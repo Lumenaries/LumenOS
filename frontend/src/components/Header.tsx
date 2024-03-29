@@ -1,6 +1,5 @@
 import { ToggleButton } from "../components/UtilityComponents";
 import { MenuIcon } from "../components/UtilityIcons";
-import NavBar from "./NavBar";
 
 // TODO: Enhance header to display settings icon and battery levels
 function Header(props) {

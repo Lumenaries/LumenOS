@@ -2,23 +2,8 @@ import { Route, Router } from "@solidjs/router";
 import { lazy } from "solid-js";
 import { render } from "solid-js/web";
 
-import App from "./App";
-import "./index.css";
-import Advertisements from "./pages/Advertisements";
-import Games from "./pages/Games";
-import Settings from "./pages/Settings";
-import {
-  BaseballConfig,
-  BasketballConfig,
-  FootballConfig,
-  SoccerConfig,
-  TennisConfig,
-  VolleyballConfig,
-} from "./pages/SportConfig";
-
 const root = document.getElementById("root");
 
-/*
 const App = lazy(() => import("./App"));
 const Advertisements = lazy(() => import("./pages/Advertisements"));
 const Games = lazy(() => import("./pages/Games"));
@@ -59,7 +44,6 @@ const VolleyballConfig = lazy(() =>
     default: module.VolleyballConfig,
   }))
 );
-*/
 
 if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   throw new Error(

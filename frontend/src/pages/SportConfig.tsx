@@ -91,21 +91,14 @@ function Score(props) {
   const team = props.team;
   const [score, set_score] = createSignal(0);
 
-  // Reset the scores on the product
-  fetch("/reset", { method: "PUT" });
-
   const decrease_score = function () {
     if (score() != 0) {
       set_score(score() - 1);
-
-      fetch("/decrease_" + team, { method: "PUT" });
     }
   };
 
   const increase_score = function () {
     set_score(score() + 1);
-
-    fetch("/increase_" + team, { method: "PUT" });
   };
 
   return (

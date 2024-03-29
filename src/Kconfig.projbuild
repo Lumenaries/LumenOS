@@ -1,10 +1,11 @@
 menu "Lumen"
-    menu "Website Deployment"
-        config WEB_DEPLOY_SF
-            bool "Deploy website to SPI Nor Flash"
+    menu "Website"
+        config WEB_MOUNT_POINT
+            string "Website mount point in VFS"
+            default "/www"
             help
-                Delpy website to SPI Nor Flash.
-                Choose this production mode if the size of the website is small (less than 2MB).
+                Specify the mount point in VFS.
+
     endmenu
 
     menu "Networking"
