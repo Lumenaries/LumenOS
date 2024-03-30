@@ -7,9 +7,9 @@ function Advertisements() {
   return (
     <>
       <Header>Advertisements</Header>
-      <div class="flex justify-center font-poppins-normal">
+      <div class="flex justify-center font-normal">
         <div class="grid w-full max-w-xl grid-cols-1 gap-3">
-          <label for="advertisement_message" class="font-poppins-bold">
+          <label for="advertisement_message" class="font-bold">
             New Advertisement
           </label>
           <input
@@ -23,12 +23,12 @@ function Advertisements() {
           />
           <button
             type="submit"
-            class="justify-self-start rounded-full bg-lumen-primary px-2 py-1 font-poppins-medium text-white"
+            class="justify-self-start rounded-full bg-primary px-2 py-1 font-medium text-white"
           >
             Add
           </button>
           <Show when={ad() != ""}>
-            <hr class="my-5 h-0.5 border-0 bg-lumen-accent" />
+            <hr class="my-5 h-0.5 border-0 bg-accent" />
             <p class="justify-self-start">{ad}</p>
           </Show>
         </div>

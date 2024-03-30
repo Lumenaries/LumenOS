@@ -6,11 +6,11 @@ function SportCard(props) {
       <A href={"/" + props.name.toLowerCase()} class="group">
         <div
           class="mb-2 flex justify-center"
-          class="rounded-xl border border-2 border-lumen-primary stroke-lumen-primary p-1 group-hover:bg-lumen-primary group-hover:stroke-white"
+          class="rounded-xl border border-2 border-primary stroke-primary p-1 group-hover:bg-primary group-hover:stroke-white"
         >
           {props.icon}
         </div>
-        <p class="m-auto flex justify-center px-3 font-poppins-medium text-xl group-hover:font-poppins-bold group-hover:tracking-normal group-hover:text-lumen-primary">
+        <p class="m-auto flex justify-center px-3 font-medium text-xl group-hover:font-bold group-hover:tracking-normal group-hover:text-primary">
           {props.name}
         </p>
       </A>

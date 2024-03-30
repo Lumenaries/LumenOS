@@ -13,7 +13,7 @@ function Games() {
   return (
     <>
       <Header>Lumenaries</Header>
-      <div class="flex justify-center font-poppins-medium">
+      <div class="flex justify-center font-medium">
         <div class="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-3">
           <SportCard name="Baseball" icon={<BaseballIcon />} />
           <SportCard name="Basketball" icon={<BasketballIcon />} />

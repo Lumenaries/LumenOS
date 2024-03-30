@@ -1,10 +1,10 @@
 menu "Lumen"
     menu "Website"
         config WEB_MOUNT_POINT
-            string "Website mount point in VFS"
+            string "Website mount point in the VFS"
             default "/www"
             help
-                Specify the mount point in VFS.
+                Specify the mount point in the VFS.
 
     endmenu
 

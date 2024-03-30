@@ -28,12 +28,12 @@ function BaseConfig(props) {
           <A href="/" class="my-auto">
             <BackArrowIcon />
           </A>
-          <span class="my-auto ml-2 justify-center text-center font-poppins-bold text-3xl font-medium">
+          <span class="my-auto ml-2 justify-center text-center font-bold text-3xl font-medium">
             {props.name}
           </span>
         </div>
       </Header>
-      <div class="flex justify-center font-poppins-normal">
+      <div class="flex justify-center font-normal">
         <div class="grid grid-cols-2 gap-10">
           <div class="col-span-2 text-center">
             <Timer />
@@ -59,7 +59,7 @@ function Timer() {
 
   return (
     <div class="flex justify-center">
-      <p class="mr-3 font-poppins-medium text-5xl">10:00</p>
+      <p class="mr-3 font-medium text-5xl">10:00</p>
       <button
         class="my-auto"
         classList={{ hidden: !is_active() }}
@@ -104,12 +104,12 @@ function Score(props) {
   return (
     <div>
       <div class="flex justify-center">
-        <p class="pb-5 font-poppins-bold text-2xl">{team_name}</p>
+        <p class="pb-5 font-bold text-2xl">{team_name}</p>
       </div>
 
       <div class="flex">
         <button
-          class="my-auto rounded-full bg-lumen-primary p-1 text-4xl text-white"
+          class="my-auto rounded-full bg-primary p-1 text-4xl text-white"
           onClick={decrease_score}
         >
           <MinusIcon />
@@ -118,7 +118,7 @@ function Score(props) {
           {score}
         </div>
         <button
-          class="my-auto rounded-full bg-lumen-primary p-1 text-4xl text-white"
+          class="my-auto rounded-full bg-primary p-1 text-4xl text-white"
           onClick={increase_score}
         >
           <PlusIcon />

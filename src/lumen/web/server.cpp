@@ -37,8 +37,13 @@ Server::~Server()
 
 namespace {
 
-/*
+/* Compare the extension of the filepath with a given extension
  *
+ * \param filepath The path to the file.
+ * \param ext The extension to compare the file to.
+ *
+ * \returns true if the filepath extension matches the given extension.
+ * \returns false if the filepath extension does not match the given extension.
  */
 bool check_file_extension(char const* filepath, char const* ext)
 {
@@ -55,8 +60,10 @@ bool check_file_extension(char const* filepath, char const* ext)
     return false;
 }
 
-/**
+/** Set the type of the response based on the file extension.
  *
+ * \param req Pointer to the request being handled.
+ * \param filepath The path to the file to be opened.
  */
 esp_err_t set_content_type_from_file(httpd_req_t* req, char const* filepath)
 {
@@ -79,11 +86,11 @@ esp_err_t set_content_type_from_file(httpd_req_t* req, char const* filepath)
     return httpd_resp_set_type(req, type);
 }
 
-/** GET handler for the root ("/") endpoint.
+/** The default GET handler.
  *
  * \param req Pointer to the request being handled.
  */
-esp_err_t root_handler(httpd_req_t* req)
+esp_err_t common_get_handler(httpd_req_t* req)
 {
     uint32_t filepath_max = ESP_VFS_PATH_MAX + 128;
     char filepath[filepath_max] = "/www";
@@ -156,10 +163,10 @@ esp_err_t root_handler(httpd_req_t* req)
 
 void register_endpoints(httpd_handle_t& server)
 {
-    httpd_uri_t root_uri = {
+    httpd_uri_t common_get_uri = {
         .uri = "/*",
         .method = HTTP_GET,
-        .handler = root_handler,
+        .handler = common_get_handler,
         .user_ctx = nullptr
     };
     httpd_register_uri_handler(server, &root_uri);

@@ -4,18 +4,6 @@
 
 @layer base {
   @font-face {
-    font-family: "Poppins Thin";
-    src: url("../fonts/poppins_thin.ttf")
-  }
-  @font-face {
-    font-family: "Poppins Extra Light";
-    src: url("../fonts/poppins_light.ttf")
-  }
-  @font-face {
-    font-family: "Poppins Light";
-    src: url("../fonts/poppins_extralight.ttf")
-  }
-  @font-face {
     font-family: "Poppins Normal";
     src: url("../fonts/poppins_normal.ttf")
   }

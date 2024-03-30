@@ -13,7 +13,7 @@ function BaseIcon(props) {
       fill="none"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="text-lumen-primary"
+      class="text-primary"
     >
       {props.children}
     </svg>
