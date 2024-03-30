@@ -5,26 +5,26 @@
 @layer base {
   @font-face {
     font-family: "Poppins Normal";
-    src: url("../fonts/poppins_normal.ttf")
+    src: url("../fonts/poppins/normal.ttf")
   }
   @font-face {
     font-family: "Poppins Medium";
-    src: url("../fonts/poppins_medium.ttf")
+    src: url("../fonts/poppins/medium.ttf")
   }
   @font-face {
     font-family: "Poppins Semi-bold";
-    src: url("../fonts/poppins_semibold.ttf")
+    src: url("../fonts/poppins/semibold.ttf")
   }
   @font-face {
     font-family: "Poppins Bold";
-    src: url("../fonts/poppins_bold.ttf")
+    src: url("../fonts/poppins/bold.ttf")
   }
   @font-face {
     font-family: "Poppins Extra Bold";
-    src: url("../fonts/poppins_extrabold.ttf")
+    src: url("../fonts/poppins/extrabold.ttf")
   }
   @font-face {
     font-family: "Poppins Black";
-    src: url("../fonts/poppins_black.ttf")
+    src: url("../fonts/poppins/black.ttf")
   }
 }
