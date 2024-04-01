@@ -1,4 +1,13 @@
 menu "Lumen"
+    menu "Website"
+        config WEB_MOUNT_POINT
+            string "Website mount point in the VFS"
+            default "/www"
+            help
+                Specify the mount point in the VFS.
+
+    endmenu
+
     menu "Networking"
         menu "Wi-Fi"
             config WIFI_SSID
