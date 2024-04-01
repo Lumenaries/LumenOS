@@ -37,7 +37,7 @@ Server::~Server()
 
 namespace {
 
-/* Compare the extension of the filepath with a given extension
+/* Compare the extension of the filepath with a given extension.
  *
  * \param filepath The path to the file.
  * \param ext The extension to compare the file to.
