@@ -13,8 +13,11 @@ namespace {
 
 constexpr auto tag = "main";
 
-/// Initialize file system.
-/// Initialize the partition for the frontend source code.
+
+
+/** Initialize file system.
+ * Initialize the partition for the frontend source code.
+ */
 esp_err_t init_filesystem();
 
 } // namespace
