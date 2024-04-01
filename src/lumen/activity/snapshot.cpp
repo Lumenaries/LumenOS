@@ -84,6 +84,9 @@ void Snapshot::update_display()
 
     display_->setCursor(68, 35);
     display_->print(std::to_string(away_).c_str());
+
+    // display_->clearScreen();
+    // display_->fillScreen(display_->color565(0, 0, 255));
 }
 
 } // namespace lumen::activity
