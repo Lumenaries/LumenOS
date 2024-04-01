@@ -169,7 +169,7 @@ void register_endpoints(httpd_handle_t& server)
         .handler = common_get_handler,
         .user_ctx = nullptr
     };
-    httpd_register_uri_handler(server, &root_uri);
+    httpd_register_uri_handler(server, &common_get_uri);
 }
 
 } // namespace

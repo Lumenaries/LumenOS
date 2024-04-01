@@ -28,7 +28,7 @@ function BaseConfig(props) {
           <A href="/" class="my-auto">
             <BackArrowIcon />
           </A>
-          <span class="my-auto ml-2 justify-center text-center font-bold text-3xl font-medium">
+          <span class="my-auto ml-2 justify-center text-center">
             {props.name}
           </span>
         </div>
@@ -114,7 +114,7 @@ function Score(props) {
         >
           <MinusIcon />
         </button>
-        <div class="mx-3 min-w-16 text-center text-5xl font-medium sm:mx-10">
+        <div class="mx-3 min-w-16 text-center font-normal text-5xl sm:mx-10">
           {score}
         </div>
         <button

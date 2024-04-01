@@ -10,7 +10,7 @@ function SportCard(props) {
         >
           {props.icon}
         </div>
-        <p class="m-auto flex justify-center px-3 font-medium text-xl group-hover:font-bold group-hover:tracking-normal group-hover:text-primary">
+        <p class="m-auto flex justify-center px-3 font-semibold text-xl group-hover:font-bold group-hover:tracking-normal group-hover:text-primary">
           {props.name}
         </p>
       </A>
