@@ -13,9 +13,9 @@ namespace {
 
 constexpr auto tag = "main";
 
-/**
- */
-esp_err_t init_fs();
+/// Initialize file system.
+/// Create a partition for the frontend source code.
+esp_err_t init_filesystem();
 
 } // namespace
 
@@ -28,7 +28,7 @@ extern "C" void app_main()
     ESP_ERROR_CHECK(nvs_flash_init());
 
     // Initialize the file system
-    ESP_ERROR_CHECK(init_fs());
+    ESP_ERROR_CHECK(init_filesystem());
 
     lumen::net::init_wifi_softap();
     lumen::net::init_mdns();
@@ -44,7 +44,7 @@ extern "C" void app_main()
 
 namespace {
 
-esp_err_t init_fs()
+esp_err_t init_filesystem()
 {
     esp_vfs_spiffs_conf_t config = {
         .base_path = CONFIG_WEB_MOUNT_POINT,
