@@ -99,6 +99,7 @@ function Score(props) {
 
   const increase_score = function () {
     set_score(score() + 1);
+    fetch("/football", { method: "PUT" });
   };
 
   return (

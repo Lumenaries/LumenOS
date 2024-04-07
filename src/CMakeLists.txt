@@ -1,7 +1,12 @@
 idf_component_register(SRCS
+                           "lumen/activity/context.cpp"
+                           "lumen/activity/field.cpp"
+                           "lumen/activity/football.cpp"
+                           "lumen/activity/team.cpp"
                            "lumen/app_task.cpp"
                            "lumen/net/mdns.cpp"
                            "lumen/net/wifi.cpp"
+                           "lumen/web/handler/football.cpp"
                            "lumen/web/server.cpp"
                            "main.cpp"
                        INCLUDE_DIRS "."

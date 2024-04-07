@@ -1,5 +1,7 @@
 #include "lumen/web/server.hpp"
 
+#include "lumen/web/handler/football.hpp"
+
 #include "esp_http_server.h"
 #include "esp_log.h"
 #include "esp_vfs.h"
@@ -15,18 +17,18 @@ constexpr auto tag = "web/server";
  *
  * \param server A reference to a valid http server handle.
  */
-void register_endpoints(httpd_handle_t& server);
+void register_endpoints(httpd_handle_t& server, activity::Context& context);
 
 } // namespace
 
-Server::Server()
+Server::Server(activity::Context& context)
 {
     ESP_LOGI(tag, "Starting web server");
 
     config.uri_match_fn = httpd_uri_match_wildcard;
 
     httpd_start(&server, &config);
-    register_endpoints(server);
+    register_endpoints(server, context);
 }
 
 Server::~Server()
@@ -161,14 +163,23 @@ esp_err_t common_get_handler(httpd_req_t* req)
     return ESP_OK;
 }
 
-void register_endpoints(httpd_handle_t& server)
+void register_endpoints(httpd_handle_t& server, activity::Context& context)
 {
+    httpd_uri_t football_put_uri = {
+        .uri = "/football",
+        .method = HTTP_PUT,
+        .handler = handler::football_put,
+        .user_ctx = &context
+    };
+
     httpd_uri_t common_get_uri = {
         .uri = "/*",
         .method = HTTP_GET,
         .handler = common_get_handler,
-        .user_ctx = nullptr
+        .user_ctx = &context
     };
+
+    httpd_register_uri_handler(server, &football_put_uri);
     httpd_register_uri_handler(server, &common_get_uri);
 }
 
