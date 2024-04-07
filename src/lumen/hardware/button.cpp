@@ -3,7 +3,6 @@
 #include "esp_log.h"
 #include "iot_button.h"
 
-#include <functional>
 #include <list>
 
 namespace lumen::hardware {
