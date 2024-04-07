@@ -15,7 +15,6 @@ constexpr auto tag = "app_task";
 void app_task(void* /* parameters */)
 {
     auto activity_context = activity::Context{};
-    //activity_context.set_activity(activity::Type::football);
 
     auto web_server = web::Server{activity_context};
 
