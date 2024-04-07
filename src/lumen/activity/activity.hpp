@@ -4,7 +4,7 @@
 
 namespace lumen::activity {
 
-enum class Type { None, Football };
+enum class Type { football };
 
 class Activity {
 public:

@@ -16,7 +16,7 @@ esp_err_t football_put(httpd_req_t* request)
 {
     auto* context = static_cast<activity::Context*>(request->user_ctx);
 
-    if (context->get_activity_type() != activity::Type::Football) {
+    if (context->get_activity_type() != activity::Type::football) {
         return ESP_FAIL;
     }
 

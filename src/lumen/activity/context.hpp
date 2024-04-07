@@ -8,6 +8,8 @@ namespace lumen::activity {
 
 class Context {
 public:
+    explicit Context(Type type = Type::football);
+
     Activity* get_activity();
 
     void set_activity(Type type);
