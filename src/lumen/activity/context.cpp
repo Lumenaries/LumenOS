@@ -1,4 +1,5 @@
 #include "lumen/activity/context.hpp"
+
 #include "lumen/activity/football.hpp"
 
 #include "esp_log.h"
@@ -15,7 +16,7 @@ Context::Context(Type type /* = Type::football */)
 {
 }
 
-Activity* Context::get_activity()
+Activity* Context::get_activity() const
 {
     return activity_.get();
 }
@@ -38,7 +39,7 @@ void Context::set_activity(Type type)
     activity_type_ = type;
 }
 
-Type Context::get_activity_type()
+Type Context::get_activity_type() const
 {
     return activity_type_;
 }

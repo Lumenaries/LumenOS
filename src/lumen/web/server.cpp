@@ -1,7 +1,5 @@
 #include "lumen/web/server.hpp"
 
-#include "lumen/web/handler/football.hpp"
-
 #include "esp_http_server.h"
 #include "esp_log.h"
 #include "esp_vfs.h"
@@ -165,13 +163,6 @@ esp_err_t common_get_handler(httpd_req_t* req)
 
 void register_endpoints(httpd_handle_t& server, activity::Context& context)
 {
-    httpd_uri_t football_put_uri = {
-        .uri = "/football",
-        .method = HTTP_PUT,
-        .handler = handler::football_put,
-        .user_ctx = &context
-    };
-
     httpd_uri_t common_get_uri = {
         .uri = "/*",
         .method = HTTP_GET,
@@ -179,7 +170,6 @@ void register_endpoints(httpd_handle_t& server, activity::Context& context)
         .user_ctx = &context
     };
 
-    httpd_register_uri_handler(server, &football_put_uri);
     httpd_register_uri_handler(server, &common_get_uri);
 }
 

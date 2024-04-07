@@ -1,11 +1,8 @@
 #include "lumen/activity/field.hpp"
 
-#include "esp_log.h"
-
-#include <cstdlib> // itoa
-
 namespace lumen::activity {
 
+// Field implementation.
 template <typename T>
 void Field<T>::signal_update()
 {
@@ -14,6 +11,7 @@ void Field<T>::signal_update()
     }
 }
 
+// NumberField implementation.
 NumberField::NumberField(Activity* parent, uint increment /* = 1 */)
     : Field{parent, {}}, increment_{increment}
 {
@@ -42,12 +40,13 @@ std::string NumberField::to_string()
     return std::to_string(get_value());
 }
 
+// TextField implementation.
 TextField::TextField(Activity* parent, std::string const& value)
     : Field{parent, value}
 {
 }
 
-bool TextField::is_scrollable()
+bool TextField::is_scrollable() const
 {
     return scrollable_;
 }

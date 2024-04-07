@@ -6,18 +6,27 @@
 
 namespace lumen::activity {
 
+/// Stores and displays the data for a Football game.
 class Football : public Activity {
 public:
     Football();
 
-    // Should this be protected?
+    /// Draw the fields to the display.
     void update_display() override;
 
+    /// Return the first team.
     Team& team_one();
+
+    /// Return the second team.
     Team& team_two();
 
+    /// Return the quarter field.
     NumberField& quarter();
+
+    /// Return the down field.
     NumberField& down();
+
+    /// Return the yards field
     NumberField& yards();
 
 private:
@@ -28,17 +37,5 @@ private:
     NumberField down_;
     NumberField yards_;
 };
-
-// void test()
-//{
-//     auto context = get_activity_context();
-//     if (context.get_activity_type() != activity::Type::Football) {
-//         return;
-//     }
-//
-//     auto football = static_cast<activity::Football>(context.get_activity());
-//     football.down().increase();
-//     football.team_one().score().increase();
-// }
 
 } // namespace lumen::activity
