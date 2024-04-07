@@ -11,7 +11,8 @@ idf_component_register(SRCS
                            "main.cpp"
                        INCLUDE_DIRS "."
                        REQUIRES
-                            button
+                            button          # iot_button
+                            driver
                             esp_event
                             esp_http_server
                             esp_hw_support  # esp_mac
