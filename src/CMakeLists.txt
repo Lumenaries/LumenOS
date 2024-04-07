@@ -1,10 +1,17 @@
 idf_component_register(SRCS
-                           "main.cpp"
+                           "lumen/hardware/button.cpp"
+                           "lumen/hardware/led_button.cpp"
+                           "lumen/hardware/led_pin.cpp"
+                           "lumen/hardware/rgb_button.cpp"
+                           "lumen/hardware/rocker_switch.cpp"
+                           "lumen/hardware/single_led_button.cpp"
                            "lumen/net/mdns.cpp"
                            "lumen/net/wifi.cpp"
                            "lumen/web/server.cpp"
+                           "main.cpp"
                        INCLUDE_DIRS "."
                        REQUIRES
+                            button
                             esp_event
                             esp_http_server
                             esp_hw_support  # esp_mac
