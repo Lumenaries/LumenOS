@@ -1,7 +1,5 @@
 #include "lumen/hardware/button/single_led_button.hpp"
 
-#include "lumen/hardware/led_pin.hpp"
-
 #include "driver/ledc.h"
 #include "esp_log.h"
 

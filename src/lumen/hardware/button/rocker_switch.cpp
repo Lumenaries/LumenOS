@@ -1,7 +1,5 @@
 #include "lumen/hardware/button/rocker_switch.hpp"
 
-#include "lumen/hardware/button.hpp"
-
 #include "iot_button.h"
 
 namespace lumen::hardware::button {

@@ -1,7 +1,5 @@
 #include "lumen/hardware/button/rgb_button.hpp"
 
-#include "lumen/hardware/button/led_button.hpp"
-
 #include "driver/ledc.h"
 #include "esp_log.h"
 
