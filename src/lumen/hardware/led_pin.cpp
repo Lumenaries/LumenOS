@@ -1,6 +1,5 @@
 #include "lumen/hardware/led_pin.hpp"
 
-#include "driver/ledc.h"
 #include "esp_log.h"
 
 #include <cmath>
