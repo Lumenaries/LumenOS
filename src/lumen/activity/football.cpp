@@ -4,16 +4,6 @@
 
 namespace lumen::activity {
 
-void Football::update_display()
-{
-    ESP_LOGI(
-        "activity/football",
-        "Football: update_display(): %s score: %s",
-        team_one().name().to_string().c_str(),
-        team_one().score().to_string().c_str()
-    );
-}
-
 field::Team& Football::team_one()
 {
     return team_one_;
@@ -37,6 +27,16 @@ field::Number& Football::down()
 field::Number& Football::yards()
 {
     return yards_;
+}
+
+void Football::update_display()
+{
+    ESP_LOGI(
+        "activity/football",
+        "Football: update_display(): %s score: %s",
+        team_one().name().to_string().c_str(),
+        team_one().score().to_string().c_str()
+    );
 }
 
 } // namespace lumen::activity
