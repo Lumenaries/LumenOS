@@ -10,14 +10,14 @@ class RGBButton : public LEDButton {
 public:
     /// Supported colors for an RGB LED button.
     enum class LEDColor {
-        red = 0,
+        none = 0,
+        red,
         orange,
         yellow,
         green,
         blue,
         purple,
         white,
-        none,
     };
 
     /** RGBButton constructor.
