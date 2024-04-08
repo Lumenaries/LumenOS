@@ -31,8 +31,8 @@ public:
     esp_err_t set_duty(uint32_t duty_percentage);
 
 private:
-    ledc_timer_config_t timer_config_{};
-    ledc_channel_config_t channel_config_{};
+    ledc_timer_config_t timer_config_;
+    ledc_channel_config_t channel_config_;
 
     uint8_t duty_resolution_{};
     uint8_t max_duty_{};

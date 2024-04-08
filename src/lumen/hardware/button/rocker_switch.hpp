@@ -31,8 +31,8 @@ public:
     [[nodiscard]] Button& down();
 
 private:
-    Button up_{};
-    Button down_{};
+    Button up_;
+    Button down_;
 };
 
 } // namespace lumen::hardware

@@ -32,7 +32,7 @@ public:
     esp_err_t set_led_brightness(uint32_t duty_percentage);
 
 private:
-    LEDPin led_{};
+    LEDPin led_;
 };
 
 } // namespace lumen::hardware
