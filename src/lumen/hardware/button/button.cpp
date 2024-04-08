@@ -1,4 +1,4 @@
-#include "lumen/hardware/button.hpp"
+#include "lumen/hardware/button/button.hpp"
 
 #include "esp_log.h"
 

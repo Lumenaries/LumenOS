@@ -1,6 +1,6 @@
 #pragma once
 
-#include "lumen/hardware/button.hpp"
+#include "lumen/hardware/button/button.hpp"
 
 namespace lumen::hardware::button {
 

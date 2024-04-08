@@ -1,5 +1,5 @@
 idf_component_register(SRCS
-                           "lumen/hardware/button.cpp"
+                           "lumen/hardware/button/button.cpp"
                            "lumen/hardware/button/led_button.cpp"
                            "lumen/hardware/button/rgb_button.cpp"
                            "lumen/hardware/button/rocker_switch.cpp"
