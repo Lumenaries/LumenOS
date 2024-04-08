@@ -1,10 +1,8 @@
 #pragma once
 
-//  #include "lumen/activity/display.hpp"
-
 namespace lumen::activity {
 
-enum class Type { football };
+enum class Type { none = 0, football };
 
 /// Base class from which different displayable activites should derive
 class Activity {

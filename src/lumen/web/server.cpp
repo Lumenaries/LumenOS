@@ -14,6 +14,8 @@ constexpr auto tag = "web/server";
 /** Register all of the endpoints.
  *
  * \param server A reference to a valid http server handle.
+ *
+ * \param context A reference to a Context object.
  */
 void register_endpoints(httpd_handle_t& server, activity::Context& context);
 

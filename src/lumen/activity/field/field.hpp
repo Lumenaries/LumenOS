@@ -6,8 +6,6 @@
 
 namespace lumen::activity {
 
-class Activity;
-
 /// Base class from which displayable types derive.
 template <typename T>
 class Field {
@@ -22,13 +20,15 @@ public:
     Field(Activity* parent, T value) : parent_{parent}, value_{value} {}
     virtual ~Field() = default;
 
-    /// Get the current value of the field.
     [[nodiscard]] T get_value() const
     {
         return value_;
     }
 
-    /// Set the value of the field and trigger a display update.
+    /** Set the value of the field and trigger a display update.
+     *
+     * \param value New value of the field.
+     */
     void set_value(T value)
     {
         value_ = value;
@@ -36,15 +36,20 @@ public:
     }
 
     /// Convert the contents of the field to a string.
-    virtual std::string to_string() = 0;
+    [[nodiscard]] virtual std::string to_string() const = 0;
 
 protected:
     /// Signal the `parent` object to update the display.
-    void signal_update();
+    void signal_update()
+    {
+        if (parent_ != nullptr) {
+            parent_->update_display();
+        }
+    }
 
 private:
-    Activity* parent_;
-    T value_;
+    Activity* parent_{};
+    T value_{};
 };
 
 /// A field which represents a numeric type.
@@ -67,38 +72,10 @@ public:
     NumberField& decrease();
 
     /// Convert the contents of the field to a string.
-    std::string to_string() override;
+    [[nodiscard]] std::string to_string() const override;
 
 private:
     uint increment_{};
-};
-
-/// A field which represents a string type.
-class TextField : public Field<std::string> {
-public:
-    /** NumberField constructor.
-     *
-     * \param parent Pointer to the activity object that should be updated when
-     * a state change occurs.
-     *
-     * \param value Initial value that the field should hold.
-     */
-    TextField(Activity* parent, std::string const& value);
-
-    /// Returns whether this field will scroll across the screen when displayed.
-    [[nodiscard]] bool is_scrollable() const;
-
-    /** Set whether is displayed as scrollable text.
-     *
-     * \param scrollable `true` if the text should scroll, `false` otherwise.
-     */
-    void set_scrollable(bool scrollable);
-
-    // Convert the contents of the field to a string.
-    std::string to_string() override;
-
-private:
-    bool scrollable_{};
 };
 
 } // namespace lumen::activity

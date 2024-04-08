@@ -9,9 +9,12 @@ namespace lumen::activity {
 /// The context class for displayable activities.
 class Context {
 public:
-    explicit Context(Type type = Type::football);
+    /** Context constructor.
+     *
+     * \param type The type of the activity to be set.
+     */
+    explicit Context(Type type = Type::none);
 
-    /// Get a pointer to the underlying activity.
     [[nodiscard]] Activity* get_activity() const;
 
     /** Set the type of the activity.
@@ -20,7 +23,6 @@ public:
      */
     void set_activity(Type type);
 
-    /// Get the current activity type.
     [[nodiscard]] Type get_activity_type() const;
 
     /** Redraw the display.
@@ -31,9 +33,8 @@ public:
     void update_display();
 
 private:
-    std::unique_ptr<Activity> activity_;
-
-    Type activity_type_;
+    std::unique_ptr<Activity> activity_{};
+    Type activity_type_{};
 };
 
 } // namespace lumen::activity

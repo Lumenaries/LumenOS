@@ -11,6 +11,10 @@ struct Server {
     httpd_handle_t server = nullptr;
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
 
+    /** Server constructor.
+     *
+     * \param context A reference to a context object.
+     */
     explicit Server(activity::Context& context);
     ~Server();
 };

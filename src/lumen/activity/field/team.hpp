@@ -1,11 +1,12 @@
 #pragma once
 
 #include "lumen/activity/activity.hpp"
-#include "lumen/activity/field.hpp"
+#include "lumen/activity/field/number.hpp"
+#include "lumen/activity/field/text.hpp"
 
 #include <string>
 
-namespace lumen::activity {
+namespace lumen::activity::field {
 
 /// A composition of different fields that represent a sports team.
 class Team {
@@ -19,15 +20,12 @@ public:
      */
     Team(Activity* parent, std::string const& name);
 
-    /// Return the score field.
-    NumberField& score();
-
-    /// Return the name field.
-    TextField& name();
+    Text& name();
+    Number& score();
 
 private:
-    NumberField score_;
-    TextField name_;
+    Text name_;
+    Number score_;
 };
 
-} // namespace lumen::activity
+} // namespace lumen::activity::field

@@ -11,9 +11,9 @@ constexpr auto tag = "activity/context";
 
 } // namespace
 
-Context::Context(Type type /* = Type::football */)
-    : activity_{std::make_unique<activity::Football>()}, activity_type_{type}
+Context::Context(Type type /* = Type::none */)
 {
+    set_activity(type);
 }
 
 Activity* Context::get_activity() const
@@ -28,6 +28,9 @@ void Context::set_activity(Type type)
     }
 
     switch (type) {
+    case Type::none:
+        activity_.reset();
+        break;
     case Type::football:
         activity_ = std::move(std::make_unique<activity::Football>());
         break;

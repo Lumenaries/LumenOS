@@ -4,12 +4,6 @@
 
 namespace lumen::activity {
 
-Football::Football()
-    : team_one_{this, "Home"}, team_two_{this, "Away"}, quarter_{this},
-      down_{this}, yards_{this}
-{
-}
-
 void Football::update_display()
 {
     ESP_LOGI(
@@ -20,27 +14,27 @@ void Football::update_display()
     );
 }
 
-Team& Football::team_one()
+field::Team& Football::team_one()
 {
     return team_one_;
 }
 
-Team& Football::team_two()
+field::Team& Football::team_two()
 {
     return team_two_;
 }
 
-NumberField& Football::quarter()
+field::Number& Football::quarter()
 {
     return quarter_;
 }
 
-NumberField& Football::down()
+field::Number& Football::down()
 {
     return down_;
 }
 
-NumberField& Football::yards()
+field::Number& Football::yards()
 {
     return yards_;
 }
