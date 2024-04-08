@@ -16,7 +16,7 @@ Context::Context(Type type /* = Type::none */)
     set_activity(type);
 }
 
-Activity* Context::get_activity() const
+Activity* Context::get_activity()
 {
     return activity_.get();
 }

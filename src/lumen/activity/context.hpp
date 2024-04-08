@@ -15,7 +15,7 @@ public:
      */
     explicit Context(Type type = Type::none);
 
-    [[nodiscard]] Activity* get_activity() const;
+    [[nodiscard]] Activity* get_activity();
 
     /** Set the type of the activity.
      *
