@@ -2,8 +2,6 @@
 
 #include "esp_log.h"
 
-#include <vector>
-
 namespace lumen::hardware {
 namespace {
 
