@@ -1,7 +1,5 @@
 #include "lumen/activity/football.hpp"
 
-#include "esp_log.h"
-
 namespace lumen::activity {
 
 field::Team& Football::team_one()
@@ -31,12 +29,6 @@ field::Number& Football::yards()
 
 void Football::update_display()
 {
-    ESP_LOGI(
-        "activity/football",
-        "Football: update_display(): %s score: %s",
-        team_one().name().to_string().c_str(),
-        team_one().score().to_string().c_str()
-    );
 }
 
 } // namespace lumen::activity
