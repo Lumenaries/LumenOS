@@ -4,7 +4,7 @@
 
 #include <vector>
 
-namespace lumen::hardware {
+namespace lumen::hardware::button {
 
 /// Defines a button on a GPIO pin.
 class Button {

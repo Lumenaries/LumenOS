@@ -2,10 +2,10 @@
 
 #include "esp_log.h"
 
-namespace lumen::hardware {
+namespace lumen::hardware::button {
 namespace {
 
-constexpr auto tag = "lumen/hardware";
+constexpr auto tag = "lumen/hardware/button";
 
 } // namespace
 
