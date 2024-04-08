@@ -1,10 +1,10 @@
-#include "lumen/hardware/rocker_switch.hpp"
+#include "lumen/hardware/button/rocker_switch.hpp"
 
 #include "lumen/hardware/button.hpp"
 
 #include "iot_button.h"
 
-namespace lumen::hardware {
+namespace lumen::hardware::button {
 
 RockerSwitch::RockerSwitch(
     int32_t up_pin,

@@ -3,7 +3,7 @@
 #include "esp_log.h"
 #include "iot_button.h"
 
-#include <list>
+#include <vector>
 
 namespace lumen::hardware {
 namespace {
@@ -34,7 +34,7 @@ Button::Button(int32_t button_pin, uint8_t active_level)
 Button::~Button()
 {
     // Unregister all event callbacks
-    for (button_event_t event : registered_events_) {
+    for (auto const& event : registered_events_) {
         iot_button_unregister_cb(button_, event);
     }
 

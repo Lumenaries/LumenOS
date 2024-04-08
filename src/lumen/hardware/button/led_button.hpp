@@ -2,27 +2,27 @@
 
 #include "lumen/hardware/button.hpp"
 
-namespace lumen::hardware {
+namespace lumen::hardware::button {
 
+/// Defines a button with LEDs.
 class LEDButton : public Button {
 public:
-    /** Constructor for a button with LEDs.
+    /** LEDButton constructor.
      *
      * \param button_pin The GPIO pin number of the button.
-     * \param active_level The GPIO level when the button is pressed.
+     *
+     * \param active_level The GPIO level (high or low) when the button is
+     * pressed. If the active level is high, input a non-zero positive. If low,
+     * input 0.
      */
     LEDButton(int32_t button_pin, uint8_t active_level);
 
 protected:
-    int get_channel_count();
-    bool is_led_supported();
-    bool is_led_active();
+    [[nodiscard]] int get_led_channel_count() const;
 
-    /** Set the channel count.
-     *
-     * \param channel_count The number of LED channels.
-     */
-    void set_channel_count(int channel_count);
+    [[nodiscard]] bool is_led_supported() const;
+
+    [[nodiscard]] bool is_led_active() const;
 
     /** Set the button's LED support.
      *
@@ -38,14 +38,15 @@ protected:
 
     /* Gets the next LED channel index and increments the channel count.
      *
-     * \Returns The next LED channel index.
+     * \returns The index of the next LED channel.
      */
-    int get_next_led_channel();
+    [[nodiscard]] int get_next_led_channel();
 
 private:
-    inline static int channel_count_ = 0;
-    bool led_supported_ = false;
-    bool led_active_ = false;
+    inline static int led_channel_count_{};
+
+    bool led_supported_{};
+    bool led_active_{};
 };
 
 } // namespace lumen::hardware

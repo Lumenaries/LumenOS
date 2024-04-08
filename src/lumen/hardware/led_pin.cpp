@@ -3,14 +3,9 @@
 #include "driver/ledc.h"
 #include "esp_log.h"
 
-#include <math.h>
+#include <cmath>
 
 namespace lumen::hardware {
-namespace {
-
-constexpr auto tag = "lumen/hardware";
-
-} // namespace
 
 LEDPin::LEDPin(int pin, int channel_num)
     : timer_config_ {
@@ -37,17 +32,18 @@ LEDPin::LEDPin(int pin, int channel_num)
     ledc_timer_config(&timer_config_);
     ledc_channel_config(&channel_config_);
 
+    // The default state of the LED is off.
     set_duty(0);
 
     ESP_LOGI(
-        tag,
+        "lumen/hardware",
         "Initialized LED pin with GPIO number %d and channel number %d.",
         pin,
         channel_num
     );
 }
 
-uint32_t LEDPin::get_duty()
+uint32_t LEDPin::get_duty() const
 {
     return ledc_get_duty(channel_config_.speed_mode, channel_config_.channel);
 }

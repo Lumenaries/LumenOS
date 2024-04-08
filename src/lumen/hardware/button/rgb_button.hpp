@@ -1,11 +1,9 @@
 #pragma once
 
-#include "lumen/hardware/rgb_button.hpp"
-
-#include "lumen/hardware/led_button.hpp"
+#include "lumen/hardware/button/led_button.hpp"
 #include "lumen/hardware/led_pin.hpp"
 
-namespace lumen::hardware {
+namespace lumen::hardware::button {
 
 /// A button with a 3-pin RGB LED.
 class RGBButton : public LEDButton {
@@ -22,12 +20,18 @@ public:
         none,
     };
 
-    /** Construct a button with RGB LEDs.
+    /** RGBButton constructor.
      *
      * \param button_pin The GPIO pin number of the button.
-     * \param active_level The GPIO level when the button is pressed.
+     *
+     * \param active_level The GPIO level (high or low) when the button is
+     * pressed. If the active level is high, input a non-zero positive. If low,
+     * input 0.
+     *
      * \param red_pin The GPIO pin number of the red LED.
+     *
      * \param green_pin The GPIO pin number of the green LED.
+     *
      * \param blue_pin The GPIO pin number of the blue LED.
      */
     RGBButton(
@@ -45,9 +49,9 @@ public:
     esp_err_t set_color(LEDColor color);
 
 private:
-    LEDPin red_led_;
-    LEDPin green_led_;
-    LEDPin blue_led_;
+    LEDPin red_led_{};
+    LEDPin green_led_{};
+    LEDPin blue_led_{};
 };
 
 } // namespace lumen::hardware
