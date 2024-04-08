@@ -1,4 +1,3 @@
-#include "lumen/hardware/button.hpp"
 #include "lumen/net/mdns.hpp"
 #include "lumen/net/wifi.hpp"
 #include "lumen/web/server.hpp"
@@ -38,11 +37,6 @@ extern "C" void app_main()
     // TODO: Start an "Application" task that creates the web server and passes
     // it to the functions/tasks that need it.
     auto web_server = lumen::web::Server{};
-
-    auto button = lumen::hardware::Button{25, 3};
-    button.register_callback(BUTTON_SINGLE_CLICK, [](void*, void*) {
-        ESP_LOGI(tag, "Button pressed");
-    });
 
     while (true) {
         vTaskDelay(1);
