@@ -4,7 +4,7 @@ namespace lumen::activity {
 
 enum class Type { none = 0, football };
 
-/// Base class from which different displayable activites should derive
+/// Base class from which different displayable activites should derive.
 class Activity {
 public:
     virtual ~Activity() = default;

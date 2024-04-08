@@ -52,30 +52,5 @@ private:
     T value_{};
 };
 
-/// A field which represents a numeric type.
-class NumberField : public Field<uint> {
-public:
-    /** NumberField constructor.
-     *
-     * \param parent Pointer to the activity object that should be updated when
-     * a state change occurs.
-     *
-     * \param increment Interval by which the value of the field change each
-     * time `increase()` or `decrease()` is called.
-     */
-    explicit NumberField(Activity* parent, uint increment = 1);
-
-    /// Increase the value of the field by the value of `increment`.
-    NumberField& increase();
-
-    /// Decrease the value of the field by the value of `increment`.
-    NumberField& decrease();
-
-    /// Convert the contents of the field to a string.
-    [[nodiscard]] std::string to_string() const override;
-
-private:
-    uint increment_{};
-};
 
 } // namespace lumen::activity
