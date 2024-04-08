@@ -1,4 +1,9 @@
 idf_component_register(SRCS
+                           "lumen/activity/context.cpp"
+                           "lumen/activity/field/number.cpp"
+                           "lumen/activity/field/team.cpp"
+                           "lumen/activity/field/text.cpp"
+                           "lumen/activity/football.cpp"
                            "lumen/app_task.cpp"
                            "lumen/net/mdns.cpp"
                            "lumen/net/wifi.cpp"

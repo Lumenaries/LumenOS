@@ -1,5 +1,6 @@
 #include "lumen/app_task.hpp"
 
+#include "lumen/activity/context.hpp"
 #include "lumen/web/server.hpp"
 
 #include "freertos/task.h"
@@ -13,7 +14,9 @@ constexpr auto tag = "app_task";
 
 void app_task(void* /* parameters */)
 {
-    auto web_server = web::Server{};
+    auto activity_context = activity::Context{};
+
+    auto web_server = web::Server{activity_context};
 
     while (true) {
         vTaskDelay(100);
