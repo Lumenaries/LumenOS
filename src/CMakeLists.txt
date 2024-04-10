@@ -3,7 +3,6 @@ idf_component_register(SRCS
                            "lumen/hardware/button/led_button.cpp"
                            "lumen/hardware/button/rgb_button.cpp"
                            "lumen/hardware/button/rocker_switch.cpp"
-                           "lumen/hardware/button/single_led_button.cpp"
                            "lumen/hardware/led_pin.cpp"
                            "lumen/net/mdns.cpp"
                            "lumen/net/wifi.cpp"

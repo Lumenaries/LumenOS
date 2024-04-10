@@ -1,65 +1,17 @@
 #include "lumen/hardware/led_pin.hpp"
 
-#include "esp_log.h"
-
-#include <cmath>
-
 namespace lumen::hardware {
 
-LEDPin::LEDPin(int pin, int channel_num)
-    : timer_config_ {
-          .speed_mode = LEDC_HIGH_SPEED_MODE,
-          .duty_resolution = LEDC_TIMER_2_BIT,
-          .timer_num = LEDC_TIMER_0,
-          .freq_hz = 4000,
-          .clk_cfg = LEDC_AUTO_CLK,
-      },
-      channel_config_ {
-        .gpio_num = pin,
-        .speed_mode = LEDC_HIGH_SPEED_MODE,
-        .channel = static_cast<ledc_channel_t>(channel_num),
-        .intr_type = LEDC_INTR_DISABLE,
-        .timer_sel = LEDC_TIMER_0,
-        .duty = 0,
-        .hpoint = 0,
-        .flags = {},
-    }
+void led_pin_init(gpio_num_t led_pin)
 {
-    duty_resolution_ = 2;
-    max_duty_ = pow(2, duty_resolution_);
-
-    ledc_timer_config(&timer_config_);
-    ledc_channel_config(&channel_config_);
-
-    // The default state of the LED is off.
-    set_duty(0);
-
-    ESP_LOGI(
-        "lumen/hardware",
-        "Initialized LED pin with GPIO number %d and channel number %d.",
-        pin,
-        channel_num
-    );
+    gpio_reset_pin(led_pin);
+    gpio_set_direction(led_pin, GPIO_MODE_OUTPUT);
+    gpio_set_level(led_pin, 0);
 }
 
-uint32_t LEDPin::get_duty() const
+void led_pin_set_level(gpio_num_t led_pin, uint32_t level)
 {
-    return ledc_get_duty(channel_config_.speed_mode, channel_config_.channel);
+    gpio_set_level(led_pin, level);
 }
 
-esp_err_t LEDPin::set_duty(uint32_t duty_percentage)
-{
-    if (duty_percentage > 100) {
-        return ESP_ERR_INVALID_ARG;
-    }
-
-    // Get duty from given percentage
-    auto duty = static_cast<uint8_t>(duty_percentage / 100.0 * max_duty_ + 0.5);
-
-    ledc_set_duty(channel_config_.speed_mode, channel_config_.channel, duty);
-    ledc_update_duty(channel_config_.speed_mode, channel_config_.channel);
-
-    return ESP_OK;
 }
-
-} // namespace lumen::hardware

@@ -1,6 +1,7 @@
 #include "lumen/hardware/button/rgb_button.hpp"
 
-#include "driver/ledc.h"
+#include "lumen/hardware/led_pin.hpp"
+
 #include "esp_log.h"
 
 namespace lumen::hardware::button {
@@ -12,76 +13,71 @@ RGBButton::RGBButton(
     int green_pin,
     int blue_pin
 )
-    : LEDButton{button_pin, active_level}
+    : Button{button_pin, active_level},
+      red_pin_{static_cast<gpio_num_t>(red_pin)},
+      green_pin_{static_cast<gpio_num_t>(green_pin)},
+      blue_pin_{static_cast<gpio_num_t>(blue_pin)}
 {
-    // Check if there are enough LED channels for all LED pins.
-    if (get_led_channel_count() + 3 <= static_cast<int>(LEDC_CHANNEL_MAX)) {
-        red_led_ = LEDPin{red_pin, get_next_led_channel()};
-        green_led_ = LEDPin{green_pin, get_next_led_channel()};
-        blue_led_ = LEDPin{blue_pin, get_next_led_channel()};
-
-        set_led_supported(true);
-    } else {
-        ESP_LOGE("lumen/hardware/button", "Unable to initialize LED pins.");
-        set_led_supported(false);
-    }
+    // Initialize all LED pins
+    led_pin_init(red_pin_);
+    led_pin_init(green_pin_);
+    led_pin_init(blue_pin_);
 }
 
-esp_err_t RGBButton::set_color(LEDColor color)
+void RGBButton::set_color(LEDColor color)
 {
-    if (!is_led_supported()) {
-        return ESP_ERR_NOT_SUPPORTED;
-    }
-
     switch (color) {
     case LEDColor::none:
-        red_led_.set_duty(0);
-        green_led_.set_duty(0);
-        blue_led_.set_duty(0);
+        led_pin_set_level(red_pin_, 0);
+        led_pin_set_level(green_pin_, 0);
+        led_pin_set_level(blue_pin_, 0);
+        break;
 
-        set_led_active(false);
-        return ESP_OK;
     case LEDColor::red:
-        red_led_.set_duty(100);
-        green_led_.set_duty(0);
-        blue_led_.set_duty(0);
+        led_pin_set_level(red_pin_, 1);
+        led_pin_set_level(green_pin_, 0);
+        led_pin_set_level(blue_pin_, 0);
         break;
-    case LEDColor::orange:
-        red_led_.set_duty(75);
-        green_led_.set_duty(100);
-        blue_led_.set_duty(0);
-        break;
+
     case LEDColor::yellow:
-        red_led_.set_duty(50);
-        green_led_.set_duty(100);
-        blue_led_.set_duty(0);
+        led_pin_set_level(red_pin_, 1);
+        led_pin_set_level(green_pin_, 1);
+        led_pin_set_level(blue_pin_, 0);
         break;
+
     case LEDColor::green:
-        red_led_.set_duty(0);
-        green_led_.set_duty(100);
-        blue_led_.set_duty(0);
+        led_pin_set_level(red_pin_, 0);
+        led_pin_set_level(green_pin_, 1);
+        led_pin_set_level(blue_pin_, 0);
         break;
+
+    case LEDColor::cyan:
+        led_pin_set_level(red_pin_, 0);
+        led_pin_set_level(green_pin_, 1);
+        led_pin_set_level(blue_pin_, 1);
+        break;
+
     case LEDColor::blue:
-        red_led_.set_duty(0);
-        green_led_.set_duty(0);
-        blue_led_.set_duty(100);
+        led_pin_set_level(red_pin_, 0);
+        led_pin_set_level(green_pin_, 0);
+        led_pin_set_level(blue_pin_, 1);
         break;
+
     case LEDColor::purple:
-        red_led_.set_duty(25);
-        green_led_.set_duty(0);
-        blue_led_.set_duty(100);
+        led_pin_set_level(red_pin_, 1);
+        led_pin_set_level(green_pin_, 0);
+        led_pin_set_level(blue_pin_, 1);
         break;
+
     case LEDColor::white:
-        red_led_.set_duty(25);
-        green_led_.set_duty(50);
-        blue_led_.set_duty(75);
+        led_pin_set_level(red_pin_, 1);
+        led_pin_set_level(green_pin_, 1);
+        led_pin_set_level(blue_pin_, 1);
         break;
+
     default:
         break;
     }
-
-    set_led_active(true);
-    return ESP_OK;
 }
 
 } // namespace lumen::hardware::button

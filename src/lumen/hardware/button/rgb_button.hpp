@@ -1,20 +1,21 @@
 #pragma once
 
-#include "lumen/hardware/button/led_button.hpp"
-#include "lumen/hardware/led_pin.hpp"
+#include "lumen/hardware/button/button.hpp"
+
+#include "driver/gpio.h"
 
 namespace lumen::hardware::button {
 
-/// A button with a 3-pin RGB LED.
-class RGBButton : public LEDButton {
+/// Defines a button with 3-pin RGB LEDs.
+class RGBButton : public Button {
 public:
     /// Supported colors for an RGB LED button.
     enum class LEDColor {
         none = 0,
         red,
-        orange,
         yellow,
         green,
+        cyan,
         blue,
         purple,
         white,
@@ -25,8 +26,9 @@ public:
      * \param button_pin The GPIO pin number of the button.
      *
      * \param active_level The GPIO level (high or low) when the button is
-     * pressed. If the active level is high, input a non-zero positive. If low,
-     * input 0.
+     * pressed.
+     * A value of 0 will set the GPIO level to low.
+     * A non-zero positive integer will set the GPIO level to high.
      *
      * \param red_pin The GPIO pin number of the red LED.
      *
@@ -46,12 +48,12 @@ public:
      *
      * \param color The supported LED color.
      */
-    esp_err_t set_color(LEDColor color);
+    void set_color(LEDColor color);
 
 private:
-    LEDPin red_led_{};
-    LEDPin green_led_{};
-    LEDPin blue_led_{};
+    gpio_num_t red_pin_;
+    gpio_num_t green_pin_;
+    gpio_num_t blue_pin_;
 };
 
 } // namespace lumen::hardware

@@ -1,41 +1,23 @@
 #pragma once
 
-#include "driver/ledc.h"
+#include "driver/gpio.h"
 
 namespace lumen::hardware {
 
-/// Defines an LED on a GPIO pin.
-class LEDPin {
-public:
-    LEDPin() = default;
+/** Initialize an LED GPIO pin.
+ *
+ * \param led_pin The GPIO number of the LED.
+ */
+void led_pin_init(gpio_num_t led_pin);
 
-    /** LEDPin constructor.
-     *
-     * \param pin The GPIO pin number.
-     *
-     * \param channel The LED channel.
-     */
-    LEDPin(int pin, int channel_num);
+/** Set the GPIO level of an LED pin.
+ *
+ * \param led_pin The GPIO number of the LED.
+ *
+ * \param level The level of the GPIO pin.
+ * A value of zero will turn off the LED.
+ * A non-zero positive integer will turn on the LED.
+ */
+void led_pin_set_level(gpio_num_t led_pin, uint32_t level);
 
-    [[nodiscard]] uint32_t get_duty() const;
-
-    /** Setter for the channel duty.
-     *
-     * \param duty_percentage A range from 0 to 100 that is a percentage of the
-     * max duty resolution.
-     *
-     * \returns ESP_OK on success.
-     *
-     * \returns ESP_ERR_INVALID_ARG if `duty_percentage` is greater than 100.
-     */
-    esp_err_t set_duty(uint32_t duty_percentage);
-
-private:
-    ledc_timer_config_t timer_config_;
-    ledc_channel_config_t channel_config_;
-
-    uint8_t duty_resolution_{};
-    uint8_t max_duty_{};
-};
-
-} // namespace lumen::hardware
+}
