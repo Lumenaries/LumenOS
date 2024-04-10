@@ -2,6 +2,8 @@
 
 #include "lumen/hardware/button/button.hpp"
 
+#include "lumen/hardware/led_pin.hpp"
+
 #include "driver/gpio.h"
 
 namespace lumen::hardware::button {
@@ -24,14 +26,13 @@ public:
 
     /* Set the level of the LED GPIO pin.
      *
-     * \param level The level of the GPIO pin.
-     * A value of zero will turn off the LED.
-     * A non-zero positive integer will turn on the LED.
+     * \param on A value of `true` will turn on the LED.
+     * A value of `false` will turn off the LED.
      */
-    void set_led(uint32_t level);
+    void set_led(bool on);
 
 private:
-    gpio_num_t led_pin_;
+    LEDPin led_pin_;
 };
 
 } // namespace lumen::hardware::button

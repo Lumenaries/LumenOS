@@ -2,6 +2,8 @@
 
 #include "lumen/hardware/button/button.hpp"
 
+#include "lumen/hardware/led_pin.hpp"
+
 #include "driver/gpio.h"
 
 namespace lumen::hardware::button {
@@ -51,9 +53,9 @@ public:
     void set_color(LEDColor color);
 
 private:
-    gpio_num_t red_pin_;
-    gpio_num_t green_pin_;
-    gpio_num_t blue_pin_;
+    LEDPin red_pin_;
+    LEDPin green_pin_;
+    LEDPin blue_pin_;
 };
 
 } // namespace lumen::hardware::button

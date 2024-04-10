@@ -2,16 +2,21 @@
 
 namespace lumen::hardware {
 
-void led_pin_init(gpio_num_t led_pin)
+LEDPin::LEDPin(int pin) : pin_{static_cast<gpio_num_t>(pin)}
 {
-    gpio_reset_pin(led_pin);
-    gpio_set_direction(led_pin, GPIO_MODE_OUTPUT);
-    gpio_set_level(led_pin, 0);
+    gpio_reset_pin(pin_);
+    gpio_set_direction(pin_, GPIO_MODE_OUTPUT);
+    gpio_set_level(pin_, 0);
 }
 
-void led_pin_set_level(gpio_num_t led_pin, uint32_t level)
+void LEDPin::on()
 {
-    gpio_set_level(led_pin, level);
+    gpio_set_level(pin_, 1);
+}
+
+void LEDPin::off()
+{
+    gpio_set_level(pin_, 0);
 }
 
 } // namespace lumen::hardware
