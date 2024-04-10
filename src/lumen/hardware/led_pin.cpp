@@ -14,4 +14,4 @@ void led_pin_set_level(gpio_num_t led_pin, uint32_t level)
     gpio_set_level(led_pin, level);
 }
 
-}
+} // namespace lumen::hardware

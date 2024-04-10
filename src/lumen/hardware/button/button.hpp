@@ -43,4 +43,4 @@ private:
     std::vector<button_event_t> registered_events_{};
 };
 
-} // namespace lumen::hardware
+} // namespace lumen::hardware::button

@@ -52,4 +52,4 @@ esp_err_t Button::register_callback(button_event_t event, button_cb_t callback)
     return iot_button_register_cb(button_, event, callback, nullptr);
 }
 
-} // namespace lumen::hardware
+} // namespace lumen::hardware::button

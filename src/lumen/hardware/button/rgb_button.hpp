@@ -56,4 +56,4 @@ private:
     gpio_num_t blue_pin_;
 };
 
-} // namespace lumen::hardware
+} // namespace lumen::hardware::button

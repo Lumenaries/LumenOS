@@ -24,4 +24,4 @@ Button& RockerSwitch::down()
     return down_;
 }
 
-} // namespace lumen::hardware
+} // namespace lumen::hardware::button

@@ -5,7 +5,8 @@
 namespace lumen::hardware::button {
 
 LEDButton::LEDButton(int32_t button_pin, uint8_t active_level, int led_pin)
-    : Button{button_pin, active_level}, led_pin_{static_cast<gpio_num_t>(led_pin)}
+    : Button{button_pin, active_level},
+      led_pin_{static_cast<gpio_num_t>(led_pin)}
 {
     led_pin_init(led_pin_);
 }
