@@ -14,19 +14,21 @@ constexpr auto tag = "web/server";
 /** Register all of the endpoints.
  *
  * \param server A reference to a valid http server handle.
+ *
+ * \param context A reference to a Context object.
  */
-void register_endpoints(httpd_handle_t& server);
+void register_endpoints(httpd_handle_t& server, activity::Context& context);
 
 } // namespace
 
-Server::Server()
+Server::Server(activity::Context& context)
 {
     ESP_LOGI(tag, "Starting web server");
 
     config.uri_match_fn = httpd_uri_match_wildcard;
 
     httpd_start(&server, &config);
-    register_endpoints(server);
+    register_endpoints(server, context);
 }
 
 Server::~Server()
@@ -37,7 +39,7 @@ Server::~Server()
 
 namespace {
 
-/* Compare the extension of the filepath with a given extension
+/* Compare the extension of the filepath with a given extension.
  *
  * \param filepath The path to the file.
  * \param ext The extension to compare the file to.
@@ -161,14 +163,15 @@ esp_err_t common_get_handler(httpd_req_t* req)
     return ESP_OK;
 }
 
-void register_endpoints(httpd_handle_t& server)
+void register_endpoints(httpd_handle_t& server, activity::Context& context)
 {
     httpd_uri_t common_get_uri = {
         .uri = "/*",
         .method = HTTP_GET,
         .handler = common_get_handler,
-        .user_ctx = nullptr
+        .user_ctx = &context
     };
+
     httpd_register_uri_handler(server, &common_get_uri);
 }
 

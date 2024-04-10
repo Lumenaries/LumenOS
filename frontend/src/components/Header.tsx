@@ -6,10 +6,8 @@ function Header(props) {
   return (
     <header class="mx-auto flex max-w-xl justify-between py-10">
       <div class="font-extrabold text-3xl">{props.children}</div>
-      <div class="flex">
-        <div class="mr-3">
-          <ToggleButton />
-        </div>
+      <div class="flex items-center gap-x-3 sm:gap-x-5">
+        <ToggleButton />
         <MenuIcon />
       </div>
     </header>
