@@ -5,12 +5,19 @@ idf_component_register(SRCS
                            "lumen/activity/field/text.cpp"
                            "lumen/activity/football.cpp"
                            "lumen/app_task.cpp"
+                           "lumen/hardware/button/button.cpp"
+                           "lumen/hardware/button/led_button.cpp"
+                           "lumen/hardware/button/rgb_button.cpp"
+                           "lumen/hardware/button/rocker_switch.cpp"
+                           "lumen/hardware/led_pin.cpp"
                            "lumen/net/mdns.cpp"
                            "lumen/net/wifi.cpp"
                            "lumen/web/server.cpp"
                            "main.cpp"
                        INCLUDE_DIRS "."
                        REQUIRES
+                            button          # iot_button
+                            driver
                             esp_event
                             esp_http_server
                             esp_hw_support  # esp_mac
