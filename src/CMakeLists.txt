@@ -9,6 +9,7 @@ idf_component_register(SRCS
                            "lumen/hardware/button/led_button.cpp"
                            "lumen/hardware/button/rgb_button.cpp"
                            "lumen/hardware/button/rocker_switch.cpp"
+                           "lumen/hardware/display.cpp"
                            "lumen/hardware/led_pin.cpp"
                            "lumen/net/mdns.cpp"
                            "lumen/net/wifi.cpp"
@@ -16,6 +17,7 @@ idf_component_register(SRCS
                            "main.cpp"
                        INCLUDE_DIRS "."
                        REQUIRES
+                            ESP32-HUB75-MatrixPanel-DMA
                             button          # iot_button
                             driver
                             esp_event
