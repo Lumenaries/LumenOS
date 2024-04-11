@@ -41,6 +41,8 @@ void Context::set_activity(Type type)
     }
 
     activity_type_ = type;
+
+    update_display();
 }
 
 Type Context::get_activity_type() const

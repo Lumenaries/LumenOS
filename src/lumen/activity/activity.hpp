@@ -21,7 +21,8 @@ protected:
 
 private:
     inline static auto display_ =
-        std::make_unique<hardware::Display>(4, 3, 32, 16);
+        std::make_unique<hardware::Display>(1, 1, 32, 16);
+    // inline static hardware::Display* display_ = nullptr;
 };
 
 } // namespace lumen::activity

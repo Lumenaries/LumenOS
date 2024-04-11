@@ -1,11 +1,11 @@
 #include "lumen/activity/football.hpp"
 
 namespace lumen::activity {
+namespace {
 
-Football::Football()
-{
-    update_display();
-}
+constexpr auto text_color = 52825;
+
+} // namespace
 
 field::Team& Football::team_one()
 {
@@ -37,8 +37,10 @@ void Football::update_display()
     auto* display = get_display();
 
     display->clearScreen();
+    display->setTextColor(text_color);
 
     display->setCursor(0, 0);
+    display->print("H:");
     display->print(team_one_.score().to_string().c_str());
 }
 

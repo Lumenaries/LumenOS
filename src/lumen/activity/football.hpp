@@ -10,8 +10,6 @@ namespace lumen::activity {
 /// Stores and displays the data for a Football game.
 class Football : public Activity {
 public:
-    Football();
-
     /// Return the first team.
     field::Team& team_one();
 
