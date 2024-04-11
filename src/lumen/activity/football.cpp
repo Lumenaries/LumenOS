@@ -2,6 +2,11 @@
 
 namespace lumen::activity {
 
+Football::Football()
+{
+    update_display();
+}
+
 field::Team& Football::team_one()
 {
     return team_one_;
@@ -29,6 +34,12 @@ field::Number& Football::yards()
 
 void Football::update_display()
 {
+    auto* display = get_display();
+
+    display->clearScreen();
+
+    display->setCursor(0, 0);
+    display->print(team_one_.score().to_string().c_str());
 }
 
 } // namespace lumen::activity

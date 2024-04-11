@@ -32,6 +32,7 @@ void Context::set_activity(Type type)
         activity_.reset();
         break;
     case Type::football:
+        ESP_LOGI(tag, "Setting activity to football");
         activity_ = std::move(std::make_unique<activity::Football>());
         break;
     default:

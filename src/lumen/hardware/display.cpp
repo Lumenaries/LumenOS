@@ -3,30 +3,47 @@
 namespace lumen::hardware {
 namespace {
 
-int yRemap[] = {0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7, 4, 5, 6, 7};
+constexpr int yRemap[] = {0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7, 4, 5, 6, 7};
 
-}
+} // namespace
 
-Display::Display(
-    int numRows,
-    int numCols,
-    int panelResX,
-    int panelResY,
-    HUB75_I2S_CFG::i2s_pins& pins
-)
+Display::Display(int numRows, int numCols, int panelResX, int panelResY)
     : Adafruit_GFX(panelResX * numCols, panelResY * numRows), numRows_{numRows},
       numCols_{numCols}, panelResX_{panelResX}, panelResY_{panelResY},
       displayResX_{numCols * panelResX}, displayResY_{numRows * panelResY},
       dmaResX_{panelResX * numCols * numRows}
 {
-    auto config =
-        HUB75_I2S_CFG(panelResX * 2, panelResY / 2, numRows * numCols, pins);
+    auto config = HUB75_I2S_CFG(
+        panelResX * 2,
+        panelResY / 2,
+        numRows * numCols,
+        HUB75_I2S_CFG::i2s_pins{
+            CONFIG_HARDWARE_DISPLAY_R1_PIN,
+            CONFIG_HARDWARE_DISPLAY_G1_PIN,
+            CONFIG_HARDWARE_DISPLAY_B1_PIN,
+            CONFIG_HARDWARE_DISPLAY_R2_PIN,
+            CONFIG_HARDWARE_DISPLAY_G2_PIN,
+            CONFIG_HARDWARE_DISPLAY_B2_PIN,
+            CONFIG_HARDWARE_DISPLAY_A_PIN,
+            CONFIG_HARDWARE_DISPLAY_B_PIN,
+            CONFIG_HARDWARE_DISPLAY_C_PIN,
+            CONFIG_HARDWARE_DISPLAY_D_PIN,
+            CONFIG_HARDWARE_DISPLAY_E_PIN,
+            CONFIG_HARDWARE_DISPLAY_LAT_PIN,
+            CONFIG_HARDWARE_DISPLAY_OE_PIN,
+            CONFIG_HARDWARE_DISPLAY_CLK_PIN,
+        }
+    );
 
     // config.double_buff = true;
 
     // config.setPixelColorDepthBits(6);
 
     dmaDisplay_ = std::make_unique<MatrixPanel_I2S_DMA>(config);
+
+    setBrightness(20);
+    begin();
+    clearScreen();
 }
 
 bool Display::begin()
@@ -129,4 +146,4 @@ Display::Coordinate Display::mapCoord(int16_t x, int16_t y)
     return coord;
 }
 
-} // namespace lumen::activity
+} // namespace lumen::hardware

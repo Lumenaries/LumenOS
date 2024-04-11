@@ -1,4 +1,5 @@
 idf_component_register(SRCS
+                           "lumen/activity/activity.cpp"
                            "lumen/activity/context.cpp"
                            "lumen/activity/field/number.cpp"
                            "lumen/activity/field/team.cpp"

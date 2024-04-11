@@ -9,13 +9,7 @@ namespace lumen::hardware {
 
 class Display : public Adafruit_GFX {
 public:
-    Display(
-        int numRows,
-        int numCols,
-        int panelResX,
-        int panelResY,
-        HUB75_I2S_CFG::i2s_pins& pins
-    );
+    Display(int numRows, int numCols, int panelResX, int panelResY);
 
     bool begin();
 
