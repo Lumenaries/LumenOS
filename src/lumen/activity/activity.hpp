@@ -20,8 +20,7 @@ protected:
     hardware::Display* get_display();
 
 private:
-    inline static auto display_ =
-        std::make_unique<hardware::Display>(1, 1, 32, 16);
+    inline static auto display_ = std::make_unique<hardware::Display>();
     // inline static hardware::Display* display_ = nullptr;
 };
 

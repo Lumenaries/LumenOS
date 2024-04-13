@@ -7,16 +7,18 @@ constexpr int yRemap[] = {0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7, 4, 5, 6, 7};
 
 } // namespace
 
-Display::Display(int numRows, int numCols, int panelResX, int panelResY)
-    : Adafruit_GFX(panelResX * numCols, panelResY * numRows), numRows_{numRows},
-      numCols_{numCols}, panelResX_{panelResX}, panelResY_{panelResY},
-      displayResX_{numCols * panelResX}, displayResY_{numRows * panelResY},
-      dmaResX_{panelResX * numCols * numRows}
+Display::Display()
+    : Adafruit_GFX(
+          CONFIG_HARDWARE_DISPLAY_PANEL_RES_X *
+              CONFIG_HARDWARE_DISPLAY_PANEL_COLUMNS,
+          CONFIG_HARDWARE_DISPLAY_PANEL_RES_Y *
+              CONFIG_HARDWARE_DISPLAY_PANEL_ROWS
+      )
 {
     auto config = HUB75_I2S_CFG(
-        panelResX * 2,
-        panelResY / 2,
-        numRows * numCols,
+        panelResX_ * 2,
+        panelResY_ / 2,
+        numRows_ * numCols_,
         HUB75_I2S_CFG::i2s_pins{
             CONFIG_HARDWARE_DISPLAY_R1_PIN,
             CONFIG_HARDWARE_DISPLAY_G1_PIN,
@@ -35,31 +37,28 @@ Display::Display(int numRows, int numCols, int panelResX, int panelResY)
         }
     );
 
-    // config.double_buff = true;
+    display_ = std::make_unique<MatrixPanel_I2S_DMA>(config);
 
-    // config.setPixelColorDepthBits(6);
-
-    dmaDisplay_ = std::make_unique<MatrixPanel_I2S_DMA>(config);
-
-    setBrightness(20);
     begin();
     clearScreen();
+    // TODO: We may need to adjust the default brightness at some point
+    setBrightness(20);
 }
 
 bool Display::begin()
 {
-    return dmaDisplay_->begin();
+    return display_->begin();
 }
 
 void Display::setBrightness(uint8_t brightness)
 {
-    dmaDisplay_->setBrightness(brightness);
+    display_->setBrightness(brightness);
 }
 
 void Display::drawPixel(int16_t x, int16_t y, uint16_t color)
 {
     auto mapped = mapCoord(x, y);
-    dmaDisplay_->drawPixel(mapped.x, mapped.y, color);
+    display_->drawPixel(mapped.x, mapped.y, color);
 }
 
 void Display::drawPixelRGB888(
@@ -71,12 +70,12 @@ void Display::drawPixelRGB888(
 )
 {
     auto mapped = mapCoord(x, y);
-    dmaDisplay_->drawPixelRGB888(mapped.x, mapped.y, r, g, b);
+    display_->drawPixelRGB888(mapped.x, mapped.y, r, g, b);
 }
 
 void Display::fillScreen(uint16_t color)
 {
-    dmaDisplay_->fillScreen(color);
+    display_->fillScreen(color);
 }
 
 void Display::clearScreen()
@@ -86,22 +85,27 @@ void Display::clearScreen()
 
 uint16_t Display::color444(uint8_t r, uint8_t g, uint8_t b)
 {
-    return dmaDisplay_->color444(r, g, b);
+    return display_->color444(r, g, b);
 }
 
 uint16_t Display::color565(uint8_t r, uint8_t g, uint8_t b)
 {
-    return dmaDisplay_->color565(r, g, b);
+    return display_->color565(r, g, b);
 }
 
 uint16_t Display::color333(uint8_t r, uint8_t g, uint8_t b)
 {
-    return dmaDisplay_->color333(r, g, b);
+    return display_->color333(r, g, b);
 }
 
 void Display::flipDMABuffer()
 {
-    dmaDisplay_->flipDMABuffer();
+    display_->flipDMABuffer();
+}
+
+MatrixPanel_I2S_DMA* Display::getDisplay()
+{
+    return display_.get();
 }
 
 Display::Coordinate Display::mapCoord(int16_t x, int16_t y)

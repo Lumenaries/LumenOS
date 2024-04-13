@@ -9,7 +9,7 @@ namespace lumen::hardware {
 
 class Display : public Adafruit_GFX {
 public:
-    Display(int numRows, int numCols, int panelResX, int panelResY);
+    Display();
 
     bool begin();
 
@@ -32,10 +32,7 @@ public:
 
     void flipDMABuffer();
 
-    MatrixPanel_I2S_DMA* dmaDisplay()
-    {
-        return dmaDisplay_.get();
-    }
+    MatrixPanel_I2S_DMA* getDisplay();
 
 private:
     struct Coordinate {
@@ -44,27 +41,37 @@ private:
     };
 
     // Number of rows in the chain
-    int numRows_;
+    int numRows_{CONFIG_HARDWARE_DISPLAY_PANEL_ROWS};
 
     // Number of columns in the chain
-    int numCols_;
+    int numCols_{CONFIG_HARDWARE_DISPLAY_PANEL_COLUMNS};
 
     // Number of pixels in the X direction of each panel
-    int panelResX_;
+    int panelResX_{CONFIG_HARDWARE_DISPLAY_PANEL_RES_X};
 
     // Number of pixels in the Y direction of each panel
-    int panelResY_;
+    int panelResY_{CONFIG_HARDWARE_DISPLAY_PANEL_RES_Y};
 
     // The number pixels on the X axis in the entire display
-    int displayResX_;
+    int displayResX_{
+        CONFIG_HARDWARE_DISPLAY_PANEL_RES_X *
+        CONFIG_HARDWARE_DISPLAY_PANEL_COLUMNS
+    };
 
     // The number pixels on the Y axis in the entire display
-    int displayResY_;
+    int displayResY_{
+        CONFIG_HARDWARE_DISPLAY_PANEL_RES_X *
+        CONFIG_HARDWARE_DISPLAY_PANEL_COLUMNS
+    };
 
     // The width of the chain in pixels (as the DMA engine sees it)
-    int dmaResX_;
+    int dmaResX_{
+        CONFIG_HARDWARE_DISPLAY_PANEL_RES_X *
+        CONFIG_HARDWARE_DISPLAY_PANEL_COLUMNS *
+        CONFIG_HARDWARE_DISPLAY_PANEL_ROWS
+    };
 
-    std::unique_ptr<MatrixPanel_I2S_DMA> dmaDisplay_;
+    std::unique_ptr<MatrixPanel_I2S_DMA> display_{};
 
     Coordinate mapCoord(int16_t x, int16_t y);
 };

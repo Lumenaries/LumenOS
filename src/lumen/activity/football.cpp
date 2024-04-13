@@ -37,9 +37,9 @@ void Football::update_display()
     auto* display = get_display();
 
     display->clearScreen();
-    display->setTextColor(text_color);
+    display->setTextColor(display->color565(247, 141, 64));
 
-    display->setCursor(0, 0);
+    display->setCursor(70, 0);
     display->print("H:");
     display->print(team_one_.score().to_string().c_str());
 }
