@@ -88,6 +88,11 @@ MatrixPanel_I2S_DMA* Display::getDisplay()
     return display_.get();
 }
 
+bool Display::begin()
+{
+    return display_->begin();
+}
+
 Display::Coordinate Display::mapCoord(int16_t x, int16_t y)
 {
     // Check if requested coordinate is outside the display bounds
@@ -129,11 +134,5 @@ Display::Coordinate Display::mapCoord(int16_t x, int16_t y)
 
     return coord;
 }
-
-bool Display::begin()
-{
-    return display_->begin();
-}
-
 
 } // namespace lumen::hardware

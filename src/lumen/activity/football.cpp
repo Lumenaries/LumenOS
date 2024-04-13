@@ -3,9 +3,6 @@
 #include "lumen/hardware/display.hpp"
 
 namespace lumen::activity {
-namespace {
-
-} // namespace
 
 field::Team& Football::team_one()
 {

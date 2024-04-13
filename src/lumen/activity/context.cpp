@@ -13,7 +13,9 @@ constexpr auto tag = "activity/context";
 
 Context::Context(Type type /* = Type::none */)
 {
-    set_activity(type);
+    if (type != Type::none) {
+        set_activity(type);
+    }
 }
 
 Activity* Context::get_activity()
