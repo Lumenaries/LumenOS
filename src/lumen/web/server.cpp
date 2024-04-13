@@ -1,8 +1,5 @@
 #include "lumen/web/server.hpp"
 
-#include "lumen/activity/context.hpp"
-#include "lumen/activity/football.hpp"
-
 #include "esp_http_server.h"
 #include "esp_log.h"
 #include "esp_vfs.h"
@@ -166,32 +163,8 @@ esp_err_t common_get_handler(httpd_req_t* req)
     return ESP_OK;
 }
 
-esp_err_t football_put_handler(httpd_req_t* request)
-{
-    auto* context = static_cast<activity::Context*>(request->user_ctx);
-
-    if (context->get_activity_type() != activity::Type::football) {
-        httpd_resp_send(request, nullptr, 0);
-        return ESP_FAIL;
-    }
-
-    auto* football = static_cast<activity::Football*>(context->get_activity());
-
-    football->team_one().score().increase();
-
-    httpd_resp_send(request, nullptr, 0);
-    return ESP_OK;
-}
-
 void register_endpoints(httpd_handle_t& server, activity::Context& context)
 {
-    httpd_uri_t football_put_uri = {
-        .uri = "/football",
-        .method = HTTP_PUT,
-        .handler = football_put_handler,
-        .user_ctx = &context
-    };
-
     httpd_uri_t common_get_uri = {
         .uri = "/*",
         .method = HTTP_GET,
@@ -199,7 +172,6 @@ void register_endpoints(httpd_handle_t& server, activity::Context& context)
         .user_ctx = &context
     };
 
-    httpd_register_uri_handler(server, &football_put_uri);
     httpd_register_uri_handler(server, &common_get_uri);
 }
 

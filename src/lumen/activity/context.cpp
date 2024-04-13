@@ -27,20 +27,19 @@ void Context::set_activity(Type type)
         return;
     }
 
+    activity_type_ = type;
+
     switch (type) {
     case Type::none:
         activity_.reset();
-        break;
+        return;
     case Type::football:
-        ESP_LOGI(tag, "Setting activity to football");
         activity_ = std::move(std::make_unique<activity::Football>());
         break;
     default:
         ESP_LOGW(tag, "Unknown sport");
         return;
     }
-
-    activity_type_ = type;
 
     update_display();
 }

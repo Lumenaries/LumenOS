@@ -45,11 +45,6 @@ Display::Display()
     setBrightness(20);
 }
 
-bool Display::begin()
-{
-    return display_->begin();
-}
-
 void Display::setBrightness(uint8_t brightness)
 {
     display_->setBrightness(brightness);
@@ -134,5 +129,11 @@ Display::Coordinate Display::mapCoord(int16_t x, int16_t y)
 
     return coord;
 }
+
+bool Display::begin()
+{
+    return display_->begin();
+}
+
 
 } // namespace lumen::hardware

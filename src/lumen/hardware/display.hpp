@@ -11,9 +11,6 @@ class Display : public Adafruit_GFX {
 public:
     Display();
 
-    /// Initialize the display.
-    bool begin();
-
     /** Set the brightness of the display.
      *
     * \param brightness The brightness value out of. A value of 0 = 0%, and
@@ -105,6 +102,10 @@ private:
 
     std::unique_ptr<MatrixPanel_I2S_DMA> display_{};
 
+    /// Initialize the display.
+    bool begin();
+
+    /// Remap the desired coordinates so they display correctly
     Coordinate mapCoord(int16_t x, int16_t y);
 };
 

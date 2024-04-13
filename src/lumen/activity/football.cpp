@@ -5,11 +5,6 @@
 namespace lumen::activity {
 namespace {
 
-constexpr uint16_t color565(uint8_t red, uint8_t green, uint8_t blue)
-{
-    return ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | (blue >> 3);
-}
-
 } // namespace
 
 field::Team& Football::team_one()
@@ -41,13 +36,7 @@ void Football::update_display()
 {
     auto* display = get_display();
 
-    display->clearScreen();
-    display->setTextColor(hardware::Display::color565(247, 141, 64));
-    //display->setTextColor(color565(247, 141, 64));
-
-    display->setCursor(70, 0);
-    display->print("H:");
-    display->print(team_one_.score().to_string().c_str());
+    // TODO: Configure how football will be displayed
 }
 
 } // namespace lumen::activity
