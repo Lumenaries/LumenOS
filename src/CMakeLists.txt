@@ -1,10 +1,12 @@
 idf_component_register(SRCS
+                           "lumen/activity/connect.cpp"
                            "lumen/activity/context.cpp"
                            "lumen/activity/field/number.cpp"
                            "lumen/activity/field/team.cpp"
                            "lumen/activity/field/text.cpp"
                            "lumen/activity/football.cpp"
                            "lumen/app_task.cpp"
+                           "lumen/button_callback.cpp"
                            "lumen/hardware/button/button.cpp"
                            "lumen/hardware/button/led_button.cpp"
                            "lumen/hardware/button/rgb_button.cpp"
@@ -32,8 +34,8 @@ idf_component_register(SRCS
 
 set(WEB_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../frontend")
 
-if (EXISTS ${WEB_SRC_DIR}/dist)
-    spiffs_create_partition_image(www ${WEB_SRC_DIR}/dist FLASH_IN_PROJECT)
-else()
-    message(FATAL_ERROR "${WEB_SRC_DIR}/dist doesn't exit. Please run 'npm run build' in ${WEB_SRC_DIR}")
-endif()
+#if (EXISTS ${WEB_SRC_DIR}/dist)
+#    spiffs_create_partition_image(www ${WEB_SRC_DIR}/dist FLASH_IN_PROJECT)
+#else()
+#    message(FATAL_ERROR "${WEB_SRC_DIR}/dist doesn't exit. Please run 'npm run build' in ${WEB_SRC_DIR}")
+#endif()

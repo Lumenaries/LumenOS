@@ -10,19 +10,26 @@ menu "Lumen"
 
     menu "Networking"
         menu "Wi-Fi"
-            config WIFI_SSID
+            config NET_WIFI_SSID
                 string "SoftAP SSID"
                 default "lumen"
                 help
                     SSID (network name) to setup the softAP with.
 
-            config WIFI_PASSWORD
+            config NET_WIFI_PASSWORD
                 string "SoftAP Password"
                 default "lumenaries"
                 help
                     Wi-Fi password (WPA or WPA2) to use for the softAP.
 
-            config MAX_STA_CONNECTION
+            config NET_WIFI_PASSWORD_LENGTH
+                int "Length of SoftAP Password"
+                default 8
+                range 8 64
+                help
+                    Wi-Fi password length to use for random password generation.
+
+            config NET_WIFI_MAX_STA_CONNECTION
                 int "Maxmium STA Connections"
                 default 4
                 help
@@ -30,11 +37,46 @@ menu "Lumen"
         endmenu
 
         menu "mDNS"
-            config MDNS_HOSTNAME
+            config NET_MDNS_HOSTNAME
                 string "mDNS Hostname"
                 default "lumen"
                 help
                     mDNS hostname to allow users users to navigate to the UI.
+
+        endmenu
+    endmenu
+
+    menu "Hardware"
+        menu "Power Button"
+            config HARDWARE_POWER_BUTTON_PIN
+                int "Power Button GPIO Pin"
+                default 4
+                help
+                    Set the GPIO number of the power button pin.
+
+            config HARDWARE_POWER_BUTTON_ACTIVE_LEVEL
+                int "Power Button GPIO Pin Active Level"
+                default 1
+                help
+                    Set the active level (high or low) of the GPIO pin.
+
+            config HARDWARE_POWER_BUTTON_RED_PIN
+                int "Power Button Red LED Pin"
+                default 5
+                help
+                    Set the GPIO number of the power button's red LED pin.
+
+            config HARDWARE_POWER_BUTTON_GREEN_PIN
+                int "Power Button Green LED Pin"
+                default 6
+                help
+                    Set the GPIO number of the power button's green LED pin.
+
+            config HARDWARE_POWER_BUTTON_BLUE_PIN
+                int "Power Button Blue LED Pin"
+                default 7
+                help
+                    Set the GPIO number of the power button's blue LED pin.
 
         endmenu
     endmenu

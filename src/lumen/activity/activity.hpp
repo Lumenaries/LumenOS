@@ -2,7 +2,7 @@
 
 namespace lumen::activity {
 
-enum class Type { none = 0, football };
+enum class Type { none = 0, connect, football };
 
 /// Base class from which different displayable activites should derive.
 class Activity {

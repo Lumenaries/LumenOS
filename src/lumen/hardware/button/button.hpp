@@ -36,7 +36,7 @@ public:
      *
      * \returns ESP_ERR_NO_MEM No more memory allocation for the event.
      */
-    esp_err_t register_callback(button_event_t event, button_cb_t callback);
+    esp_err_t register_callback(button_event_t event, button_cb_t callback, void* context = nullptr);
 
 private:
     button_handle_t button_{};

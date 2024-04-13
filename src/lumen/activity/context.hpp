@@ -25,6 +25,8 @@ public:
 
     [[nodiscard]] Type get_activity_type() const;
 
+    void user_connected();
+
     /** Redraw the display.
      *
      * Should be used when a state change occurs that should be reflected on
