@@ -1,9 +1,14 @@
 #include "lumen/activity/football.hpp"
 
+#include "lumen/hardware/display.hpp"
+
 namespace lumen::activity {
 namespace {
 
-constexpr auto text_color = 52825;
+constexpr uint16_t color565(uint8_t red, uint8_t green, uint8_t blue)
+{
+    return ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | (blue >> 3);
+}
 
 } // namespace
 
@@ -37,7 +42,8 @@ void Football::update_display()
     auto* display = get_display();
 
     display->clearScreen();
-    display->setTextColor(display->color565(247, 141, 64));
+    display->setTextColor(hardware::Display::color565(247, 141, 64));
+    //display->setTextColor(color565(247, 141, 64));
 
     display->setCursor(70, 0);
     display->print("H:");

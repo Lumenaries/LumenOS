@@ -83,21 +83,6 @@ void Display::clearScreen()
     fillScreen(0);
 }
 
-uint16_t Display::color444(uint8_t r, uint8_t g, uint8_t b)
-{
-    return display_->color444(r, g, b);
-}
-
-uint16_t Display::color565(uint8_t r, uint8_t g, uint8_t b)
-{
-    return display_->color565(r, g, b);
-}
-
-uint16_t Display::color333(uint8_t r, uint8_t g, uint8_t b)
-{
-    return display_->color333(r, g, b);
-}
-
 void Display::flipDMABuffer()
 {
     display_->flipDMABuffer();

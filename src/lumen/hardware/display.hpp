@@ -11,25 +11,57 @@ class Display : public Adafruit_GFX {
 public:
     Display();
 
+    /// Initialize the display.
     bool begin();
 
-    // 0 - 0%, 255 - 100%
+    /** Set the brightness of the display.
+     *
+    * \param brightness The brightness value out of. A value of 0 = 0%, and
+    *                   255 = 100%
+    */
     void setBrightness(uint8_t brightness);
 
+    /** Draw a pixel to a given coordinate.
+     *
+     * \param x X-coordinate of pixel to light.
+     * \param y Y-coordinate of pixel to light.
+     * \param color "Packed" color value of pixel. Use color565() to convert
+     *              typical RGB values into 5:6:5 "packed" format.
+     */
     void drawPixel(int16_t x, int16_t y, uint16_t color) override;
 
+    /** Draw a pixel to a given coordinate.
+     *
+     * \param x X-coordinate of pixel to light.
+     * \param y Y-coordinate of pixel to light.
+     * \param r Red color value of LED.
+     * \param g Green color value of LED.
+     * \param b Blue color value of LED.
+     */
     void drawPixelRGB888(int16_t x, int16_t y, uint8_t r, uint8_t g, uint8_t b);
 
+    /** Color every pixel the same color.
+     *
+     * \param color Color value of the screen. Use color444(), color565(), or
+     *              color333() to convert a typical RGB value.
+     */
     void fillScreen(uint16_t color) override;
 
+    /// Turn off every pixel.
     void clearScreen();
 
-    uint16_t color444(uint8_t r, uint8_t g, uint8_t b);
+    /** Convert RGB values into 5:6:5 "packed" 16 bit color format.
+     *
+     * \param red Red color value of LED.
+     * \param green Green color value of LED.
+     * \param blue Blue color value of LED.
+     */
+    static constexpr uint16_t color565(uint8_t red, uint8_t green, uint8_t blue)
+    {
+        return ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | (blue >> 3);
+    }
 
-    uint16_t color565(uint8_t r, uint8_t g, uint8_t b);
-
-    uint16_t color333(uint8_t r, uint8_t g, uint8_t b);
-
+    /// Swap the display buffer when double buffering is enabled.
     void flipDMABuffer();
 
     MatrixPanel_I2S_DMA* getDisplay();
