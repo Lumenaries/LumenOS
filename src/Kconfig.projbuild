@@ -122,19 +122,19 @@ menu "Lumen"
 
     menu "Networking"
         menu "Wi-Fi"
-            config WIFI_SSID
+            config NET_WIFI_SSID
                 string "SoftAP SSID"
                 default "lumen"
                 help
                     SSID (network name) to setup the softAP with.
 
-            config WIFI_PASSWORD
+            config NET_WIFI_PASSWORD
                 string "SoftAP Password"
                 default "lumenaries"
                 help
                     Wi-Fi password (WPA or WPA2) to use for the softAP.
 
-            config MAX_STA_CONNECTION
+            config NET_WIFI_MAX_STA_CONNECTION
                 int "Maxmium STA Connections"
                 default 4
                 help
@@ -142,7 +142,7 @@ menu "Lumen"
         endmenu
 
         menu "mDNS"
-            config MDNS_HOSTNAME
+            config NET_MDNS_HOSTNAME
                 string "mDNS Hostname"
                 default "lumen"
                 help

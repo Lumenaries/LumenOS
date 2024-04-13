@@ -50,14 +50,14 @@ void init_wifi_softap()
 
     wifi_config_t wifi_config = {
         .ap =
-            {.ssid = CONFIG_WIFI_SSID,
-             .password = CONFIG_WIFI_PASSWORD,
-             .ssid_len = strlen(CONFIG_WIFI_SSID),
+            {.ssid = CONFIG_NET_WIFI_SSID,
+             .password = CONFIG_NET_WIFI_PASSWORD,
+             .ssid_len = strlen(CONFIG_NET_WIFI_SSID),
              .authmode = WIFI_AUTH_WPA_WPA2_PSK,
-             .max_connection = CONFIG_MAX_STA_CONNECTION}
+             .max_connection = CONFIG_NET_WIFI_MAX_STA_CONNECTION}
     };
 
-    if (strlen(CONFIG_WIFI_PASSWORD) == 0) {
+    if (strlen(CONFIG_NET_WIFI_PASSWORD) == 0) {
         wifi_config.ap.authmode = WIFI_AUTH_OPEN;
     }
 
@@ -77,8 +77,8 @@ void init_wifi_softap()
     ESP_LOGI(
         tag,
         "wifi_init_softap finished. SSID:'%s' password:'%s'",
-        CONFIG_WIFI_SSID,
-        CONFIG_WIFI_PASSWORD
+        CONFIG_NET_WIFI_SSID,
+        CONFIG_NET_WIFI_PASSWORD
     );
 }
 

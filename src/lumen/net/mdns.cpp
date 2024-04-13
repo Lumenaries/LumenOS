@@ -12,7 +12,7 @@ constexpr auto tag = "net/mdns";
 void init_mdns()
 {
     mdns_init();
-    mdns_hostname_set(CONFIG_MDNS_HOSTNAME);
+    mdns_hostname_set(CONFIG_NET_MDNS_HOSTNAME);
 
     mdns_txt_item_t serviceTxtData[] = {{"board", "esp32"}, {"path", "/"}};
 
