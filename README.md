@@ -6,15 +6,79 @@ Capstone Design Program.
 
 To learn more about the project, please see the `docs` directory.
 
-The source code for the ESP32-S3 microcontroller is stored in the `main`
+The source code for the ESP32-S3 microcontroller is stored in the `src`
 directory. The source code for the web frontend is stored in the `frontend/src`
 directory.
+
+## Dependencies
+
+This project requires `arduino core`. You have a few options here:
+
+- Clone [arduino core](https://github.com/espressif/arduino-esp32) to `lib`
+
+  ```
+  $ git clone https://github.com/espressif/arduino-esp32.git lib/arduino
+  ```
+
+  We don't recommend this because it's such a large library (2+ GB), if you need
+  to use it anywhere else, you'll end up waiting around for a while to
+  redownload it.
+
+- Clone [arduino core](https://github.com/espressif/arduino-esp32) to some
+  directory like `~/sdk/esp/arduino` and export the `ARDUINO_ESP32_PATH`
+  environment variable.
+
+  ```
+  $ mkdir -p ~/sdk/esp/arduino
+  $ git clone https://github.com/espressif/arduino-esp32.git ~/sdk/esp/arduino/arduino
+  $ export ARDUINO_ESP32_PATH="~/sdk/esp/arduino"
+  ```
+
+This project uses the `esp-idf` SDK. Please follow the instructions to install
+[esp-idf v5.1](https://docs.espressif.com/projects/esp-idf/en/v5.1/esp32/get-started/index.html)
+and source it.
+
+`lumen` was written with the
+[ESP32-S3](https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf)
+in mind, but it'll probably works on other ESP32 variants.
+
+```
+$ idf.py set-target esp32s3
+```
+
+## Building
+
+After setting up the dependencies, build the project.
+
+1. Clone the repository and navigate to it
+
+```
+$ git clone https://github.com/Lumenaries/lumen.git; cd lumen
+```
+
+2. Initialize all of the submodules
+
+```
+$ git submodule update --init --recursive
+```
+
+3. Build the project
+
+```
+$ idf.py build
+```
+
+4. Flash and monitor the project
+
+```
+$ idf.py -p /path/to/esp32s3 flash monitor
+```
 
 ## Troubleshooting
 
 ### Frontend
 
-*Frontend file exists, but the server is unable to open it.*
+_Frontend file exists, but the server is unable to open it._
 
 The frontend files may not exist in the partition on the ESP32-S3. Run the
 following command.
