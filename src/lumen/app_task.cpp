@@ -2,6 +2,7 @@
 
 #include "lumen/activity/context.hpp"
 #include "lumen/button_callback.hpp"
+#include "lumen/callback_context.hpp"
 #include "lumen/hardware/button/rgb_button.hpp"
 #include "lumen/net/wifi.hpp"
 #include "lumen/web/server.hpp"
@@ -23,7 +24,11 @@ void app_task(void* /* parameters */)
 {
     auto activity_context = activity::Context{activity::Type::connect};
 
-    auto wifi = net::WiFi{activity_context};
+    auto wifi = net::WiFi{};
+
+    auto callback_context = CallbackContext{&activity_context, &wifi};
+
+    wifi.register_callback(callback_context);
 
     auto web_server = web::Server{activity_context};
 
@@ -34,14 +39,10 @@ void app_task(void* /* parameters */)
         CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN,
         CONFIG_HARDWARE_POWER_BUTTON_BLUE_PIN,
     };
-
-    /*
-    auto callback_context = CallbackContext{&activity_context, &wifi};
     power_button.register_callback(
         BUTTON_LONG_PRESS_START, power_button_long_press, &callback_context
     );
     power_button.set_color(hardware::button::RGBButton::LEDColor::yellow);
-    */
 
     while (true) {
         vTaskDelay(100);

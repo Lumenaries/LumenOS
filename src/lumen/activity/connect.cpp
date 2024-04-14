@@ -5,6 +5,11 @@
 #include "esp_log.h"
 
 namespace lumen::activity {
+namespace {
+
+constexpr auto tag = "activity/connect";
+
+}
 
 Connect::Connect()
     : ssid_{reinterpret_cast<char const*>(CONFIG_NET_WIFI_SSID)},
@@ -14,19 +19,15 @@ Connect::Connect()
 
 void Connect::set_connected(bool connected)
 {
-    ESP_LOGI("activity/connect", "User connected");
-    ESP_LOGI("activity/connect", "connect obj addr %p", this);
     connected_ = connected;
-
-    this->update_display();
+    update_display();
 }
 
 void Connect::update_display()
 {
-    ESP_LOGI("activity/connect", "update display");
     if (connected_) {
         // TODO: use the display object to layout the website address.
-        ESP_LOGI("activity/connect", "website address: '%s.local'", mdns_hostname_.c_str());
+        ESP_LOGI(tag, "website address: '%s.local'", mdns_hostname_.c_str());
         return;
     }
 
@@ -37,10 +38,7 @@ void Connect::update_display()
     // auto* display = get_display();
 
     ESP_LOGI(
-        "activity/connect",
-        "SSID: %s password: %s",
-        ssid_.c_str(),
-        password_.c_str()
+        tag, "SSID: '%s' password: '%s'", ssid_.c_str(), password_.c_str()
     );
 }
 
