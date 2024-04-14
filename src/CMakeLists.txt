@@ -1,4 +1,5 @@
 idf_component_register(SRCS
+                           "lumen/activity/activity.cpp"
                            "lumen/activity/context.cpp"
                            "lumen/activity/field/number.cpp"
                            "lumen/activity/field/team.cpp"
@@ -9,6 +10,7 @@ idf_component_register(SRCS
                            "lumen/hardware/button/led_button.cpp"
                            "lumen/hardware/button/rgb_button.cpp"
                            "lumen/hardware/button/rocker_switch.cpp"
+                           "lumen/hardware/display.cpp"
                            "lumen/hardware/led_pin.cpp"
                            "lumen/net/mdns.cpp"
                            "lumen/net/wifi.cpp"
@@ -16,6 +18,10 @@ idf_component_register(SRCS
                            "main.cpp"
                        INCLUDE_DIRS "."
                        REQUIRES
+                            # Third-party libraries.
+                            ESP32-HUB75-MatrixPanel-DMA
+
+                            # First-party libraries.
                             button          # iot_button
                             driver
                             esp_event

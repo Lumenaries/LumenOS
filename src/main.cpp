@@ -32,7 +32,7 @@ extern "C" void app_main()
     lumen::net::init_wifi_softap();
     lumen::net::init_mdns();
 
-    xTaskCreate(lumen::app_task, "Application Task", 2048, nullptr, 5, nullptr);
+    xTaskCreate(lumen::app_task, "Application Task", 4096, nullptr, 5, nullptr);
 }
 
 namespace {
@@ -51,12 +51,15 @@ esp_err_t init_filesystem()
     switch (ret) {
     case ESP_OK:
         break;
+
     case ESP_FAIL:
         ESP_LOGE(tag, "Failed to mount or format filesystem");
         break;
+
     case ESP_ERR_NOT_FOUND:
         ESP_LOGE(tag, "Failed to find SPIFFS partition");
         break;
+
     default:
         ESP_LOGE(tag, "Failed to initialize SPIFFS (%s)", esp_err_to_name(ret));
     }
