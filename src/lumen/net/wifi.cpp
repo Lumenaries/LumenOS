@@ -6,6 +6,7 @@
 #include "esp_log.h"
 #include "esp_mac.h"
 #include "esp_netif.h"
+#include "esp_wifi.h"
 #include "lwip/inet.h"
 
 #include <cstdlib>
@@ -25,6 +26,10 @@ wifi_config_t config{.ap{
     .max_connection = CONFIG_NET_WIFI_MAX_STA_CONNECTION,
 }};
 
+void randomize_wifi_password();
+
+void log_wifi_credentials();
+
 /** The handler for WiFi events.
  *
  * \param arg The arguments passed to the event.
@@ -41,7 +46,7 @@ void wifi_event_handler(
 
 } // namespace
 
-WiFi::WiFi()
+void init_wifi()
 {
     // Initialize networking stack
     ESP_ERROR_CHECK(esp_netif_init());
@@ -61,33 +66,35 @@ WiFi::WiFi()
     ESP_ERROR_CHECK(esp_wifi_start());
 
     ESP_LOGI(tag, "WiFi softAP initialized");
-    log_credentials();
+    log_wifi_credentials();
 }
 
-void WiFi::register_callback(CallbackContext& callback_context)
+void register_wifi_callback(activity::Context* activity_context)
 {
     // WIFI_EVENT is the base ID for all events
     // ESP_EVENT_ANY_ID calls the callback function for all events that are
     // raised with the base WIFI_EVENT
     ESP_ERROR_CHECK(esp_event_handler_register(
-        WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, &callback_context
+        WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, &activity_context
     ));
 
     ESP_LOGI(tag, "Registered WiFi event handler");
 }
 
-std::string WiFi::get_password()
+std::string get_wifi_password()
 {
     return {reinterpret_cast<char const*>(config.ap.password)};
 }
 
-void WiFi::reset()
+void reset_wifi()
 {
-    randomize_password();
-    log_credentials();
+    randomize_wifi_password();
+    log_wifi_credentials();
 }
 
-void WiFi::randomize_password()
+namespace {
+
+void randomize_wifi_password()
 {
     int length = CONFIG_NET_WIFI_PASSWORD_LENGTH;
     uint8_t password[length];
@@ -104,7 +111,7 @@ void WiFi::randomize_password()
     ESP_LOGI(tag, "Randomize softAP password");
 }
 
-void WiFi::log_credentials()
+void log_wifi_credentials()
 {
     esp_netif_ip_info_t ip_info;
     esp_netif_get_ip_info(
@@ -120,23 +127,18 @@ void WiFi::log_credentials()
     );
 }
 
-namespace {
-
 void wifi_event_handler(
-    void* callback_context,
+    void* context,
     esp_event_base_t event_base,
     int32_t event_id,
     void* event_data
 )
 {
-    auto* context = static_cast<CallbackContext*>(callback_context);
-    auto* activity_context = context->activity_context;
-    auto* wifi = context->wifi;
+    auto* activity_context = static_cast<activity::Context*>(context);
 
     if (activity_context->get_activity_type() == activity::Type::connect) {
-        auto* connect_activity = static_cast<activity::Connect*>(
-            context->activity_context->get_activity()
-        );
+        auto* connect_activity =
+            static_cast<activity::Connect*>(activity_context->get_activity());
 
         if (event_id == WIFI_EVENT_AP_STACONNECTED) {
             auto* event =
@@ -159,7 +161,7 @@ void wifi_event_handler(
                 event->aid
             );
 
-            wifi->reset();
+            reset_wifi();
             connect_activity->set_connected(false);
         }
     }

@@ -32,7 +32,7 @@ void Connect::update_display()
     }
 
     // Get new password. The password will change every time a user disconnects.
-    password_ = net::WiFi::get_password();
+    password_ = net::get_wifi_password();
 
     // TODO: use the display object to layout the credentials.
     // auto* display = get_display();
