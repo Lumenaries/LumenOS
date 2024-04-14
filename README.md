@@ -1,4 +1,4 @@
-# LumenOS
+# lumen
 
 This repository contains the software associated with the Portable LED
 Scoreboard project for the University of Idaho's College of Engineering Senior
