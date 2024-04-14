@@ -35,9 +35,11 @@ void Context::set_activity(Type type)
     case Type::none:
         activity_.reset();
         return;
+
     case Type::football:
         activity_ = std::move(std::make_unique<activity::Football>());
         break;
+
     default:
         ESP_LOGW(tag, "Unknown sport");
         return;

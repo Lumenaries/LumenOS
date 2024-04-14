@@ -39,10 +39,17 @@ Display::Display()
 
     display_ = std::make_unique<MatrixPanel_I2S_DMA>(config);
 
-    begin();
+    display_->begin();
+
     clearScreen();
+
     // TODO: We may need to adjust the default brightness at some point
     setBrightness(20);
+}
+
+MatrixPanel_I2S_DMA* Display::getDisplay()
+{
+    return display_.get();
 }
 
 void Display::setBrightness(uint8_t brightness)
@@ -81,16 +88,6 @@ void Display::clearScreen()
 void Display::flipDMABuffer()
 {
     display_->flipDMABuffer();
-}
-
-MatrixPanel_I2S_DMA* Display::getDisplay()
-{
-    return display_.get();
-}
-
-bool Display::begin()
-{
-    return display_->begin();
 }
 
 Display::Coordinate Display::mapCoord(int16_t x, int16_t y)

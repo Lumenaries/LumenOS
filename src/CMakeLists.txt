@@ -18,7 +18,10 @@ idf_component_register(SRCS
                            "main.cpp"
                        INCLUDE_DIRS "."
                        REQUIRES
+                            # Third-party libraries.
                             ESP32-HUB75-MatrixPanel-DMA
+
+                            # First-party libraries.
                             button          # iot_button
                             driver
                             esp_event

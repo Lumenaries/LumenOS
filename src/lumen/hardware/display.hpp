@@ -11,11 +11,13 @@ class Display : public Adafruit_GFX {
 public:
     Display();
 
+    MatrixPanel_I2S_DMA* getDisplay();
+
     /** Set the brightness of the display.
      *
-    * \param brightness The brightness value out of. A value of 0 = 0%, and
-    *                   255 = 100%
-    */
+     * \param brightness The brightness value out of. A value of 0 = 0%, and
+     * 255 = 100%.
+     */
     void setBrightness(uint8_t brightness);
 
     /** Draw a pixel to a given coordinate.
@@ -23,7 +25,7 @@ public:
      * \param x X-coordinate of pixel to light.
      * \param y Y-coordinate of pixel to light.
      * \param color "Packed" color value of pixel. Use color565() to convert
-     *              typical RGB values into 5:6:5 "packed" format.
+     * typical RGB values into 5:6:5 "packed" format.
      */
     void drawPixel(int16_t x, int16_t y, uint16_t color) override;
 
@@ -61,51 +63,50 @@ public:
     /// Swap the display buffer when double buffering is enabled.
     void flipDMABuffer();
 
-    MatrixPanel_I2S_DMA* getDisplay();
-
 private:
     struct Coordinate {
         int16_t x;
         int16_t y;
     };
 
-    // Number of rows in the chain
+    std::unique_ptr<MatrixPanel_I2S_DMA> display_{};
+
+    // Number of rows in the chain.
     int numRows_{CONFIG_HARDWARE_DISPLAY_PANEL_ROWS};
 
-    // Number of columns in the chain
+    // Number of columns in the chain.
     int numCols_{CONFIG_HARDWARE_DISPLAY_PANEL_COLUMNS};
 
-    // Number of pixels in the X direction of each panel
+    // Number of pixels in the X direction of each panel.
     int panelResX_{CONFIG_HARDWARE_DISPLAY_PANEL_RES_X};
 
-    // Number of pixels in the Y direction of each panel
+    // Number of pixels in the Y direction of each panel.
     int panelResY_{CONFIG_HARDWARE_DISPLAY_PANEL_RES_Y};
 
-    // The number pixels on the X axis in the entire display
+    // The number pixels on the X axis in the entire display.
     int displayResX_{
         CONFIG_HARDWARE_DISPLAY_PANEL_RES_X *
         CONFIG_HARDWARE_DISPLAY_PANEL_COLUMNS
     };
 
-    // The number pixels on the Y axis in the entire display
+    // The number pixels on the Y axis in the entire display.
     int displayResY_{
         CONFIG_HARDWARE_DISPLAY_PANEL_RES_X *
         CONFIG_HARDWARE_DISPLAY_PANEL_COLUMNS
     };
 
-    // The width of the chain in pixels (as the DMA engine sees it)
+    // The width of the chain in pixels (as the DMA engine sees it).
     int dmaResX_{
         CONFIG_HARDWARE_DISPLAY_PANEL_RES_X *
         CONFIG_HARDWARE_DISPLAY_PANEL_COLUMNS *
         CONFIG_HARDWARE_DISPLAY_PANEL_ROWS
     };
 
-    std::unique_ptr<MatrixPanel_I2S_DMA> display_{};
-
-    /// Initialize the display.
-    bool begin();
-
-    /// Remap the desired coordinates so they display correctly
+    /** Remap the desired coordinates so they display correctly.
+     *
+     * \param x Virtual X-coordinate in the range [0, displayResX_].
+     * \param x Virtual Y-coordinate in the range [0, displayResY_].
+     */
     Coordinate mapCoord(int16_t x, int16_t y);
 };
 
