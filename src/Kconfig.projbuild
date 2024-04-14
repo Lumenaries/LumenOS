@@ -1,11 +1,155 @@
 menu "Lumen"
     menu "Website"
         config WEB_MOUNT_POINT
-            string "Website mount point in the VFS"
+            string "Website Mount Point in the VFS"
             default "/www"
             help
                 Specify the mount point in the VFS.
 
+    endmenu
+
+    menu "Hardware"
+        menu "Display"
+            config HARDWARE_DISPLAY_PANEL_ROWS
+                int "Display Panel Rows"
+                default 4
+                help
+                    The number of panel rows in the display.
+
+            config HARDWARE_DISPLAY_PANEL_COLUMNS
+                int "Display Panel Columns"
+                default 3
+                help
+                    The number of panel columns in the display.
+
+            config HARDWARE_DISPLAY_PANEL_RES_X
+                int "Display Panel X Resolution"
+                default 32
+                help
+                    The horizontal length of each panel in the display.
+
+            config HARDWARE_DISPLAY_PANEL_RES_Y
+                int "Display Panel Y Resolution"
+                default 16
+                help
+                    The vertical width of each panel in the display.
+
+            config HARDWARE_DISPLAY_R1_PIN
+                int "Display R1 Pin"
+                default 21
+                help
+                    Specify the GPIO number connected to the R1 pin of the display.
+
+            config HARDWARE_DISPLAY_G1_PIN
+                int "Display G1 Pin"
+                default 47
+                help
+                    Specify the GPIO number connected to the G1 pin of the display.
+
+            config HARDWARE_DISPLAY_B1_PIN
+                int "Display B1 Pin"
+                default 35
+                help
+                    Specify the GPIO number connected to the B1 pin of the display.
+
+            config HARDWARE_DISPLAY_R2_PIN
+                int "Display R2 Pin"
+                default 36
+                help
+                    Specify the GPIO number connected to the R2 pin of the display.
+
+            config HARDWARE_DISPLAY_G2_PIN
+                int "Display G2 Pin"
+                default 37
+                help
+                    Specify the GPIO number connected to the G2 pin of the display.
+
+            config HARDWARE_DISPLAY_B2_PIN
+                int "Display B2 Pin"
+                default 38
+                help
+                    Specify the GPIO number connected to the B2 pin of the display.
+
+            config HARDWARE_DISPLAY_A_PIN
+                int "Display A Pin"
+                default 39
+                help
+                    Specify the GPIO number connected to the A pin of the display.
+
+            config HARDWARE_DISPLAY_B_PIN
+                int "Display B Pin"
+                default 40
+                help
+                    Specify the GPIO number connected to the B pin of the display.
+
+            config HARDWARE_DISPLAY_C_PIN
+                int "Display C Pin"
+                default 41
+                help
+                    Specify the GPIO number connected to the C pin of the display.
+
+            config HARDWARE_DISPLAY_D_PIN
+                int "Display D Pin"
+                default 42
+                help
+                    Specify the GPIO number connected to the D pin of the display.
+
+            config HARDWARE_DISPLAY_E_PIN
+                int "Display E Pin"
+                default -1
+                help
+                    Specify the GPIO number connected to the E pin of the display. -1 Disables this pin.
+
+            config HARDWARE_DISPLAY_LAT_PIN
+                int "Display LAT Pin"
+                default 1
+                help
+                    Specify the GPIO number connected to the latch pin of the display. -1 Disables this pin.
+
+            config HARDWARE_DISPLAY_OE_PIN
+                int "Display OE Pin"
+                default 44
+                help
+                    Specify the GPIO number connected to the output-enable pin of the display. -1 Disables this pin.
+
+            config HARDWARE_DISPLAY_CLK_PIN
+                int "Display CLK Pin"
+                default 2
+                help
+                    Specify the GPIO number connected to the clock pin of the display. -1 Disables this pin.
+        endmenu
+        menu "Power Button"
+            config HARDWARE_POWER_BUTTON_PIN
+                int "Power Button GPIO Pin"
+                default 4
+                help
+                    Set the GPIO number of the power button pin.
+
+            config HARDWARE_POWER_BUTTON_ACTIVE_LEVEL
+                int "Power Button GPIO Pin Active Level"
+                default 1
+                help
+                    Set the active level (high or low) of the GPIO pin.
+
+            config HARDWARE_POWER_BUTTON_RED_PIN
+                int "Power Button Red LED Pin"
+                default 5
+                help
+                    Set the GPIO number of the power button's red LED pin.
+
+            config HARDWARE_POWER_BUTTON_GREEN_PIN
+                int "Power Button Green LED Pin"
+                default 6
+                help
+                    Set the GPIO number of the power button's green LED pin.
+
+            config HARDWARE_POWER_BUTTON_BLUE_PIN
+                int "Power Button Blue LED Pin"
+                default 7
+                help
+                    Set the GPIO number of the power button's blue LED pin.
+
+        endmenu
     endmenu
 
     menu "Networking"
@@ -42,41 +186,6 @@ menu "Lumen"
                 default "lumen"
                 help
                     mDNS hostname to allow users users to navigate to the UI.
-
-        endmenu
-    endmenu
-
-    menu "Hardware"
-        menu "Power Button"
-            config HARDWARE_POWER_BUTTON_PIN
-                int "Power Button GPIO Pin"
-                default 4
-                help
-                    Set the GPIO number of the power button pin.
-
-            config HARDWARE_POWER_BUTTON_ACTIVE_LEVEL
-                int "Power Button GPIO Pin Active Level"
-                default 1
-                help
-                    Set the active level (high or low) of the GPIO pin.
-
-            config HARDWARE_POWER_BUTTON_RED_PIN
-                int "Power Button Red LED Pin"
-                default 5
-                help
-                    Set the GPIO number of the power button's red LED pin.
-
-            config HARDWARE_POWER_BUTTON_GREEN_PIN
-                int "Power Button Green LED Pin"
-                default 6
-                help
-                    Set the GPIO number of the power button's green LED pin.
-
-            config HARDWARE_POWER_BUTTON_BLUE_PIN
-                int "Power Button Blue LED Pin"
-                default 7
-                help
-                    Set the GPIO number of the power button's blue LED pin.
 
         endmenu
     endmenu

@@ -14,7 +14,9 @@ constexpr auto tag = "activity/context";
 
 Context::Context(Type type /* = Type::none */)
 {
-    set_activity(type);
+    if (type != Type::none) {
+        set_activity(type);
+    }
 }
 
 Activity* Context::get_activity()
@@ -28,22 +30,26 @@ void Context::set_activity(Type type)
         return;
     }
 
+    activity_type_ = type;
+
     switch (type) {
     case Type::none:
         activity_.reset();
-        break;
+        return;
+
     case Type::connect:
         activity_ = std::move(std::make_unique<Connect>());
         break;
+
     case Type::football:
         activity_ = std::move(std::make_unique<Football>());
         break;
+
     default:
         ESP_LOGW(tag, "Unknown sport");
         return;
     }
 
-    activity_type_ = type;
     update_display();
 }
 

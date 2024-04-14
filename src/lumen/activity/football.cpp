@@ -1,5 +1,7 @@
 #include "lumen/activity/football.hpp"
 
+#include "lumen/hardware/display.hpp"
+
 namespace lumen::activity {
 
 field::Team& Football::team_one()
@@ -29,6 +31,9 @@ field::Number& Football::yards()
 
 void Football::update_display()
 {
+    auto* display = get_display();
+
+    // TODO: Configure how football will be displayed
 }
 
 } // namespace lumen::activity
