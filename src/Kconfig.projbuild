@@ -36,61 +36,61 @@ menu "Lumen"
 
             config HARDWARE_DISPLAY_R1_PIN
                 int "Display R1 Pin"
-                default 21
+                default 16
                 help
                     Specify the GPIO number connected to the R1 pin of the display.
 
             config HARDWARE_DISPLAY_G1_PIN
                 int "Display G1 Pin"
-                default 47
+                default 17
                 help
                     Specify the GPIO number connected to the G1 pin of the display.
 
             config HARDWARE_DISPLAY_B1_PIN
                 int "Display B1 Pin"
-                default 35
+                default 18
                 help
                     Specify the GPIO number connected to the B1 pin of the display.
 
             config HARDWARE_DISPLAY_R2_PIN
                 int "Display R2 Pin"
-                default 36
+                default 8
                 help
                     Specify the GPIO number connected to the R2 pin of the display.
 
             config HARDWARE_DISPLAY_G2_PIN
                 int "Display G2 Pin"
-                default 37
+                default 42
                 help
                     Specify the GPIO number connected to the G2 pin of the display.
 
             config HARDWARE_DISPLAY_B2_PIN
                 int "Display B2 Pin"
-                default 38
+                default 37
                 help
                     Specify the GPIO number connected to the B2 pin of the display.
 
             config HARDWARE_DISPLAY_A_PIN
                 int "Display A Pin"
-                default 39
+                default 5
                 help
                     Specify the GPIO number connected to the A pin of the display.
 
             config HARDWARE_DISPLAY_B_PIN
                 int "Display B Pin"
-                default 40
+                default 6
                 help
                     Specify the GPIO number connected to the B pin of the display.
 
             config HARDWARE_DISPLAY_C_PIN
                 int "Display C Pin"
-                default 41
+                default 7
                 help
                     Specify the GPIO number connected to the C pin of the display.
 
             config HARDWARE_DISPLAY_D_PIN
                 int "Display D Pin"
-                default 42
+                default 15
                 help
                     Specify the GPIO number connected to the D pin of the display.
 
@@ -101,20 +101,20 @@ menu "Lumen"
                     Specify the GPIO number connected to the E pin of the display. -1 Disables this pin.
 
             config HARDWARE_DISPLAY_LAT_PIN
-                int "Display LAT Pin"
-                default 1
+                int "Display LAT/STB Pin"
+                default 4
                 help
-                    Specify the GPIO number connected to the latch pin of the display. -1 Disables this pin.
+                    Specify the GPIO number connected to the latch/strobe pin of the display. -1 Disables this pin.
 
             config HARDWARE_DISPLAY_OE_PIN
                 int "Display OE Pin"
-                default 44
+                default 39
                 help
                     Specify the GPIO number connected to the output-enable pin of the display. -1 Disables this pin.
 
             config HARDWARE_DISPLAY_CLK_PIN
                 int "Display CLK Pin"
-                default 2
+                default 9
                 help
                     Specify the GPIO number connected to the clock pin of the display. -1 Disables this pin.
         endmenu
