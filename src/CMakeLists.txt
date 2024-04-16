@@ -7,7 +7,7 @@ idf_component_register(SRCS
                            "lumen/activity/football.cpp"
                            "lumen/app_task.cpp"
                            "lumen/hardware/button/button.cpp"
-                           "lumen/hardware/button/dual_led_button.cpp"
+                           "lumen/hardware/button/rg_led_button.cpp"
                            "lumen/hardware/button/led_button.cpp"
                            "lumen/hardware/button/rocker_switch.cpp"
                            "lumen/hardware/display.cpp"

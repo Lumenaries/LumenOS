@@ -1,10 +1,10 @@
-#include "lumen/hardware/button/dual_led_button.hpp"
+#include "lumen/hardware/button/rg_led_button.hpp"
 
 #include "esp_log.h"
 
 namespace lumen::hardware::button {
 
-DualLEDButton::DualLEDButton(
+RGLEDButton::RGLEDButton(
     int32_t button_pin,
     uint8_t active_level,
     int red_pin,
@@ -14,7 +14,7 @@ DualLEDButton::DualLEDButton(
 {
 }
 
-void DualLEDButton::set_color(LEDColor color)
+void RGLEDButton::set_color(LEDColor color)
 {
     switch (color) {
     case LEDColor::none:

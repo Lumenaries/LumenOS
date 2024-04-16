@@ -5,10 +5,10 @@
 
 namespace lumen::hardware::button {
 
-/// Defines a button with 3-pin RGB LEDs.
-class DualLEDButton : public Button {
+/// Defines a button with 2-pin RG LEDs.
+class RGLEDButton : public Button {
 public:
-    /// Supported colors for an RGB LED button.
+    /// Supported colors for an RG LED button.
     enum class LEDColor {
         none = 0,
         red,
@@ -16,7 +16,7 @@ public:
         green,
     };
 
-    /** DualLEDButton constructor.
+    /** RGLEDButton constructor.
      *
      * \param button_pin The GPIO pin number of the button.
      *
@@ -29,7 +29,7 @@ public:
      *
      * \param green_pin The GPIO pin number of the green LED.
      */
-    DualLEDButton(
+    RGLEDButton(
         int32_t button_pin,
         uint8_t active_level,
         int red_pin,
