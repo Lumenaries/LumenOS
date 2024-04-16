@@ -10,7 +10,7 @@ idf_component_register(SRCS
                            "lumen/button_callback.cpp"
                            "lumen/hardware/button/button.cpp"
                            "lumen/hardware/button/led_button.cpp"
-                           "lumen/hardware/button/rgb_button.cpp"
+                           "lumen/hardware/button/rg_led_button.cpp"
                            "lumen/hardware/button/rocker_switch.cpp"
                            "lumen/hardware/display.cpp"
                            "lumen/hardware/led_pin.cpp"
