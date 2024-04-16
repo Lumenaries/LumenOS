@@ -1,5 +1,6 @@
 #include "lumen/button_callback.hpp"
 
+#include "lumen/activity/connect.hpp"
 #include "lumen/activity/context.hpp"
 #include "lumen/net/wifi.hpp"
 
@@ -22,7 +23,12 @@ void power_button_long_press(void* /* button_handle */, void* context)
     auto* activity_context = static_cast<activity::Context*>(context);
 
     net::reset_wifi();
-    activity_context->set_activity(activity::Type::connect);
+    if (activity_context->get_activity_type() != activity::Type::connect) {
+        activity_context->set_activity(activity::Type::connect);
+    }
+
+    auto* connect_activity = static_cast<activity::Connect*>(activity_context->get_activity());
+    connect_activity->set_connected(false);
 }
 
 } // namespace lumen

@@ -6,8 +6,7 @@
 
 namespace lumen::net {
 
-void init_wifi();
-void register_wifi_callback(activity::Context* activity_context);
+void init_wifi(activity::Context& activity_context);
 [[nodiscard]] std::string get_wifi_password();
 void reset_wifi();
 

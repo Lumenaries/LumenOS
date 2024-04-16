@@ -17,6 +17,7 @@ namespace lumen::net {
 namespace {
 
 constexpr auto tag = "net/wifi";
+constexpr auto esp_max_password_length = 64;
 
 wifi_config_t config{.ap{
     .ssid = CONFIG_NET_WIFI_SSID,
@@ -46,7 +47,7 @@ void wifi_event_handler(
 
 } // namespace
 
-void init_wifi()
+void init_wifi(activity::Context& activity_context)
 {
     // Initialize networking stack
     ESP_ERROR_CHECK(esp_netif_init());
@@ -56,6 +57,14 @@ void init_wifi()
 
     wifi_init_config_t init_config = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&init_config));
+
+    // WIFI_EVENT is the base ID for all events
+    // ESP_EVENT_ANY_ID calls the callback function for all events that are
+    // raised with the base WIFI_EVENT
+    ESP_ERROR_CHECK(esp_event_handler_register(
+        WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, &activity_context
+    ));
+
 
     if (strlen(CONFIG_NET_WIFI_PASSWORD) == 0) {
         config.ap.authmode = WIFI_AUTH_OPEN;
@@ -67,18 +76,6 @@ void init_wifi()
 
     ESP_LOGI(tag, "WiFi softAP initialized");
     log_wifi_credentials();
-}
-
-void register_wifi_callback(activity::Context* activity_context)
-{
-    // WIFI_EVENT is the base ID for all events
-    // ESP_EVENT_ANY_ID calls the callback function for all events that are
-    // raised with the base WIFI_EVENT
-    ESP_ERROR_CHECK(esp_event_handler_register(
-        WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, &activity_context
-    ));
-
-    ESP_LOGI(tag, "Registered WiFi event handler");
 }
 
 std::string get_wifi_password()
@@ -96,19 +93,23 @@ namespace {
 
 void randomize_wifi_password()
 {
+    ESP_LOGI(tag, "Randomize softAP password");
+
     int length = CONFIG_NET_WIFI_PASSWORD_LENGTH;
-    uint8_t password[length];
+    ESP_LOGI(tag, "Config wifi pass length: %d", length);
+    uint8_t password[esp_max_password_length] = {};
 
     std::srand(time(0));
     for (int i = 0; i < length; i++) {
+        ESP_LOGI(tag, "password index %d", i);
         password[i] = static_cast<uint8_t>(rand() % 26 + 97);
     }
 
-    std::memcpy(config.ap.password, password, length);
+    std::memcpy(config.ap.password, password, esp_max_password_length);
 
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &config));
 
-    ESP_LOGI(tag, "Randomize softAP password");
+    ESP_LOGI(tag, "New password: %s", password);
 }
 
 void log_wifi_credentials()
@@ -134,7 +135,20 @@ void wifi_event_handler(
     void* event_data
 )
 {
+    ESP_LOGI(tag, "WiFi Event Handler");
     auto* activity_context = static_cast<activity::Context*>(context);
+
+    ESP_LOGI(tag, "Activity addr %p", activity_context);
+    switch (activity_context->get_activity_type()) {
+    case activity::Type::none:
+        ESP_LOGI(tag, "handler none");
+        break;
+    case activity::Type::connect:
+        ESP_LOGI(tag, "handler connect");
+        break;
+    default:
+        ESP_LOGI(tag, "no type");
+    }
 
     if (activity_context->get_activity_type() == activity::Type::connect) {
         auto* connect_activity =

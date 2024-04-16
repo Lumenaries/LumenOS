@@ -121,7 +121,7 @@ menu "Lumen"
         menu "Power Button"
             config HARDWARE_POWER_BUTTON_PIN
                 int "Power Button GPIO Pin"
-                default 4
+                default 21
                 help
                     Set the GPIO number of the power button pin.
 
@@ -133,13 +133,13 @@ menu "Lumen"
 
             config HARDWARE_POWER_BUTTON_RED_PIN
                 int "Power Button Red LED Pin"
-                default 5
+                default 36
                 help
                     Set the GPIO number of the power button's red LED pin.
 
             config HARDWARE_POWER_BUTTON_GREEN_PIN
                 int "Power Button Green LED Pin"
-                default 6
+                default 38
                 help
                     Set the GPIO number of the power button's green LED pin.
 

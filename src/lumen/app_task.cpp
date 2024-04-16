@@ -23,7 +23,19 @@ void app_task(void* /* parameters */)
 {
     auto activity_context = activity::Context{activity::Type::connect};
 
-    net::register_wifi_callback(&activity_context);
+    ESP_LOGI(tag, "Activity addr %p", &activity_context);
+    switch (activity_context.get_activity_type()) {
+    case activity::Type::none:
+        ESP_LOGI(tag, "none");
+        break;
+    case activity::Type::connect:
+        ESP_LOGI(tag, "connect");
+        break;
+    default:
+        ESP_LOGI(tag, "no type");
+    }
+
+    net::init_wifi(activity_context);
 
     auto web_server = web::Server{activity_context};
 
