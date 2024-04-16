@@ -118,6 +118,7 @@ menu "Lumen"
                 help
                     Specify the GPIO number connected to the clock pin of the display. -1 Disables this pin.
         endmenu
+
         menu "Power Button"
             config HARDWARE_POWER_BUTTON_PIN
                 int "Power Button GPIO Pin"
@@ -142,12 +143,6 @@ menu "Lumen"
                 default 38
                 help
                     Set the GPIO number of the power button's green LED pin.
-
-            config HARDWARE_POWER_BUTTON_BLUE_PIN
-                int "Power Button Blue LED Pin"
-                default 7
-                help
-                    Set the GPIO number of the power button's blue LED pin.
 
         endmenu
     endmenu

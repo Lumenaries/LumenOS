@@ -30,6 +30,9 @@ void Context::set_activity(Type type)
         return;
     }
 
+    // TODO: Before switching to a new activity, save the state of the current
+    // activity if the activity is active.
+
     activity_type_ = type;
 
     switch (type) {

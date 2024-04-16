@@ -2,7 +2,7 @@
 
 #include "lumen/activity/context.hpp"
 #include "lumen/button_callback.hpp"
-#include "lumen/hardware/button/rgb_button.hpp"
+#include "lumen/hardware/button/rg_led_button.hpp"
 #include "lumen/net/wifi.hpp"
 #include "lumen/web/server.hpp"
 
@@ -39,20 +39,28 @@ void app_task(void* /* parameters */)
 
     auto web_server = web::Server{activity_context};
 
-    auto power_button = hardware::button::RGBButton{
+    auto power_button = hardware::button::RGLEDButton{
         CONFIG_HARDWARE_POWER_BUTTON_PIN,
         CONFIG_HARDWARE_POWER_BUTTON_ACTIVE_LEVEL,
         CONFIG_HARDWARE_POWER_BUTTON_RED_PIN,
-        CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN,
-        CONFIG_HARDWARE_POWER_BUTTON_BLUE_PIN,
+        CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN
     };
     power_button.register_callback(
         BUTTON_LONG_PRESS_START, power_button_long_press, &activity_context
     );
-    power_button.set_color(hardware::button::RGBButton::LEDColor::yellow);
+
+    // TODO: register a callback function on the power button for a single
+    // press. This will turn on the product.
 
     while (true) {
-        vTaskDelay(100);
+        power_button.set_color(hardware::button::RGLEDButton::LEDColor::none);
+        vTaskDelay(1000);
+        power_button.set_color(hardware::button::RGLEDButton::LEDColor::red);
+        vTaskDelay(1000);
+        power_button.set_color(hardware::button::RGLEDButton::LEDColor::yellow);
+        vTaskDelay(1000);
+        power_button.set_color(hardware::button::RGLEDButton::LEDColor::green);
+        vTaskDelay(1000);
     }
 }
 

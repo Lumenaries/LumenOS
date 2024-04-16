@@ -21,13 +21,11 @@ void power_button_long_press(void* /* button_handle */, void* context)
     ESP_LOGI(tag, "Registered a long click from the power button");
 
     auto* activity_context = static_cast<activity::Context*>(context);
-
-    net::reset_wifi();
-    if (activity_context->get_activity_type() != activity::Type::connect) {
-        activity_context->set_activity(activity::Type::connect);
-    }
+    activity_context->set_activity(activity::Type::connect);
 
     auto* connect_activity = static_cast<activity::Connect*>(activity_context->get_activity());
+
+    net::reset_wifi();
     connect_activity->set_connected(false);
 }
 

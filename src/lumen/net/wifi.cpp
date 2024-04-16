@@ -31,6 +31,8 @@ void randomize_wifi_password();
 
 void log_wifi_credentials();
 
+[[nodiscard]] activity::Connect* get_connect_activity(void* context);
+
 /** The handler for WiFi events.
  *
  * \param arg The arguments passed to the event.
@@ -65,7 +67,6 @@ void init_wifi(activity::Context& activity_context)
         WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, &activity_context
     ));
 
-
     if (strlen(CONFIG_NET_WIFI_PASSWORD) == 0) {
         config.ap.authmode = WIFI_AUTH_OPEN;
     }
@@ -96,12 +97,10 @@ void randomize_wifi_password()
     ESP_LOGI(tag, "Randomize softAP password");
 
     int length = CONFIG_NET_WIFI_PASSWORD_LENGTH;
-    ESP_LOGI(tag, "Config wifi pass length: %d", length);
     uint8_t password[esp_max_password_length] = {};
 
     std::srand(time(0));
     for (int i = 0; i < length; i++) {
-        ESP_LOGI(tag, "password index %d", i);
         password[i] = static_cast<uint8_t>(rand() % 26 + 97);
     }
 
@@ -128,6 +127,15 @@ void log_wifi_credentials()
     );
 }
 
+activity::Connect* get_connect_activity(void* context)
+{
+    auto* activity_context = static_cast<activity::Context*>(context);
+
+    activity_context->set_activity(activity::Type::connect);
+
+    return static_cast<activity::Connect*>(activity_context->get_activity());
+}
+
 void wifi_event_handler(
     void* context,
     esp_event_base_t event_base,
@@ -135,49 +143,30 @@ void wifi_event_handler(
     void* event_data
 )
 {
-    ESP_LOGI(tag, "WiFi Event Handler");
-    auto* activity_context = static_cast<activity::Context*>(context);
+    if (event_id == WIFI_EVENT_AP_STACONNECTED) {
+        auto* connect_activity = get_connect_activity(context);
+        connect_activity->set_connected(true);
 
-    ESP_LOGI(tag, "Activity addr %p", activity_context);
-    switch (activity_context->get_activity_type()) {
-    case activity::Type::none:
-        ESP_LOGI(tag, "handler none");
-        break;
-    case activity::Type::connect:
-        ESP_LOGI(tag, "handler connect");
-        break;
-    default:
-        ESP_LOGI(tag, "no type");
-    }
+        auto* event = static_cast<wifi_event_ap_staconnected_t*>(event_data);
+        ESP_LOGI(
+            tag,
+            "station " MACSTR " join, AID=%d",
+            MAC2STR(event->mac),
+            event->aid
+        );
+    } else if (event_id == WIFI_EVENT_AP_STADISCONNECTED) {
+        auto* connect_activity = get_connect_activity(context);
 
-    if (activity_context->get_activity_type() == activity::Type::connect) {
-        auto* connect_activity =
-            static_cast<activity::Connect*>(activity_context->get_activity());
+        reset_wifi();
+        connect_activity->set_connected(false);
 
-        if (event_id == WIFI_EVENT_AP_STACONNECTED) {
-            auto* event =
-                static_cast<wifi_event_ap_staconnected_t*>(event_data);
-            ESP_LOGI(
-                tag,
-                "station " MACSTR " join, AID=%d",
-                MAC2STR(event->mac),
-                event->aid
-            );
-
-            connect_activity->set_connected(true);
-        } else if (event_id == WIFI_EVENT_AP_STADISCONNECTED) {
-            auto* event =
-                static_cast<wifi_event_ap_stadisconnected_t*>(event_data);
-            ESP_LOGI(
-                tag,
-                "station " MACSTR " leave, AID=%d",
-                MAC2STR(event->mac),
-                event->aid
-            );
-
-            reset_wifi();
-            connect_activity->set_connected(false);
-        }
+        auto* event = static_cast<wifi_event_ap_stadisconnected_t*>(event_data);
+        ESP_LOGI(
+            tag,
+            "station " MACSTR " leave, AID=%d",
+            MAC2STR(event->mac),
+            event->aid
+        );
     }
 }
 
