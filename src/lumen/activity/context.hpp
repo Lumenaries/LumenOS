@@ -17,15 +17,13 @@ public:
 
     [[nodiscard]] Activity* get_activity();
 
+    [[nodiscard]] Type get_activity_type() const;
+
     /** Set the type of the activity.
      *
      * \param type The activity type.
      */
     void set_activity(Type type);
-
-    [[nodiscard]] Type get_activity_type() const;
-
-    void user_connected();
 
     /** Redraw the display.
      *

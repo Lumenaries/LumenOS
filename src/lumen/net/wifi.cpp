@@ -84,7 +84,7 @@ std::string get_wifi_password()
     return {reinterpret_cast<char const*>(config.ap.password)};
 }
 
-void reset_wifi()
+void disconnect_user()
 {
     randomize_wifi_password();
     log_wifi_credentials();
@@ -157,7 +157,7 @@ void wifi_event_handler(
     } else if (event_id == WIFI_EVENT_AP_STADISCONNECTED) {
         auto* connect_activity = get_connect_activity(context);
 
-        reset_wifi();
+        disconnect_user();
         connect_activity->set_connected(false);
 
         auto* event = static_cast<wifi_event_ap_stadisconnected_t*>(event_data);

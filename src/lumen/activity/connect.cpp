@@ -11,15 +11,12 @@ constexpr auto tag = "activity/connect";
 
 }
 
-Connect::Connect()
-    : ssid_{reinterpret_cast<char const*>(CONFIG_NET_WIFI_SSID)},
-      mdns_hostname_{reinterpret_cast<char const*>(CONFIG_NET_MDNS_HOSTNAME)}
-{
-}
-
 void Connect::set_connected(bool connected)
 {
-    ESP_LOGI(tag, "Setting up connection %d", connected);
+    if (connected_ == connected) {
+        return;
+    }
+
     connected_ = connected;
     update_display();
 }

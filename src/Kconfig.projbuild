@@ -129,6 +129,7 @@ menu "Lumen"
             config HARDWARE_POWER_BUTTON_ACTIVE_LEVEL
                 int "Power Button GPIO Pin Active Level"
                 default 1
+                range 0 1
                 help
                     Set the active level (high or low) of the GPIO pin.
 
