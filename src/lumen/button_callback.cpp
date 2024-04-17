@@ -2,6 +2,7 @@
 
 #include "lumen/activity/connect.hpp"
 #include "lumen/activity/context.hpp"
+#include "lumen/hardware/button/rg_led_button.hpp"
 #include "lumen/net/wifi.hpp"
 
 #include "esp_log.h"
@@ -13,7 +14,7 @@ constexpr auto tag = "button_callback";
 
 } // namespace
 
-void power_button_long_press(void* /* button_handle */, void* context)
+void power_button_long_press(void* /* button */, void* context)
 {
     // TODO: Check the state of the system.
     // If we are in low power mode, we should flash the battery status.

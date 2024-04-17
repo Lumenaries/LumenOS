@@ -17,6 +17,7 @@ namespace lumen::net {
 namespace {
 
 constexpr auto tag = "net/wifi";
+
 constexpr auto esp_max_password_length = 64;
 
 wifi_config_t config{.ap{
@@ -27,21 +28,30 @@ wifi_config_t config{.ap{
     .max_connection = CONFIG_NET_WIFI_MAX_STA_CONNECTION,
 }};
 
-void randomize_wifi_password();
+/** Get the `Connect` activity. This should be used in callback functions.
+ *
+ * \param context The context of a callback function.
+ */
+[[nodiscard]] activity::Connect* get_connect_activity(void* context);
 
+/// Log IP, SSID, and password information.
 void log_wifi_credentials();
 
-[[nodiscard]] activity::Connect* get_connect_activity(void* context);
+/// Randomize the Wi-Fi password.
+void randomize_wifi_password();
 
 /** The handler for WiFi events.
  *
- * \param arg The arguments passed to the event.
+ * \param context The arguments passed to the event.
+ *
  * \param event_base The base ID of the event.
+ *
  * \param event_id The ID of the event.
+ *
  * \param event_data The data specific to the event.
  */
 void wifi_event_handler(
-    void* arg,
+    void* context,
     esp_event_base_t event_base,
     int32_t event_id,
     void* event_data
@@ -92,23 +102,13 @@ void disconnect_user()
 
 namespace {
 
-void randomize_wifi_password()
+activity::Connect* get_connect_activity(void* context)
 {
-    ESP_LOGI(tag, "Randomize softAP password");
+    auto* activity_context = static_cast<activity::Context*>(context);
 
-    int length = CONFIG_NET_WIFI_PASSWORD_LENGTH;
-    uint8_t password[esp_max_password_length] = {};
+    activity_context->set_activity(activity::Type::connect);
 
-    std::srand(time(0));
-    for (int i = 0; i < length; i++) {
-        password[i] = static_cast<uint8_t>(rand() % 26 + 97);
-    }
-
-    std::memcpy(config.ap.password, password, esp_max_password_length);
-
-    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &config));
-
-    ESP_LOGI(tag, "New password: %s", password);
+    return static_cast<activity::Connect*>(activity_context->get_activity());
 }
 
 void log_wifi_credentials()
@@ -127,13 +127,25 @@ void log_wifi_credentials()
     );
 }
 
-activity::Connect* get_connect_activity(void* context)
+void randomize_wifi_password()
 {
-    auto* activity_context = static_cast<activity::Context*>(context);
+    int length = CONFIG_NET_WIFI_PASSWORD_LENGTH;
+    uint8_t password[esp_max_password_length] = {};
 
-    activity_context->set_activity(activity::Type::connect);
+    std::srand(time(0));
 
-    return static_cast<activity::Connect*>(activity_context->get_activity());
+    for (int i = 0; i < length; i++) {
+        if (i % 2 == 0) {
+            password[i] = static_cast<uint8_t>(rand() % 26 + 97);
+            continue;
+        }
+
+        password[i] = password[i - 1];
+    }
+
+    std::memcpy(config.ap.password, password, esp_max_password_length);
+
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &config));
 }
 
 void wifi_event_handler(
