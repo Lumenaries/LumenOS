@@ -134,6 +134,8 @@ void randomize_wifi_password()
 
     std::srand(time(0));
 
+    // Construct the password to have two repeated letters in a row,
+    // x.g. "aabbccdd". This will create a simpler user experience.
     for (int i = 0; i < length; i++) {
         if (i % 2 == 0) {
             password[i] = static_cast<uint8_t>(rand() % 26 + 97);
