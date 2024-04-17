@@ -5,7 +5,7 @@
 namespace lumen::hardware::button {
 namespace {
 
-constexpr auto tag = "lumen/hardware/button";
+constexpr auto tag = "hardware/button";
 
 } // namespace
 
@@ -38,7 +38,11 @@ Button::~Button()
     iot_button_delete(button_);
 }
 
-esp_err_t Button::register_callback(button_event_t event, button_cb_t callback)
+esp_err_t Button::register_callback(
+    button_event_t event,
+    button_cb_t callback,
+    void* context /* = nullptr */
+)
 {
     // Check if a button has already been created
     if (button_ == nullptr) {
@@ -49,7 +53,7 @@ esp_err_t Button::register_callback(button_event_t event, button_cb_t callback)
     // Add the event
     registered_events_.push_back(event);
 
-    return iot_button_register_cb(button_, event, callback, nullptr);
+    return iot_button_register_cb(button_, event, callback, context);
 }
 
 } // namespace lumen::hardware::button
