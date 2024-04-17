@@ -10,4 +10,4 @@ namespace lumen {
  */
 void power_button_long_press(void* button, void* context);
 
-}
+} // namespace lumen

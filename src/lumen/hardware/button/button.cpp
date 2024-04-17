@@ -38,7 +38,11 @@ Button::~Button()
     iot_button_delete(button_);
 }
 
-esp_err_t Button::register_callback(button_event_t event, button_cb_t callback, void* context /* = nullptr */)
+esp_err_t Button::register_callback(
+    button_event_t event,
+    button_cb_t callback,
+    void* context /* = nullptr */
+)
 {
     // Check if a button has already been created
     if (button_ == nullptr) {
