@@ -8,6 +8,6 @@ namespace lumen {
  *
  * \param context The arguments to the callback.
  */
-void power_button_long_press(void* button, void* context);
+void timer_button_long_press(void* button, void* context);
 
 } // namespace lumen
