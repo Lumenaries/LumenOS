@@ -146,6 +146,28 @@ menu "Lumen"
                     Set the GPIO number of the power button's green LED pin.
 
         endmenu
+
+        menu "Timer Button"
+            config HARDWARE_TIMER_BUTTON_PIN
+                int "Timer Button GPIO Pin"
+                default 13
+                help
+                    Set the GPIO number of the timer button pin.
+
+            config HARDWARE_TIMER_BUTTON_ACTIVE_LEVEL
+                int "Power Button GPIO Pin Active Level"
+                default 1
+                range 0 1
+                help
+                    Set the active level (high or low) of the GPIO pin.
+
+            config HARDWARE_TIMER_BUTTON_WHITE_PIN
+                int "Timer Button White LED Pin"
+                default 35
+                help
+                    Set the GPIO number of the timer button's white LED pin.
+
+        endmenu
     endmenu
 
     menu "Networking"
