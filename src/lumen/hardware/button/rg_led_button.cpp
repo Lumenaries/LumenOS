@@ -12,6 +12,7 @@ RGLEDButton::RGLEDButton(
 )
     : Button{button_pin, active_level}, red_pin_{red_pin}, green_pin_{green_pin}
 {
+    set_color(LEDColor::none);
 }
 
 void RGLEDButton::set_color(LEDColor color)
