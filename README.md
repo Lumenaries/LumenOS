@@ -65,8 +65,7 @@ $ git submodule update --init --recursive
 3. Build the project
 
 ```
-$ idf.py set-target esp32s3
-$ idf.py build
+$ idf.py set-target esp32s3; idf.py build
 ```
 
 4. Flash and monitor the project
