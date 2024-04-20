@@ -65,6 +65,7 @@ $ git submodule update --init --recursive
 3. Build the project
 
 ```
+$ idf.py set-target esp32s3
 $ idf.py build
 ```
 
@@ -75,6 +76,18 @@ $ idf.py -p /path/to/esp32s3 flash monitor
 ```
 
 ## Troubleshooting
+
+### Configurations
+
+_`button_gpio_config_t` has no non-static data member named `enable_power_save`_
+
+Open `menuconfig`.
+
+```
+$ idf.py menuconfig
+```
+
+In `Component config`/`IoT Button`, select `GPIO BUTTON SUPPORT POWER SAVE`.
 
 ### Frontend
 
