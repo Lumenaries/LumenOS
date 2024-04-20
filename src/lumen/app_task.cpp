@@ -29,7 +29,7 @@ void app_task(void* /* parameters */)
         CONFIG_HARDWARE_POWER_BUTTON_PIN,
         CONFIG_HARDWARE_POWER_BUTTON_ACTIVE_LEVEL,
         CONFIG_HARDWARE_POWER_BUTTON_RED_PIN,
-        CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN,
+        CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN
     };
     power_button.register_callback(
         BUTTON_SINGLE_CLICK, power_button_single_click, nullptr

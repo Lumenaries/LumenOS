@@ -23,8 +23,6 @@ public:
      * \param active_level The GPIO level (high or low) when the button is
      * pressed. If the active level is high, input a non-zero positive. If low,
      * input 0.
-     *
-     * \param enable_power_save
      */
     Button(int32_t button_pin, uint8_t active_level);
 
