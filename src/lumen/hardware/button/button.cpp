@@ -1,6 +1,9 @@
 #include "lumen/hardware/button/button.hpp"
 
+#include "driver/gpio.h"
+#include "esp_check.h"
 #include "esp_log.h"
+#include "esp_sleep.h"
 
 namespace lumen::hardware::button {
 namespace {
@@ -19,6 +22,7 @@ Button::Button(int32_t button_pin, uint8_t active_level)
             {
                 .gpio_num = button_pin,
                 .active_level = active_level,
+                .enable_power_save = true,
             },
     };
 
@@ -44,6 +48,10 @@ esp_err_t Button::register_callback(
     void* context /* = nullptr */
 )
 {
+    if (callback_context_.user_context == nullptr) {
+        callback_context_.user_context = context;
+    }
+
     // Check if a button has already been created
     if (button_ == nullptr) {
         ESP_LOGE(tag, "Button was not created.");
@@ -53,7 +61,7 @@ esp_err_t Button::register_callback(
     // Add the event
     registered_events_.push_back(event);
 
-    return iot_button_register_cb(button_, event, callback, context);
+    return iot_button_register_cb(button_, event, callback, &callback_context_);
 }
 
 } // namespace lumen::hardware::button

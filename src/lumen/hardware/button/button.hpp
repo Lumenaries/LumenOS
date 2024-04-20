@@ -6,6 +6,13 @@
 
 namespace lumen::hardware::button {
 
+class Button;
+
+struct ButtonContext {
+    Button* button;
+    void* user_context;
+};
+
 /// Defines a button on a GPIO pin.
 class Button {
 public:
@@ -16,6 +23,8 @@ public:
      * \param active_level The GPIO level (high or low) when the button is
      * pressed. If the active level is high, input a non-zero positive. If low,
      * input 0.
+     *
+     * \param enable_power_save
      */
     Button(int32_t button_pin, uint8_t active_level);
 
@@ -44,7 +53,9 @@ public:
 
 private:
     button_handle_t button_{};
+
     std::vector<button_event_t> registered_events_{};
+    ButtonContext callback_context_{this, nullptr};
 };
 
 } // namespace lumen::hardware::button

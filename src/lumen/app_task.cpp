@@ -29,19 +29,13 @@ void app_task(void* /* parameters */)
         CONFIG_HARDWARE_POWER_BUTTON_PIN,
         CONFIG_HARDWARE_POWER_BUTTON_ACTIVE_LEVEL,
         CONFIG_HARDWARE_POWER_BUTTON_RED_PIN,
-        CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN
+        CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN,
     };
-
-    // TODO: register a callback function on the power button for a single
-    // press. This will turn on the product.
-
-    auto timer_button = hardware::button::LEDButton{
-        CONFIG_HARDWARE_TIMER_BUTTON_PIN,
-        CONFIG_HARDWARE_TIMER_BUTTON_ACTIVE_LEVEL,
-        CONFIG_HARDWARE_TIMER_BUTTON_WHITE_PIN
-    };
-    timer_button.register_callback(
-        BUTTON_LONG_PRESS_START, timer_button_long_press, &activity_context
+    power_button.register_callback(
+        BUTTON_SINGLE_CLICK, power_button_single_click, nullptr
+    );
+    power_button.register_callback(
+        BUTTON_LONG_PRESS_START, power_button_long_press, &activity_context
     );
 
     while (true) {
