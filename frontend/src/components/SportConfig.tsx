@@ -34,12 +34,7 @@ function BaseConfig(props) {
           </span>
         </div>
       </Header>
-      <div
-        on:reset={() => {
-          console.log("this div got the event");
-        }}
-        class="flex justify-center font-normal"
-      >
+      <div class="flex justify-center font-normal">
         <div class="grid grid-cols-2 gap-10">
           <div class="col-span-2 text-center">
             <Timer />
