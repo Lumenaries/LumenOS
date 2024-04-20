@@ -29,14 +29,6 @@ function Settings() {
           <hr class="my-5 h-0.5 border-0 bg-accent" />
           <p class="font-bold text-lg">General</p>
           <div class="flex justify-between">
-            <span class="my-auto font-bold">Theme</span>
-            <select class="rounded-lg border border-gray-300 bg-gray-50 p-1 font-normal text-sm text-gray-900">
-              <option>Light</option>
-              <option>Dark</option>
-              <option>System Default</option>
-            </select>
-          </div>
-          <div class="flex justify-between">
             <span class="my-auto font-bold">Buzzer on Timer End</span>
             <ToggleButton />
           </div>
