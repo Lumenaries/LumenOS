@@ -57,6 +57,25 @@ function GameBoardIcon() {
   );
 }
 
+function LeftArrowIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="3"
+      stroke="currentColor"
+      class="h-8 w-8"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M15.75 19.5 8.25 12l7.5-7.5"
+      />
+    </svg>
+  );
+}
+
 function MenuIcon() {
   return (
     <svg
@@ -154,6 +173,25 @@ function PlusIcon() {
   );
 }
 
+function RightArrowIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="3"
+      stroke="currentColor"
+      class="h-8 w-8"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m8.25 4.5 7.5 7.5-7.5 7.5"
+      />
+    </svg>
+  );
+}
+
 function SettingsIcon() {
   return (
     <svg
@@ -178,10 +216,12 @@ export {
   AdIcon,
   BackArrowIcon,
   GameBoardIcon,
+  LeftArrowIcon,
   MenuIcon,
   MinusIcon,
   PauseIcon,
   PlayIcon,
   PlusIcon,
+  RightArrowIcon,
   SettingsIcon,
 };

@@ -11,40 +11,24 @@ const Advertisements = lazy(() => import("./pages/Advertisements"));
 const Games = lazy(() => import("./pages/Games"));
 const Settings = lazy(() => import("./pages/Settings"));
 
-const BaseballConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.BaseballConfig,
-  }))
+const BaseballConfig = lazy(
+  () => import("./pages/sport_config/BaseballConfig")
 );
 
-const BasketballConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.BasketballConfig,
-  }))
+const BasketballConfig = lazy(
+  () => import("./pages/sport_config/BasketballConfig")
 );
 
-const FootballConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.FootballConfig,
-  }))
+const FootballConfig = lazy(
+  () => import("./pages/sport_config/FootballConfig")
 );
 
-const SoccerConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.SoccerConfig,
-  }))
-);
+const SoccerConfig = lazy(() => import("./pages/sport_config/SoccerConfig"));
 
-const TennisConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.TennisConfig,
-  }))
-);
+const TennisConfig = lazy(() => import("./pages/sport_config/TennisConfig"));
 
-const VolleyballConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.VolleyballConfig,
-  }))
+const VolleyballConfig = lazy(
+  () => import("./pages/sport_config/VolleyballConfig")
 );
 
 if (import.meta.env.DEV && !(root instanceof HTMLElement)) {

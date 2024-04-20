@@ -1,7 +1,7 @@
 import { A, useParams } from "@solidjs/router";
-import { createSignal, lazy } from "solid-js";
+import { Show, createSignal, lazy } from "solid-js";
 
-import Header from "../components/Header";
+import Header from "./Header";
 import {
   BaseballIcon,
   BasketballIcon,
@@ -9,14 +9,15 @@ import {
   SoccerIcon,
   TennisIcon,
   VolleyballIcon,
-} from "../components/SportIcons";
+} from "./SportIcons";
+import { LeftArrowIcon, RightArrowIcon } from "./UtilityIcons";
 import {
   BackArrowIcon,
   MinusIcon,
   PauseIcon,
   PlayIcon,
   PlusIcon,
-} from "../components/UtilityIcons";
+} from "./UtilityIcons";
 
 // TODO: Allow user to change team names
 // TODO: Add a configurable timer element
@@ -33,7 +34,12 @@ function BaseConfig(props) {
           </span>
         </div>
       </Header>
-      <div class="flex justify-center font-normal">
+      <div
+        on:reset={() => {
+          console.log("this div got the event");
+        }}
+        class="flex justify-center font-normal"
+      >
         <div class="grid grid-cols-2 gap-10">
           <div class="col-span-2 text-center">
             <Timer />
@@ -48,6 +54,9 @@ function BaseConfig(props) {
             team="two"
             default_score={props.default_score}
           />
+          <Show when={typeof props.children === "object"}>
+            <div class="col-span-2">{props.children}</div>
+          </Show>
         </div>
       </div>
     </>
@@ -128,35 +137,44 @@ function Score(props) {
   );
 }
 
-function BaseballConfig() {
-  return <BaseConfig name="Baseball" />;
+function Field(props) {
+  const field_names = props.fields;
+
+  const default_field = field_names.indexOf(props.default_field);
+
+  const [field, set_field] = createSignal(
+    default_field == -1 ? 0 : default_field
+  );
+
+  const decrease_field = function () {
+    if (field() != 0) {
+      set_field(field() - 1);
+    }
+  };
+
+  const increase_field = function () {
+    if (field() + 1 != field_names.length) {
+      set_field(field() + 1);
+    }
+  };
+
+  return (
+    <div class="grid grid-flow-dense grid-cols-4">
+      <button class="flex justify-start" onClick={decrease_field}>
+        <Show when={field() > 0}>
+          <LeftArrowIcon />
+        </Show>
+      </button>
+      <p class="col-span-2 flex items-center justify-center text-2xl">
+        {field_names[field()]}
+      </p>
+      <button class="flex justify-end" onClick={increase_field}>
+        <Show when={field() < field_names.length - 1}>
+          <RightArrowIcon />
+        </Show>
+      </button>
+    </div>
+  );
 }
 
-function BasketballConfig() {
-  return <BaseConfig name="Basketball" />;
-}
-
-function FootballConfig() {
-  return <BaseConfig name="Football" />;
-}
-
-function SoccerConfig() {
-  return <BaseConfig name="Soccer" />;
-}
-
-function TennisConfig() {
-  return <BaseConfig name="Tennis" />;
-}
-
-function VolleyballConfig() {
-  return <BaseConfig name="Volleyball" />;
-}
-
-export {
-  BaseballConfig,
-  BasketballConfig,
-  FootballConfig,
-  SoccerConfig,
-  TennisConfig,
-  VolleyballConfig,
-};
+export { BaseConfig, Field };
