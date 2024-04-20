@@ -1,6 +1,5 @@
 #pragma once
 
-#include "lumen/activity/activity.hpp"
 #include "lumen/activity/field/number.hpp"
 #include "lumen/activity/field/text.hpp"
 
@@ -18,7 +17,7 @@ public:
      *
      * \param name Initial name of the team.
      */
-    Team(Activity* parent, std::string const& name);
+    explicit Team(std::string const& name);
 
     Text& name();
     Number& score();

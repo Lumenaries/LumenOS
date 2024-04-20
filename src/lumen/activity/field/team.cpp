@@ -2,10 +2,7 @@
 
 namespace lumen::activity::field {
 
-Team::Team(Activity* parent, std::string const& name)
-    : name_{parent, name}, score_{parent}
-{
-}
+Team::Team(std::string const& name) : name_{name}, score_{} {}
 
 Number& Team::score()
 {

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "lumen/activity/activity.hpp"
+#include "lumen/app_task.hpp"
 
 #include <string>
 
-namespace lumen::activity {
+namespace lumen::activity::field {
 
 /// Base class from which displayable types derive.
 template <typename T>
@@ -17,7 +17,7 @@ public:
      *
      * \param value Initial value of the field.
      */
-    Field(Activity* parent, T value) : parent_{parent}, value_{value} {}
+    explicit Field(T value) : value_{value} {}
     virtual ~Field() = default;
 
     [[nodiscard]] T get_value() const
@@ -29,28 +29,51 @@ public:
      *
      * \param value New value of the field.
      */
-    void set_value(T value)
+    virtual void set_value(T value)
     {
-        value_ = value;
-        signal_update();
+        if (value_ != value) {
+            value_ = value;
+            signal_update();
+        }
+    }
+
+    virtual bool set_value_from_isr(T value)
+    {
+        if (value_ != value) {
+            value_ = value;
+            return signal_update_from_isr();
+        }
+        // Does this work?
+        return false;
     }
 
     /// Convert the contents of the field to a string.
     [[nodiscard]] virtual std::string to_string() const = 0;
 
-protected:
     /// Signal the `parent` object to update the display.
     void signal_update()
     {
-        if (parent_ != nullptr) {
-            parent_->update_display();
-        }
+        xTaskNotify(get_app_task_handle(), 0x01, eSetBits);
     }
 
+    /// Signal the App Task to refresh the display.
+    bool signal_update_from_isr()
+    {
+        auto higher_priority_task_awoken = pdFALSE;
+
+        xTaskNotifyFromISR(
+            get_app_task_handle(),
+            g_update_display_signal,
+            eSetBits,
+            &higher_priority_task_awoken
+        );
+
+        return higher_priority_task_awoken == pdTRUE;
+    }
+
+protected:
 private:
-    Activity* parent_{};
     T value_{};
 };
 
-
-} // namespace lumen::activity
+} // namespace lumen::activity::field
