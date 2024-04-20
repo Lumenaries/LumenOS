@@ -38,7 +38,6 @@ void app_task(void* /* parameters */)
     );
 
     while (true) {
-        power_button.set_color(hardware::button::RGLEDButton::LEDColor::none);
         vTaskDelay(1000);
     }
 }
