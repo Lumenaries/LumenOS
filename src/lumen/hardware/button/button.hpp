@@ -28,6 +28,10 @@ public:
 
     virtual ~Button();
 
+    [[nodiscard]] gpio_num_t get_pin() const;
+
+    [[nodiscard]] int get_active_level() const;
+
     /** Register a callback function for the given button event.
      *
      * \param event The button event.
@@ -51,6 +55,8 @@ public:
 
 private:
     button_handle_t button_{};
+    gpio_num_t pin_;
+    int active_level_;
 
     std::vector<button_event_t> registered_events_{};
     ButtonContext callback_context_{this, nullptr};

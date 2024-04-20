@@ -3,7 +3,6 @@
 #include "lumen/activity/connect.hpp"
 #include "lumen/activity/context.hpp"
 #include "lumen/hardware/button/button.hpp"
-#include "lumen/hardware/button/rg_led_button.hpp"
 #include "lumen/net/wifi.hpp"
 
 #include "esp_log.h"
@@ -22,7 +21,10 @@ void power_button_single_click(void* /* button */, void* context)
     // activity
     ESP_LOGI(tag, "Shutting down...");
 
-    ESP_ERROR_CHECK(esp_sleep_enable_ext0_wakeup(GPIO_NUM_21, 1));
+    auto* button_context = static_cast<hardware::button::ButtonContext*>(context);
+    auto* button = button_context->button;
+
+    ESP_ERROR_CHECK(esp_sleep_enable_ext0_wakeup(button->get_pin(), button->get_active_level()));
     esp_deep_sleep_start();
 }
 

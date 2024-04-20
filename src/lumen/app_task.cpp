@@ -2,7 +2,6 @@
 
 #include "lumen/activity/context.hpp"
 #include "lumen/button_callback.hpp"
-#include "lumen/hardware/button/led_button.hpp"
 #include "lumen/hardware/button/rg_led_button.hpp"
 #include "lumen/net/wifi.hpp"
 #include "lumen/web/server.hpp"
@@ -39,6 +38,7 @@ void app_task(void* /* parameters */)
     );
 
     while (true) {
+        power_button.set_color(hardware::button::RGLEDButton::LEDColor::none);
         vTaskDelay(1000);
     }
 }
