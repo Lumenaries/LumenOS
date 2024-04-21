@@ -39,4 +39,16 @@ void Football::update_display()
     // TODO: Configure how football will be displayed
 }
 
+void Football::button_pressed(ButtonEvent event)
+{
+    switch (event) {
+    case ButtonEvent::timer:
+        timer_.toggle();
+        break;
+    default:
+        ESP_LOGE("activity/football", "Unknown button event");
+        break;
+    }
+}
+
 } // namespace lumen::activity

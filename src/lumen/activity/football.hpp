@@ -32,6 +32,12 @@ public:
     /// Draw the fields to the display.
     void update_display() override;
 
+    /** Handler for a button press.
+     *
+     * \param event The button event.
+     */
+    void button_pressed(ButtonEvent event) override;
+
 private:
     field::Team team_one_{"Home"};
     field::Team team_two_{"Away"};
