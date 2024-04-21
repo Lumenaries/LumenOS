@@ -59,8 +59,6 @@ function Timer() {
         <button
           class="my-auto"
           onClick={function () {
-            console.log("timer is " + is_active());
-            console.log("setting to inactive");
             set_active(false);
           }}
         >
@@ -71,8 +69,6 @@ function Timer() {
         <button
           class="my-auto"
           onClick={function () {
-            console.log("timer is " + is_active());
-            console.log("setting to active");
             set_active(true);
           }}
         >
