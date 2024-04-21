@@ -155,7 +155,7 @@ menu "Lumen"
                     Set the GPIO number of the timer button pin.
 
             config HARDWARE_TIMER_BUTTON_ACTIVE_LEVEL
-                int "Power Button GPIO Pin Active Level"
+                int "Timer Button GPIO Pin Active Level"
                 default 1
                 range 0 1
                 help
@@ -166,6 +166,64 @@ menu "Lumen"
                 default 35
                 help
                     Set the GPIO number of the timer button's white LED pin.
+
+        endmenu
+
+        menu "Rocker Switch One"
+            config HARDWARE_ROCKER_SWITCH_ONE_UP
+                int "Rocker One Up Switch"
+                default 14
+                help
+                    Set the GPIO number of the rocker switch one's up switch pin.
+
+            config HARDWARE_ROCKER_SWITCH_ONE_UP_ACTIVE_LEVEL
+                int "Rocker One Up Switch Active Level"
+                default 1
+                range 0 1
+                help
+                    Set the active level (high or low) of the up switch pin.
+
+            config HARDWARE_ROCKER_SWITCH_ONE_DOWN
+                int "Rocker One Down Switch"
+                default 12
+                help
+                    Set the GPIO number of the rocker switch one's down switch pin.
+
+            config HARDWARE_ROCKER_SWITCH_ONE_DOWN_ACTIVE_LEVEL
+                int "Rocker One Down Switch Active Level"
+                default 1
+                range 0 1
+                help
+                    Set the active level (high or low) of the down switch pin.
+
+        endmenu
+
+        menu "Rocker Switch Two"
+            config HARDWARE_ROCKER_SWITCH_TWO_UP
+                int "Rocker Two Up Switch"
+                default 11
+                help
+                    Set the GPIO number of the rocker switch two's up switch pin.
+
+            config HARDWARE_ROCKER_SWITCH_TWO_UP_ACTIVE_LEVEL
+                int "Rocker Two Up Switch Active Level"
+                default 1
+                range 0 1
+                help
+                    Set the active level (high or low) of the up switch pin.
+
+            config HARDWARE_ROCKER_SWITCH_TWO_DOWN
+                int "Rocker Two Down Switch"
+                default 10
+                help
+                    Set the GPIO number of the rocker switch two's down switch pin.
+
+            config HARDWARE_ROCKER_SWITCH_TWO_DOWN_ACTIVE_LEVEL
+                int "Rocker Two Down Switch Active Level"
+                default 1
+                range 0 1
+                help
+                    Set the active level (high or low) of the down switch pin.
 
         endmenu
     endmenu

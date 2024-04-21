@@ -14,6 +14,10 @@ enum class Type {
 
 enum class ButtonEvent {
     timer = 0,
+    rocker_one_up,
+    rocker_one_down,
+    rocker_two_up,
+    rocker_two_down,
 };
 
 /// Base class from which different displayable activites should derive.

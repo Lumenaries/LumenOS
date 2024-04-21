@@ -51,14 +51,52 @@ void power_button_long_press(void* /* button */, void* context)
 
 void timer_button_single_click(void* /* button */, void* context)
 {
-    ESP_LOGI(tag, "Toggle activity timer");
-
     auto* button_context =
         static_cast<hardware::button::ButtonContext*>(context);
 
     auto* activity_context =
         static_cast<activity::Context*>(button_context->user_context);
     activity_context->button_pressed(activity::ButtonEvent::timer);
+}
+
+void rocker_one_up_single_click(void* /* button */, void* context)
+{
+    auto* button_context =
+        static_cast<hardware::button::ButtonContext*>(context);
+
+    auto* activity_context =
+        static_cast<activity::Context*>(button_context->user_context);
+    activity_context->button_pressed(activity::ButtonEvent::rocker_one_up);
+}
+
+void rocker_one_down_single_click(void* /* button */, void* context)
+{
+    auto* button_context =
+        static_cast<hardware::button::ButtonContext*>(context);
+
+    auto* activity_context =
+        static_cast<activity::Context*>(button_context->user_context);
+    activity_context->button_pressed(activity::ButtonEvent::rocker_one_down);
+}
+
+void rocker_two_up_single_click(void* /* button */, void* context)
+{
+    auto* button_context =
+        static_cast<hardware::button::ButtonContext*>(context);
+
+    auto* activity_context =
+        static_cast<activity::Context*>(button_context->user_context);
+    activity_context->button_pressed(activity::ButtonEvent::rocker_two_up);
+}
+
+void rocker_two_down_single_click(void* /* button */, void* context)
+{
+    auto* button_context =
+        static_cast<hardware::button::ButtonContext*>(context);
+
+    auto* activity_context =
+        static_cast<activity::Context*>(button_context->user_context);
+    activity_context->button_pressed(activity::ButtonEvent::rocker_two_down);
 }
 
 } // namespace lumen

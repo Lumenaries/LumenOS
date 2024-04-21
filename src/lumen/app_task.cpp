@@ -4,6 +4,7 @@
 #include "lumen/button_callback.hpp"
 #include "lumen/hardware/button/led_button.hpp"
 #include "lumen/hardware/button/rg_led_button.hpp"
+#include "lumen/hardware/button/rocker_switch.hpp"
 #include "lumen/net/wifi.hpp"
 #include "lumen/web/server.hpp"
 
@@ -45,6 +46,32 @@ void app_task(void* /* parameters */)
     };
     timer_button.register_callback(
         BUTTON_SINGLE_CLICK, timer_button_single_click, &activity_context
+    );
+
+    auto rocker_one = hardware::button::RockerSwitch{
+        CONFIG_HARDWARE_ROCKER_SWITCH_ONE_UP,
+        CONFIG_HARDWARE_ROCKER_SWITCH_ONE_UP_ACTIVE_LEVEL,
+        CONFIG_HARDWARE_ROCKER_SWITCH_ONE_DOWN,
+        CONFIG_HARDWARE_ROCKER_SWITCH_ONE_DOWN_ACTIVE_LEVEL
+    };
+    rocker_one.up().register_callback(
+        BUTTON_SINGLE_CLICK, rocker_one_up_single_click, &activity_context
+    );
+    rocker_one.down().register_callback(
+        BUTTON_SINGLE_CLICK, rocker_one_down_single_click, &activity_context
+    );
+
+    auto rocker_two = hardware::button::RockerSwitch{
+        CONFIG_HARDWARE_ROCKER_SWITCH_TWO_UP,
+        CONFIG_HARDWARE_ROCKER_SWITCH_TWO_UP_ACTIVE_LEVEL,
+        CONFIG_HARDWARE_ROCKER_SWITCH_TWO_DOWN,
+        CONFIG_HARDWARE_ROCKER_SWITCH_TWO_DOWN_ACTIVE_LEVEL
+    };
+    rocker_two.up().register_callback(
+        BUTTON_SINGLE_CLICK, rocker_two_up_single_click, &activity_context
+    );
+    rocker_two.down().register_callback(
+        BUTTON_SINGLE_CLICK, rocker_two_down_single_click, &activity_context
     );
 
     uint32_t event_buffer{};
