@@ -18,13 +18,21 @@ void power_button_single_click(void* button, void* context);
  */
 void power_button_long_press(void* button, void* context);
 
-/** The handler for a short click of the timer button.
+/** The handler for a press down of the timer button.
  *
  * \param button The handle to the button.
  *
  * \param context The arguments to the callback.
  */
-void timer_button_single_click(void* button, void* context);
+void timer_button_press_down(void* button, void* context);
+
+/** The handler for a press release of the timer button.
+ *
+ * \param button The handle to the button.
+ *
+ * \param context The arguments to the callback.
+ */
+void timer_button_press_up(void* button, void* context);
 
 /** The handler for a short click of the rocker switch one up switch.
  *

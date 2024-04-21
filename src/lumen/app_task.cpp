@@ -45,7 +45,10 @@ void app_task(void* /* parameters */)
         CONFIG_HARDWARE_TIMER_BUTTON_WHITE_PIN
     };
     timer_button.register_callback(
-        BUTTON_SINGLE_CLICK, timer_button_single_click, &activity_context
+        BUTTON_PRESS_DOWN, timer_button_press_down, &activity_context
+    );
+    timer_button.register_callback(
+        BUTTON_PRESS_UP, timer_button_press_up, nullptr
     );
 
     auto rocker_one = hardware::button::RockerSwitch{
@@ -73,6 +76,8 @@ void app_task(void* /* parameters */)
     rocker_two.down().register_callback(
         BUTTON_SINGLE_CLICK, rocker_two_down_single_click, &activity_context
     );
+
+    activity_context.set_activity(activity::Type::football);
 
     uint32_t event_buffer{};
 
