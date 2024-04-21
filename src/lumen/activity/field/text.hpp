@@ -1,6 +1,5 @@
 #pragma once
 
-#include "lumen/activity/activity.hpp"
 #include "lumen/activity/field/field.hpp"
 
 #include <string>
@@ -12,12 +11,9 @@ class Text : public Field<std::string> {
 public:
     /** Text constructor.
      *
-     * \param parent Pointer to the activity object that should be updated when
-     * a state change occurs.
-     *
      * \param value Initial value that the field should hold.
      */
-    Text(Activity* parent, std::string const& value);
+    explicit Text(std::string const& value);
 
     /// Returns whether this field will scroll across the screen when displayed.
     [[nodiscard]] bool is_scrollable() const;

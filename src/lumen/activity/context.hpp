@@ -32,6 +32,12 @@ public:
      */
     void update_display();
 
+    /** Handler for a button press.
+     *
+     * \param event The button event.
+     */
+    void button_pressed(ButtonEvent event);
+
 private:
     std::unique_ptr<Activity> activity_{};
     Type activity_type_{};

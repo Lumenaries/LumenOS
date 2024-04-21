@@ -2,7 +2,7 @@
 
 namespace lumen::activity::field {
 
-Text::Text(Activity* parent, std::string const& value) : Field{parent, value} {}
+Text::Text(std::string const& value) : Field{value} {}
 
 bool Text::is_scrollable() const
 {

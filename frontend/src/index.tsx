@@ -8,43 +8,27 @@ const root = document.getElementById("root");
 
 const App = lazy(() => import("./App"));
 const Advertisements = lazy(() => import("./pages/Advertisements"));
-const Games = lazy(() => import("./pages/Games"));
+const Activities = lazy(() => import("./pages/Activities"));
 const Settings = lazy(() => import("./pages/Settings"));
 
-const BaseballConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.BaseballConfig,
-  }))
+const BaseballConfig = lazy(
+  () => import("./pages/activityConfig/BaseballConfig")
 );
 
-const BasketballConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.BasketballConfig,
-  }))
+const BasketballConfig = lazy(
+  () => import("./pages/activityConfig/BasketballConfig")
 );
 
-const FootballConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.FootballConfig,
-  }))
+const FootballConfig = lazy(
+  () => import("./pages/activityConfig/FootballConfig")
 );
 
-const SoccerConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.SoccerConfig,
-  }))
-);
+const SoccerConfig = lazy(() => import("./pages/activityConfig/SoccerConfig"));
 
-const TennisConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.TennisConfig,
-  }))
-);
+const TennisConfig = lazy(() => import("./pages/activityConfig/TennisConfig"));
 
-const VolleyballConfig = lazy(() =>
-  import("./pages/SportConfig").then((module) => ({
-    default: module.VolleyballConfig,
-  }))
+const VolleyballConfig = lazy(
+  () => import("./pages/activityConfig/VolleyballConfig")
 );
 
 if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
@@ -56,7 +40,7 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 render(
   () => (
     <Router root={App}>
-      <Route path="/" component={Games} />
+      <Route path="/" component={Activities} />
       <Route path="/ads" component={Advertisements} />
       <Route path="/settings" component={Settings} />
       <Route path="/baseball" component={BaseballConfig} />

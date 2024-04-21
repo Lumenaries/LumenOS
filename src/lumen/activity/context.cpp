@@ -70,4 +70,13 @@ void Context::update_display()
     activity_->update_display();
 }
 
+void Context::button_pressed(ButtonEvent event)
+{
+    if (activity_ == nullptr) {
+        return;
+    }
+
+    activity_->button_pressed(event);
+}
+
 } // namespace lumen::activity

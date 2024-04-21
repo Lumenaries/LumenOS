@@ -1,6 +1,5 @@
 #pragma once
 
-#include "lumen/activity/activity.hpp"
 #include "lumen/activity/field/field.hpp"
 
 namespace lumen::activity::field {
@@ -10,13 +9,10 @@ class Number : public Field<uint> {
 public:
     /** Number constructor.
      *
-     * \param parent Pointer to the activity object that should be updated when
-     * a state change occurs.
-     *
      * \param increment Interval by which the value of the field change each
      * time `increase()` or `decrease()` is called.
      */
-    explicit Number(Activity* parent, uint increment = 1);
+    explicit Number(uint increment = 1);
 
     /// Increase the value of the field by the value of `increment`.
     Number& increase();
