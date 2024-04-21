@@ -26,17 +26,13 @@ gptimer_alarm_config_t const alarm_config = {
 Timer::Timer(uint64_t start_time, bool count_up /* = false */)
     : Field{start_time}, start_time_{start_time}, is_count_up_{count_up}
 {
-    // Initialize timer
     auto err = gptimer_new_timer(&config_, &timer_);
 
     if (err != ESP_OK) {
         ESP_LOGE(tag, "Unable to initialize new timer");
     }
 
-    // Register timer callback
     gptimer_register_event_callbacks(timer_, &callbacks, this);
-
-    // alarm_config.flags.auto_reload_on_alarm = 1;
 
     gptimer_set_alarm_action(timer_, &alarm_config);
 
@@ -116,7 +112,7 @@ void Timer::reset()
     set_value(start_time_);
 }
 
-void Timer::set_value(uint64_t time)
+void Timer::set_value(uint64_t const& time)
 {
     if (time == 0) {
         stop();
@@ -125,7 +121,7 @@ void Timer::set_value(uint64_t time)
     Field::set_value(time);
 }
 
-bool Timer::set_value_from_isr(uint64_t time)
+bool Timer::set_value_from_isr(uint64_t const& time)
 {
     if (time == 0) {
         stop();

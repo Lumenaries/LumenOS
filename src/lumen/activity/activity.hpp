@@ -20,9 +20,7 @@ protected:
     hardware::Display* get_display();
 
 private:
-    //inline static auto display_ = std::make_unique<hardware::Display>();
-    std::unique_ptr<hardware::Display> display_{};
-
+    inline static auto display_ = std::make_unique<hardware::Display>();
 };
 
 } // namespace lumen::activity

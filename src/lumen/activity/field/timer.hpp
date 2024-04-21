@@ -59,7 +59,7 @@ public:
      * \param time The new value of the timer. If `time` is 0, then the timer
      * will be stopped automatically.
      */
-    void set_value(uint64_t time) override;
+    void set_value(uint64_t const& time) override;
 
     /** Set the number of seconds in the timer.
      *
@@ -75,7 +75,7 @@ public:
      * \return Whether or not a higher priority task was awakened as a result of
      * setting the valule.
      */
-    bool set_value_from_isr(uint64_t time) override;
+    bool set_value_from_isr(uint64_t const& time) override;
 
 private:
     gptimer_handle_t timer_{};

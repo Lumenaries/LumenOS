@@ -39,7 +39,8 @@ private:
     field::Number down_{};
     field::Number yards_{};
 
-    field::Timer timer_{15};
+    // High school Football games have 12 minute quarters
+    field::Timer timer_{12 * 60};
 };
 
 } // namespace lumen::activity

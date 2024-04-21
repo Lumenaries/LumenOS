@@ -17,7 +17,7 @@ public:
      *
      * \param value Initial value of the field.
      */
-    explicit Field(T value) : value_{value} {}
+    explicit Field(T const& value = T{}) : value_{value} {}
     virtual ~Field() = default;
 
     [[nodiscard]] T get_value() const
@@ -29,7 +29,7 @@ public:
      *
      * \param value New value of the field.
      */
-    virtual void set_value(T value)
+    virtual void set_value(T const& value)
     {
         if (value_ != value) {
             value_ = value;
@@ -37,13 +37,13 @@ public:
         }
     }
 
-    virtual bool set_value_from_isr(T value)
+    virtual bool set_value_from_isr(T const& value)
     {
         if (value_ != value) {
             value_ = value;
             return signal_update_from_isr();
         }
-        // Does this work?
+
         return false;
     }
 
@@ -53,7 +53,7 @@ public:
     /// Signal the `parent` object to update the display.
     void signal_update()
     {
-        xTaskNotify(get_app_task_handle(), 0x01, eSetBits);
+        xTaskNotify(get_app_task_handle(), g_update_display_signal, eSetBits);
     }
 
     /// Signal the App Task to refresh the display.
