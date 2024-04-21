@@ -12,9 +12,6 @@ class Field {
 public:
     /** Field constructor.
      *
-     * \param parent Pointer to the activity object that should be updated when
-     * a state change occurs.
-     *
      * \param value Initial value of the field.
      */
     explicit Field(T const& value = T{}) : value_{value} {}
@@ -56,7 +53,7 @@ public:
     /// Convert the contents of the field to a string.
     [[nodiscard]] virtual std::string to_string() const = 0;
 
-    /// Signal the `parent` object to update the display.
+    /// Signal the App Task to refresh the display.
     void signal_update()
     {
         xTaskNotify(get_app_task_handle(), g_update_display_signal, eSetBits);
@@ -77,7 +74,6 @@ public:
         return higher_priority_task_awoken == pdTRUE;
     }
 
-protected:
 private:
     T value_{};
 };

@@ -12,9 +12,6 @@ class Team {
 public:
     /** Team constructor.
      *
-     * \param parent Pointer to the activity object that should be updated when
-     * a state change occurs.
-     *
      * \param name Initial name of the team.
      */
     explicit Team(std::string const& name);

@@ -7,6 +7,7 @@ namespace {
 
 constexpr auto tag = "activity/field/timer";
 
+/// Update the value of the timer field and signal an update
 bool timer_alarm_callback(
     gptimer_handle_t timer,
     gptimer_alarm_event_data_t const* timer_data,
@@ -78,12 +79,12 @@ std::string Timer::to_string() const
 
 void Timer::start()
 {
+    // If this is a count down timer, don't start it if the value is already 0
     if (!is_count_up_ && get_value() == 0) {
         return;
     }
 
     if (!is_running_) {
-
         gptimer_start(timer_);
         is_running_ = true;
     }

@@ -11,9 +11,6 @@ class Text : public Field<std::string> {
 public:
     /** Text constructor.
      *
-     * \param parent Pointer to the activity object that should be updated when
-     * a state change occurs.
-     *
      * \param value Initial value that the field should hold.
      */
     explicit Text(std::string const& value);
