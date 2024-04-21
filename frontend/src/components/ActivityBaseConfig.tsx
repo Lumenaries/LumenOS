@@ -1,26 +1,18 @@
-import { A, useParams } from "@solidjs/router";
-import { createSignal, lazy } from "solid-js";
+import { A } from "@solidjs/router";
+import { Show, createSignal } from "solid-js";
 
-import Header from "../components/Header";
-import {
-  BaseballIcon,
-  BasketballIcon,
-  FootballIcon,
-  SoccerIcon,
-  TennisIcon,
-  VolleyballIcon,
-} from "../components/SportIcons";
+import Header from "./Header";
 import {
   BackArrowIcon,
   MinusIcon,
   PauseIcon,
   PlayIcon,
   PlusIcon,
-} from "../components/UtilityIcons";
+} from "./UtilityIcons";
 
 // TODO: Allow user to change team names
 // TODO: Add a configurable timer element
-function BaseConfig(props) {
+function ActivityBaseConfig(props) {
   return (
     <>
       <Header>
@@ -48,6 +40,9 @@ function BaseConfig(props) {
             team="two"
             default_score={props.default_score}
           />
+          <Show when={typeof props.children === "object"}>
+            <div class="col-span-2">{props.children}</div>
+          </Show>
         </div>
       </div>
     </>
@@ -60,28 +55,26 @@ function Timer() {
   return (
     <div class="flex justify-center">
       <p class="mr-3 font-medium text-5xl">10:00</p>
-      <button
-        class="my-auto"
-        classList={{ hidden: !is_active() }}
-        onClick={function () {
-          console.log("timer is " + is_active());
-          console.log("setting to inactive");
-          set_active(false);
-        }}
-      >
-        <PauseIcon />
-      </button>
-      <button
-        class="my-auto"
-        classList={{ hidden: is_active() }}
-        onClick={function () {
-          console.log("timer is " + is_active());
-          console.log("setting to active");
-          set_active(true);
-        }}
-      >
-        <PlayIcon />
-      </button>
+      <Show when={is_active()}>
+        <button
+          class="my-auto"
+          onClick={function () {
+            set_active(false);
+          }}
+        >
+          <PauseIcon />
+        </button>
+      </Show>
+      <Show when={!is_active()}>
+        <button
+          class="my-auto"
+          onClick={function () {
+            set_active(true);
+          }}
+        >
+          <PlayIcon />
+        </button>
+      </Show>
     </div>
   );
 }
@@ -128,35 +121,4 @@ function Score(props) {
   );
 }
 
-function BaseballConfig() {
-  return <BaseConfig name="Baseball" />;
-}
-
-function BasketballConfig() {
-  return <BaseConfig name="Basketball" />;
-}
-
-function FootballConfig() {
-  return <BaseConfig name="Football" />;
-}
-
-function SoccerConfig() {
-  return <BaseConfig name="Soccer" />;
-}
-
-function TennisConfig() {
-  return <BaseConfig name="Tennis" />;
-}
-
-function VolleyballConfig() {
-  return <BaseConfig name="Volleyball" />;
-}
-
-export {
-  BaseballConfig,
-  BasketballConfig,
-  FootballConfig,
-  SoccerConfig,
-  TennisConfig,
-  VolleyballConfig,
-};
+export default ActivityBaseConfig;
