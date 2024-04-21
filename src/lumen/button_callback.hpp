@@ -26,7 +26,7 @@ void power_button_long_press(void* button, void* context);
  */
 void timer_button_press_down(void* button, void* context);
 
-/** The handler for a press release of the timer button.
+/** The handler for a release of the timer button.
  *
  * \param button The handle to the button.
  *
