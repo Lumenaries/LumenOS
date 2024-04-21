@@ -19,12 +19,12 @@ void app_task(void* /* parameters */)
     app_task_handle = xTaskGetCurrentTaskHandle();
 
     auto activity_context = activity::Context{activity::Type::connect};
-    
+
     net::init_wifi(activity_context);
-  
+
     auto web_server = web::Server{activity_context};
-    
-     auto power_button = hardware::button::RGLEDButton{
+
+    auto power_button = hardware::button::RGLEDButton{
         CONFIG_HARDWARE_POWER_BUTTON_PIN,
         CONFIG_HARDWARE_POWER_BUTTON_ACTIVE_LEVEL,
         CONFIG_HARDWARE_POWER_BUTTON_RED_PIN,
