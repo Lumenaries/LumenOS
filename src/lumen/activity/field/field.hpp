@@ -37,6 +37,12 @@ public:
         }
     }
 
+    /** Set the value of the field and trigger a display update.
+     *
+     * \note This function is only meant to be used inside of an ISR.
+     *
+     * \param value New value of the field.
+     */
     virtual bool set_value_from_isr(T const& value)
     {
         if (value_ != value) {

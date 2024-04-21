@@ -78,7 +78,7 @@ std::string Timer::to_string() const
 
 void Timer::start()
 {
-    if (is_count_up_ && get_value() == 0) {
+    if (!is_count_up_ && get_value() == 0) {
         return;
     }
 
