@@ -77,8 +77,6 @@ void app_task(void* /* parameters */)
         BUTTON_SINGLE_CLICK, rocker_two_down_single_click, &activity_context
     );
 
-    activity_context.set_activity(activity::Type::football);
-
     uint32_t event_buffer{};
 
     while (true) {
