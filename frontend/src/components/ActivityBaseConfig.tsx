@@ -102,7 +102,7 @@ function Score(props) {
 
       <div class="flex">
         <button
-          class="my-auto rounded-full bg-primary p-1 text-4xl text-white"
+          class="my-auto touch-none rounded-full bg-primary p-1 text-4xl text-white"
           onClick={decrease_score}
         >
           <MinusIcon />
@@ -111,7 +111,7 @@ function Score(props) {
           {score}
         </div>
         <button
-          class="my-auto rounded-full bg-primary p-1 text-4xl text-white"
+          class="my-auto touch-none rounded-full bg-primary p-1 text-4xl text-white"
           onClick={increase_score}
         >
           <PlusIcon />

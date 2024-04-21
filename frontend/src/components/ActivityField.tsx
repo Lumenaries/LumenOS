@@ -29,7 +29,7 @@ function ActivityField(props) {
 
   return (
     <div class="grid grid-flow-dense grid-cols-4">
-      <button class="flex justify-start" onClick={decrease_field}>
+      <button class="flex touch-none justify-start" onClick={decrease_field}>
         <Show when={field() > 0}>
           <LeftArrowIcon />
         </Show>
@@ -37,7 +37,7 @@ function ActivityField(props) {
       <p class="col-span-2 flex items-center justify-center text-2xl">
         {field_names[field()]}
       </p>
-      <button class="flex justify-end" onClick={increase_field}>
+      <button class="flex touch-none justify-end" onClick={increase_field}>
         <Show when={field() < field_names.length - 1}>
           <RightArrowIcon />
         </Show>
