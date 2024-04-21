@@ -1,8 +1,11 @@
 import { Show, createSignal, lazy } from "solid-js";
 
-import { BaseConfig, Field } from "../../components/SportConfig";
+import ActivityBaseConfig from "../../components/ActivityBaseConfig";
+import ActivityField from "../../components/ActivityField";
 
 function FootballConfig() {
+  // TODO: Add an API prop
+
   const quarters = ["1st Quarter", "2nd Quarter", "3rd Quarter", "4th Quarter"];
 
   const downs = ["1st Down", "2nd Down", "3rd Down", "4th Down"];
@@ -13,13 +16,13 @@ function FootballConfig() {
   }
 
   return (
-    <BaseConfig name="Football">
+    <ActivityBaseConfig name="Football">
       <div class="grid grid-cols-1 gap-4">
-        <Field fields={quarters} default_field="1st Quarter" />
-        <Field fields={downs} default_field="1st Down" />
-        <Field fields={yards} default_field="10 Yards" />
+        <ActivityField fields={quarters} default_field="1st Quarter" />
+        <ActivityField fields={downs} default_field="1st Down" />
+        <ActivityField fields={yards} default_field="10 Yards" />
       </div>
-    </BaseConfig>
+    </ActivityBaseConfig>
   );
 }
 

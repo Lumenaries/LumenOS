@@ -1,16 +1,7 @@
-import { A, useParams } from "@solidjs/router";
-import { Show, createSignal, lazy } from "solid-js";
+import { A } from "@solidjs/router";
+import { Show, createSignal } from "solid-js";
 
 import Header from "./Header";
-import {
-  BaseballIcon,
-  BasketballIcon,
-  FootballIcon,
-  SoccerIcon,
-  TennisIcon,
-  VolleyballIcon,
-} from "./SportIcons";
-import { LeftArrowIcon, RightArrowIcon } from "./UtilityIcons";
 import {
   BackArrowIcon,
   MinusIcon,
@@ -21,7 +12,7 @@ import {
 
 // TODO: Allow user to change team names
 // TODO: Add a configurable timer element
-function BaseConfig(props) {
+function ActivityBaseConfig(props) {
   return (
     <>
       <Header>
@@ -64,28 +55,30 @@ function Timer() {
   return (
     <div class="flex justify-center">
       <p class="mr-3 font-medium text-5xl">10:00</p>
-      <button
-        class="my-auto"
-        classList={{ hidden: !is_active() }}
-        onClick={function () {
-          console.log("timer is " + is_active());
-          console.log("setting to inactive");
-          set_active(false);
-        }}
-      >
-        <PauseIcon />
-      </button>
-      <button
-        class="my-auto"
-        classList={{ hidden: is_active() }}
-        onClick={function () {
-          console.log("timer is " + is_active());
-          console.log("setting to active");
-          set_active(true);
-        }}
-      >
-        <PlayIcon />
-      </button>
+      <Show when={is_active()}>
+        <button
+          class="my-auto"
+          onClick={function () {
+            console.log("timer is " + is_active());
+            console.log("setting to inactive");
+            set_active(false);
+          }}
+        >
+          <PauseIcon />
+        </button>
+      </Show>
+      <Show when={!is_active()}>
+        <button
+          class="my-auto"
+          onClick={function () {
+            console.log("timer is " + is_active());
+            console.log("setting to active");
+            set_active(true);
+          }}
+        >
+          <PlayIcon />
+        </button>
+      </Show>
     </div>
   );
 }
@@ -132,44 +125,4 @@ function Score(props) {
   );
 }
 
-function Field(props) {
-  const field_names = props.fields;
-
-  const default_field = field_names.indexOf(props.default_field);
-
-  const [field, set_field] = createSignal(
-    default_field == -1 ? 0 : default_field
-  );
-
-  const decrease_field = function () {
-    if (field() != 0) {
-      set_field(field() - 1);
-    }
-  };
-
-  const increase_field = function () {
-    if (field() + 1 != field_names.length) {
-      set_field(field() + 1);
-    }
-  };
-
-  return (
-    <div class="grid grid-flow-dense grid-cols-4">
-      <button class="flex justify-start" onClick={decrease_field}>
-        <Show when={field() > 0}>
-          <LeftArrowIcon />
-        </Show>
-      </button>
-      <p class="col-span-2 flex items-center justify-center text-2xl">
-        {field_names[field()]}
-      </p>
-      <button class="flex justify-end" onClick={increase_field}>
-        <Show when={field() < field_names.length - 1}>
-          <RightArrowIcon />
-        </Show>
-      </button>
-    </div>
-  );
-}
-
-export { BaseConfig, Field };
+export default ActivityBaseConfig;

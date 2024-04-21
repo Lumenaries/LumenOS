@@ -38,7 +38,7 @@ function BackArrowIcon() {
   );
 }
 
-function GameBoardIcon() {
+function ActivityBoardIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -215,7 +215,7 @@ function SettingsIcon() {
 export {
   AdIcon,
   BackArrowIcon,
-  GameBoardIcon,
+  ActivityBoardIcon,
   LeftArrowIcon,
   MenuIcon,
   MinusIcon,

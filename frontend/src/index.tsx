@@ -8,27 +8,27 @@ const root = document.getElementById("root");
 
 const App = lazy(() => import("./App"));
 const Advertisements = lazy(() => import("./pages/Advertisements"));
-const Games = lazy(() => import("./pages/Games"));
+const Activities = lazy(() => import("./pages/Activities"));
 const Settings = lazy(() => import("./pages/Settings"));
 
 const BaseballConfig = lazy(
-  () => import("./pages/sport_config/BaseballConfig")
+  () => import("./pages/activity_config/BaseballConfig")
 );
 
 const BasketballConfig = lazy(
-  () => import("./pages/sport_config/BasketballConfig")
+  () => import("./pages/activity_config/BasketballConfig")
 );
 
 const FootballConfig = lazy(
-  () => import("./pages/sport_config/FootballConfig")
+  () => import("./pages/activity_config/FootballConfig")
 );
 
-const SoccerConfig = lazy(() => import("./pages/sport_config/SoccerConfig"));
+const SoccerConfig = lazy(() => import("./pages/activity_config/SoccerConfig"));
 
-const TennisConfig = lazy(() => import("./pages/sport_config/TennisConfig"));
+const TennisConfig = lazy(() => import("./pages/activity_config/TennisConfig"));
 
 const VolleyballConfig = lazy(
-  () => import("./pages/sport_config/VolleyballConfig")
+  () => import("./pages/activity_config/VolleyballConfig")
 );
 
 if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
@@ -40,7 +40,7 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 render(
   () => (
     <Router root={App}>
-      <Route path="/" component={Games} />
+      <Route path="/" component={Activities} />
       <Route path="/ads" component={Advertisements} />
       <Route path="/settings" component={Settings} />
       <Route path="/baseball" component={BaseballConfig} />

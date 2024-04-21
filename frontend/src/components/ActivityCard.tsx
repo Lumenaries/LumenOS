@@ -1,6 +1,6 @@
 import { A } from "@solidjs/router";
 
-function SportCard(props) {
+function ActivityCard(props) {
   return (
     <div>
       <A href={"/" + props.name.toLowerCase()} class="group">
@@ -18,4 +18,4 @@ function SportCard(props) {
   );
 }
 
-export default SportCard;
+export default ActivityCard;
