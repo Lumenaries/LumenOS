@@ -1,7 +1,7 @@
 import ActivityBaseConfig from "../../components/ActivityBaseConfig";
 
-function ActivityBaseballConfig() {
+function BaseballConfig() {
   return <ActivityBaseConfig name="Baseball" />;
 }
 
-export default ActivityBaseballConfig;
+export default BaseballConfig;
