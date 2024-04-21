@@ -21,10 +21,13 @@ void power_button_single_click(void* /* button */, void* context)
     // activity
     ESP_LOGI(tag, "Shutting down...");
 
-    auto* button_context = static_cast<hardware::button::ButtonContext*>(context);
+    auto* button_context =
+        static_cast<hardware::button::ButtonContext*>(context);
     auto* button = button_context->button;
 
-    ESP_ERROR_CHECK(esp_sleep_enable_ext0_wakeup(button->get_pin(), button->get_active_level()));
+    ESP_ERROR_CHECK(esp_sleep_enable_ext0_wakeup(
+        button->get_pin(), button->get_active_level()
+    ));
     esp_deep_sleep_start();
 }
 
@@ -44,6 +47,18 @@ void power_button_long_press(void* /* button */, void* context)
 
     net::disconnect_user();
     connect_activity->set_connected(false);
+}
+
+void timer_button_single_click(void* /* button */, void* context)
+{
+    ESP_LOGI(tag, "Toggle activity timer");
+
+    auto* button_context =
+        static_cast<hardware::button::ButtonContext*>(context);
+
+    auto* activity_context =
+        static_cast<activity::Context*>(button_context->user_context);
+    activity_context->button_pressed(activity::ButtonEvent::timer);
 }
 
 } // namespace lumen

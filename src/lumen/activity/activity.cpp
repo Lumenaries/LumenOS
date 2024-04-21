@@ -7,4 +7,9 @@ hardware::Display* Activity::get_display()
     return display_.get();
 }
 
+void Activity::button_pressed(ButtonEvent event)
+{
+    ESP_LOGE("activity", "Button press not implemented");
+}
+
 } // namespace lumen::activity

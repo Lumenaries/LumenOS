@@ -2,6 +2,7 @@
 
 #include "lumen/activity/context.hpp"
 #include "lumen/button_callback.hpp"
+#include "lumen/hardware/button/led_button.hpp"
 #include "lumen/hardware/button/rg_led_button.hpp"
 #include "lumen/net/wifi.hpp"
 #include "lumen/web/server.hpp"
@@ -35,6 +36,15 @@ void app_task(void* /* parameters */)
     );
     power_button.register_callback(
         BUTTON_LONG_PRESS_START, power_button_long_press, &activity_context
+    );
+
+    auto timer_button = hardware::button::LEDButton{
+        CONFIG_HARDWARE_TIMER_BUTTON_PIN,
+        CONFIG_HARDWARE_TIMER_BUTTON_ACTIVE_LEVEL,
+        CONFIG_HARDWARE_TIMER_BUTTON_WHITE_PIN
+    };
+    timer_button.register_callback(
+        BUTTON_SINGLE_CLICK, timer_button_single_click, &activity_context
     );
 
     uint32_t event_buffer{};

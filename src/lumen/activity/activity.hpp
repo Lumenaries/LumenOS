@@ -6,7 +6,15 @@
 
 namespace lumen::activity {
 
-enum class Type { none = 0, connect, football };
+enum class Type {
+    none = 0,
+    connect,
+    football,
+};
+
+enum class ButtonEvent {
+    timer = 0,
+};
 
 /// Base class from which different displayable activites should derive.
 class Activity {
@@ -15,6 +23,12 @@ public:
 
     /// Defines how the derived activity should appear on the LED display.
     virtual void update_display() = 0;
+
+    /** Handler for a button press.
+     *
+     * \param event The button event.
+     */
+    virtual void button_pressed(ButtonEvent event);
 
 protected:
     hardware::Display* get_display();
