@@ -26,6 +26,7 @@ public:
     /// Return the yards field
     field::Number& yards();
 
+    /// Return the timer field
     field::Timer& timer();
 
     /// Draw the fields to the display.
