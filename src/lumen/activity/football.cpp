@@ -37,7 +37,6 @@ field::Timer& Football::timer()
 void Football::update_display()
 {
     // TODO: Configure how football will be displayed
-    ESP_LOGI("activity/football", "timer: %s", timer_.to_string().c_str());
 }
 
 void Football::button_pressed(ButtonEvent event)
