@@ -29,10 +29,13 @@ field::Number& Football::yards()
     return yards_;
 }
 
+field::Timer& Football::timer()
+{
+    return timer_;
+}
+
 void Football::update_display()
 {
-    auto* display = get_display();
-
     // TODO: Configure how football will be displayed
 }
 

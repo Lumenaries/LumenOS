@@ -2,10 +2,7 @@
 
 namespace lumen::activity::field {
 
-Number::Number(Activity* parent, uint increment /* = 1 */)
-    : Field{parent, {}}, increment_{increment}
-{
-}
+Number::Number(uint increment /* = 1 */) : Field{}, increment_{increment} {}
 
 Number& Number::increase()
 {
