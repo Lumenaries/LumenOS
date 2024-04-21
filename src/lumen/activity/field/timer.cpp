@@ -7,7 +7,14 @@ namespace {
 
 constexpr auto tag = "activity/field/timer";
 
-/// Update the value of the timer field and signal an update
+/** Update the value of the timer field and signal an update.
+ *
+ * \param timer The handle to the timer object that caused the alarm.
+ *
+ * \param timer_data The data associated with the alarm event.
+ *
+ * \param context Context passed in by the user at registration-time.
+ */
 bool timer_alarm_callback(
     gptimer_handle_t timer,
     gptimer_alarm_event_data_t const* timer_data,
