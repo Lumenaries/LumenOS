@@ -12,23 +12,23 @@ const Activities = lazy(() => import("./pages/Activities"));
 const Settings = lazy(() => import("./pages/Settings"));
 
 const BaseballConfig = lazy(
-  () => import("./pages/activity_config/BaseballConfig")
+  () => import("./pages/activityConfig/BaseballConfig")
 );
 
 const BasketballConfig = lazy(
-  () => import("./pages/activity_config/BasketballConfig")
+  () => import("./pages/activityConfig/BasketballConfig")
 );
 
 const FootballConfig = lazy(
-  () => import("./pages/activity_config/FootballConfig")
+  () => import("./pages/activityConfig/FootballConfig")
 );
 
-const SoccerConfig = lazy(() => import("./pages/activity_config/SoccerConfig"));
+const SoccerConfig = lazy(() => import("./pages/activityConfig/SoccerConfig"));
 
-const TennisConfig = lazy(() => import("./pages/activity_config/TennisConfig"));
+const TennisConfig = lazy(() => import("./pages/activityConfig/TennisConfig"));
 
 const VolleyballConfig = lazy(
-  () => import("./pages/activity_config/VolleyballConfig")
+  () => import("./pages/activityConfig/VolleyballConfig")
 );
 
 if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
