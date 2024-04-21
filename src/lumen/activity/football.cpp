@@ -45,6 +45,18 @@ void Football::button_pressed(ButtonEvent event)
     case ButtonEvent::timer:
         timer_.toggle();
         break;
+    case ButtonEvent::rocker_one_up:
+        team_one_.score().increase();
+        break;
+    case ButtonEvent::rocker_one_down:
+        team_one_.score().decrease();
+        break;
+    case ButtonEvent::rocker_two_up:
+        team_two_.score().increase();
+        break;
+    case ButtonEvent::rocker_two_down:
+        team_two_.score().decrease();
+        break;
     default:
         ESP_LOGE("activity/football", "Unknown button event");
         break;
