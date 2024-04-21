@@ -1,5 +1,6 @@
 #include "lumen/activity/context.hpp"
 
+#include "lumen/activity/connect.hpp"
 #include "lumen/activity/football.hpp"
 
 #include "esp_log.h"
@@ -29,6 +30,9 @@ void Context::set_activity(Type type)
         return;
     }
 
+    // TODO: Before switching to a new activity, save the state of the current
+    // activity if the activity is active.
+
     activity_type_ = type;
 
     switch (type) {
@@ -36,8 +40,12 @@ void Context::set_activity(Type type)
         activity_.reset();
         return;
 
+    case Type::connect:
+        activity_ = std::move(std::make_unique<Connect>());
+        break;
+
     case Type::football:
-        activity_ = std::move(std::make_unique<activity::Football>());
+        activity_ = std::move(std::make_unique<Football>());
         break;
 
     default:
@@ -55,6 +63,10 @@ Type Context::get_activity_type() const
 
 void Context::update_display()
 {
+    if (activity_ == nullptr) {
+        return;
+    }
+
     activity_->update_display();
 }
 

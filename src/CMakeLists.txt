@@ -1,5 +1,6 @@
 idf_component_register(SRCS
                            "lumen/activity/activity.cpp"
+                           "lumen/activity/connect.cpp"
                            "lumen/activity/context.cpp"
                            "lumen/activity/field/number.cpp"
                            "lumen/activity/field/team.cpp"
@@ -7,6 +8,7 @@ idf_component_register(SRCS
                            "lumen/activity/field/timer.cpp"
                            "lumen/activity/football.cpp"
                            "lumen/app_task.cpp"
+                           "lumen/button_callback.cpp"
                            "lumen/hardware/button/button.cpp"
                            "lumen/hardware/button/led_button.cpp"
                            "lumen/hardware/button/rg_led_button.cpp"

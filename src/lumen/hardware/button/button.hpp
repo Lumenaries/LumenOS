@@ -6,6 +6,13 @@
 
 namespace lumen::hardware::button {
 
+class Button;
+
+struct ButtonContext {
+    Button* button;
+    void* user_context;
+};
+
 /// Defines a button on a GPIO pin.
 class Button {
 public:
@@ -20,6 +27,10 @@ public:
     Button(int32_t button_pin, uint8_t active_level);
 
     virtual ~Button();
+
+    [[nodiscard]] gpio_num_t get_pin() const;
+
+    [[nodiscard]] int get_active_level() const;
 
     /** Register a callback function for the given button event.
      *
@@ -36,11 +47,19 @@ public:
      *
      * \returns ESP_ERR_NO_MEM No more memory allocation for the event.
      */
-    esp_err_t register_callback(button_event_t event, button_cb_t callback);
+    esp_err_t register_callback(
+        button_event_t event,
+        button_cb_t callback,
+        void* context = nullptr
+    );
 
 private:
     button_handle_t button_{};
+    gpio_num_t pin_;
+    int active_level_;
+
     std::vector<button_event_t> registered_events_{};
+    ButtonContext callback_context_{this, nullptr};
 };
 
 } // namespace lumen::hardware::button
