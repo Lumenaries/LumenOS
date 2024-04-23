@@ -44,7 +44,7 @@ public:
      *
      * \param data The JSON object with the saved football data.
      */
-    void load(nlohmann::json data) override;
+    void load(nlohmann::json& data) override;
 
     /** Constructs a JSON object from the `Football` object.
      *

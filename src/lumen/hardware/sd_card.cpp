@@ -1,21 +1,18 @@
 #include "lumen/hardware/sd_card.hpp"
 
+#include "driver/gpio.h"
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
 
-#include "driver/gpio.h"
-
 #include <filesystem>
 #include <fstream>
-#include <iostream>
 
 using json = nlohmann::json;
 
 namespace lumen::hardware {
-
 namespace {
 
-constexpr auto tag = "hardware";
+constexpr auto tag = "hardware/sd_card";
 
 constexpr auto sd_card_mount_point = "/sdcard";
 
@@ -46,6 +43,7 @@ void init_sd_card()
     ret = spi_bus_initialize(host_slot, &bus_config, SDSPI_DEFAULT_DMA);
     if (ret != ESP_OK) {
         ESP_LOGE(tag, "Failed to initialize bus.");
+        initialized = false;
         return;
     }
 
@@ -58,7 +56,7 @@ void init_sd_card()
 
     // Configure and mount the SD card.
 
-    sdmmc_card_t* card;
+    sdmmc_card_t* card = nullptr;
 
     esp_vfs_fat_sdmmc_mount_config_t mount_config = {
         .format_if_mount_failed = true,
@@ -69,7 +67,7 @@ void init_sd_card()
     ESP_LOGI(tag, "Mounting filesystem");
 
     ret = esp_vfs_fat_sdspi_mount(
-        static_cast<char const*>(sd_card_mount_point),
+        sd_card_mount_point,
         &host,
         &slot_config,
         &mount_config,
@@ -78,34 +76,35 @@ void init_sd_card()
 
     if (ret != ESP_OK) {
         if (ret == ESP_FAIL) {
-            ESP_LOGE(
-                tag,
-                "Failed to mount filesystem. "
-                "If you want the card to be formatted, set the "
-                "CONFIG_EXAMPLE_FORMAT_IF_MOUNT_FAILED menuconfig option."
-            );
+            ESP_LOGE(tag, "Failed to mount filesystem");
         } else {
             ESP_LOGE(
                 tag,
-                "Failed to initialize the card (%s). "
-                "Make sure SD card lines have pull-up resistors in place.",
+                "Failed to initialize the card (%s). Make sure SD card lines "
+                "have pull-up resistors in place",
                 esp_err_to_name(ret)
             );
         }
+
+        initialized = false;
         return;
     }
 
     ESP_LOGI(tag, "Filesystem mounted");
-    initialized = true;
     sdmmc_card_print_info(stdout, card);
+
+    initialized = true;
 }
 
-json read_json(std::string filepath)
+json read_json(std::string const& filepath)
 {
-    std::ifstream file;
+    if (!initialized) {
+        ESP_LOGE(tag, "SD card was not initialized");
+        return {};
+    }
 
-    file.open(sd_card_mount_point + filepath);
-    if (!file) {
+    auto file = std::ifstream(sd_card_mount_point + filepath);
+    if (!file.good()) {
         ESP_LOGI(
             tag,
             "The file '%s' does not exist. Unable to read",
@@ -120,11 +119,14 @@ json read_json(std::string filepath)
     return data;
 }
 
-void write_json(std::string filepath, json data)
+void write_json(std::string const& filepath, json data)
 {
-    std::ofstream file;
+    if (!initialized) {
+        ESP_LOGE(tag, "SD card was not initialized");
+        return;
+    }
 
-    file.open(sd_card_mount_point + filepath);
+    auto file = std::ofstream(sd_card_mount_point + filepath);
     if (!file.good()) {
         ESP_LOGE(tag, "Unable to write to file '%s'", filepath.c_str());
         return;
@@ -133,8 +135,13 @@ void write_json(std::string filepath, json data)
     file << data;
 }
 
-void delete_file(std::string filepath)
+void delete_file(std::string const& filepath)
 {
+    if (!initialized) {
+        ESP_LOGE(tag, "SD card was not initialized");
+        return;
+    }
+
     std::filesystem::remove(sd_card_mount_point + filepath);
 }
 

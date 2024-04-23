@@ -26,7 +26,7 @@ constexpr auto activity_file = "/activity.json";
  *
  * \returns `Type::none` if `type` could not be matched.
  */
-Type str_to_type(std::string type);
+Type str_to_type(std::string const& type);
 
 } // namespace
 
@@ -143,7 +143,7 @@ bool Context::load_activity()
 
 namespace {
 
-Type str_to_type(std::string type)
+Type str_to_type(std::string const& type)
 {
     if (type == "connect") {
         return Type::connect;

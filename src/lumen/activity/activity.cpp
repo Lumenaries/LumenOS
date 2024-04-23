@@ -19,7 +19,7 @@ void Activity::button_pressed(ButtonEvent /* event */)
     ESP_LOGE(tag, "Button handler is not implemented");
 }
 
-void Activity::load(json /* data */)
+void Activity::load(json& /* data */)
 {
     ESP_LOGE(tag, "Loading is not implemented");
 }

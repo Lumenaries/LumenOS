@@ -67,7 +67,7 @@ void Football::button_pressed(ButtonEvent event)
     }
 }
 
-void Football::load(json data)
+void Football::load(json& data)
 {
     if (data.contains("teamOne")) {
         if (data["teamOne"].contains("name") &&

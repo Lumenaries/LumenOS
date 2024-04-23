@@ -17,7 +17,7 @@ void init_sd_card();
  *
  * \note `filepath` must be prepended by '/'
  */
-nlohmann::json read_json(std::string filepath);
+nlohmann::json read_json(std::string const& filepath);
 
 /** Write a JSON object to a file.
  *
@@ -27,7 +27,7 @@ nlohmann::json read_json(std::string filepath);
  *
  * \note `filepath` must be prepended by '/'
  */
-void write_json(std::string filepath, nlohmann::json data);
+void write_json(std::string const& filepath, nlohmann::json data);
 
 /** Delete a file.
  *
@@ -35,6 +35,6 @@ void write_json(std::string filepath, nlohmann::json data);
  *
  * \note `filepath` must be prepended by '/'
  */
-void delete_file(std::string filepath);
+void delete_file(std::string const& filepath);
 
 } // namespace lumen::hardware
