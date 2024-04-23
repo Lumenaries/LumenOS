@@ -2,8 +2,6 @@
 
 #include "lumen/hardware/display.hpp"
 
-#include "esp_log.h"
-
 namespace lumen::activity {
 namespace {
 
@@ -43,36 +41,6 @@ field::Timer& Football::timer()
 
 void Football::update_display()
 {
-    // TODO: Configure how football will be displayed
-    auto* display = get_display();
-
-    display->setCursor(0, 0);
-    display->print("H:");
-    display->print(team_one().score().to_string().c_str());
-    ESP_LOGI(tag, "HOME: %d", team_one().score().get_value());
-
-    display->print("  ");
-    display->print("A:");
-    display->println(team_two().score().to_string().c_str());
-    ESP_LOGI(tag, "AWAY: %d", team_two().score().get_value());
-
-    display->print("  ");
-    display->print("Q:");
-    display->print(quarter().to_string().c_str());
-    ESP_LOGI(tag, "QUARTER: %d", quarter().get_value());
-
-    display->print("  ");
-    display->print("D:");
-    display->print(down().to_string().c_str());
-    ESP_LOGI(tag, "DOWN: %d", down().get_value());
-
-    display->print("  ");
-    display->print("Y:");
-    display->println(yards().to_string().c_str());
-    ESP_LOGI(tag, "YARDS: %d", yards().get_value());
-
-    display->print(timer().to_string().c_str());
-    ESP_LOGI(tag, "TIME: %s", timer().to_string().c_str());
 }
 
 void Football::button_pressed(ButtonEvent event)

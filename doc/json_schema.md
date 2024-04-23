@@ -1,6 +1,6 @@
 # JSON Schemas
 
-These are the schemas that our API follows. There's no actual validation going
+These are the schema that our API follows. There's no actual validation going
 on, these are just guidelines to follow.
 
 ## /api/v1/advertisements
