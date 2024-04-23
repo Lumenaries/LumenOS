@@ -1,4 +1,5 @@
 #include "lumen/app_task.hpp"
+#include "lumen/hardware/sd_card.hpp"
 #include "lumen/net/mdns.hpp"
 
 #include "esp_event.h"
@@ -25,12 +26,16 @@ extern "C" void app_main()
     // Initialize NVS needed by Wi-Fi
     ESP_ERROR_CHECK(nvs_flash_init());
 
+    // Initialize the SD card
+    lumen::hardware::init_sd_card();
+
     // Initialize the file system
     ESP_ERROR_CHECK(init_filesystem());
 
+    // Initialize the mDNS
     lumen::net::init_mdns();
 
-    xTaskCreate(lumen::app_task, "Application Task", 4096, nullptr, 5, nullptr);
+    xTaskCreate(lumen::app_task, "Application Task", 8192, nullptr, 5, nullptr);
 }
 
 namespace {

@@ -38,6 +38,17 @@ public:
      */
     void button_pressed(ButtonEvent event);
 
+    /// Saves the current activity to the `activity_file`.
+    void store_activity();
+
+    /* Load the previously saved activity.
+     *
+     * \returns true if an activity was previously saved.
+     *
+     * \returns false if an activity was not previously saved.
+     */
+    bool load_activity();
+
 private:
     std::unique_ptr<Activity> activity_{};
     Type activity_type_{};
