@@ -15,12 +15,29 @@ function FootballConfig() {
     yards.push(i + " Yards");
   }
 
+  const endpoint = "/api/v1/football";
+
   return (
     <ActivityBaseConfig name="Football">
       <div class="grid grid-cols-1 gap-4">
-        <ActivityField fields={quarters} default_field="1st Quarter" />
-        <ActivityField fields={downs} default_field="1st Down" />
-        <ActivityField fields={yards} default_field="10 Yards" />
+        <ActivityField
+          name="quarter"
+          endpoint={endpoint}
+          fields={quarters}
+          defaultField="1st Quarter"
+        />
+        <ActivityField
+          name="down"
+          endpoint={endpoint}
+          fields={downs}
+          defaultField="1st Down"
+        />
+        <ActivityField
+          name="yards"
+          endpoint={endpoint}
+          fields={yards}
+          defaultField="10 Yards"
+        />
       </div>
     </ActivityBaseConfig>
   );

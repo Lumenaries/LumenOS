@@ -34,10 +34,7 @@ field::Timer& Football::timer()
     return timer_;
 }
 
-void Football::update_display()
-{
-    // TODO: Configure how football will be displayed
-}
+void Football::update_display() {}
 
 void Football::button_pressed(ButtonEvent event)
 {

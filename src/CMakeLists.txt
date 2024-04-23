@@ -17,6 +17,8 @@ idf_component_register(SRCS
                            "lumen/hardware/led_pin.cpp"
                            "lumen/net/mdns.cpp"
                            "lumen/net/wifi.cpp"
+                           "lumen/web/handler/common.cpp"
+                           "lumen/web/handler/football.cpp"
                            "lumen/web/server.cpp"
                            "main.cpp"
                        INCLUDE_DIRS "."
@@ -57,4 +59,3 @@ set(JSON_Install OFF CACHE INTERNAL "")
 # Add json library as a subdirectory and build it in "build/json"
 add_subdirectory(${NON_COMPONENT_LIB_DIR}/json ${CMAKE_BINARY_DIR}/json)
 target_link_libraries(${COMPONENT_LIB} PUBLIC nlohmann_json::nlohmann_json)
-
