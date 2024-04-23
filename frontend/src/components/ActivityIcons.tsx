@@ -1,13 +1,12 @@
 function BaseIcon(props) {
-  const icon_width = typeof props.width === "undefined" ? "125" : props.width;
-  const icon_height =
-    typeof props.height === "undefined" ? "125" : props.height;
+  const iconWidth = typeof props.width === "undefined" ? "125" : props.width;
+  const iconHeight = typeof props.height === "undefined" ? "125" : props.height;
 
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={icon_width}
-      height={icon_height}
+      width={iconWidth}
+      height={iconHeight}
       viewBox="0 0 24 24"
       stroke-width="1.5"
       fill="none"

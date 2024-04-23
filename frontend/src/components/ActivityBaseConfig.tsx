@@ -28,17 +28,19 @@ function ActivityBaseConfig(props) {
       <div class="flex justify-center font-normal">
         <div class="grid grid-cols-2 gap-10">
           <div class="col-span-2 text-center">
-            <Timer />
+            <Timer sport={props.name} />
           </div>
           <Score
-            team_name="Home"
+            sport={props.name}
+            teamName="Home"
             team="one"
-            default_score={props.default_score}
+            defaultScore={props.defaultScore}
           />
           <Score
-            team_name="Away"
+            sport={props.name}
+            teamName="Away"
             team="two"
-            default_score={props.default_score}
+            defaultScore={props.defaultScore}
           />
           <Show when={typeof props.children === "object"}>
             <div class="col-span-2">{props.children}</div>
@@ -49,27 +51,36 @@ function ActivityBaseConfig(props) {
   );
 }
 
-function Timer() {
-  const [is_active, set_active] = createSignal(false);
+function Timer(props) {
+  const [isRunning, setRunning] = createSignal(false);
+
+  const putIsRunning = function () {
+    fetch(`/api/v1/${props.sport.toLowerCase()}`, {
+      method: "PUT",
+      body: JSON.stringify({ timer: { isRunning: isRunning() } }),
+    });
+  };
 
   return (
     <div class="flex justify-center">
       <p class="mr-3 font-medium text-5xl">10:00</p>
-      <Show when={is_active()}>
+      <Show when={isRunning()}>
         <button
           class="my-auto"
           onClick={function () {
-            set_active(false);
+            setRunning(false);
+            putIsRunning();
           }}
         >
           <PauseIcon />
         </button>
       </Show>
-      <Show when={!is_active()}>
+      <Show when={!isRunning()}>
         <button
           class="my-auto"
           onClick={function () {
-            set_active(true);
+            setRunning(true);
+            putIsRunning();
           }}
         >
           <PlayIcon />
@@ -80,30 +91,39 @@ function Timer() {
 }
 
 function Score(props) {
-  const [team_name, set_team_name] = createSignal(props.team_name);
-  const team = props.team;
-  const [score, set_score] = createSignal(0);
+  const [teamName, setTeamName] = createSignal(props.teamName);
+  const team = props.team === "two" ? "teamTwo" : "teamOne";
+  const [score, setScore] = createSignal(0);
 
-  const decrease_score = function () {
-    if (score() != 0) {
-      set_score(score() - 1);
-    }
+  const putScore = function () {
+    fetch(`/api/v1/${props.sport.toLowerCase()}`, {
+      method: "PUT",
+      body: JSON.stringify({ [team]: { score: score() } }),
+    });
   };
 
-  const increase_score = function () {
-    set_score(score() + 1);
+  const decreaseScore = function () {
+    if (score() != 0) {
+      setScore(score() - 1);
+    }
+    putScore();
+  };
+
+  const increaseScore = function () {
+    setScore(score() + 1);
+    putScore();
   };
 
   return (
     <div>
       <div class="flex justify-center">
-        <p class="pb-5 font-bold text-2xl">{team_name}</p>
+        <p class="pb-5 font-bold text-2xl">{teamName}</p>
       </div>
 
       <div class="flex">
         <button
           class="my-auto touch-none rounded-full bg-primary p-1 text-4xl text-white"
-          onClick={decrease_score}
+          onClick={decreaseScore}
         >
           <MinusIcon />
         </button>
@@ -112,7 +132,7 @@ function Score(props) {
         </div>
         <button
           class="my-auto touch-none rounded-full bg-primary p-1 text-4xl text-white"
-          onClick={increase_score}
+          onClick={increaseScore}
         >
           <PlusIcon />
         </button>

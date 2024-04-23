@@ -12,7 +12,7 @@ public:
      * \param increment Interval by which the value of the field change each
      * time `increase()` or `decrease()` is called.
      */
-    explicit Number(uint increment = 1);
+    explicit Number(uint start_value = 0, uint increment = 1);
 
     /// Increase the value of the field by the value of `increment`.
     Number& increase();
