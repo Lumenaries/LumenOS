@@ -56,5 +56,6 @@ endif()
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 set(JSON_Install OFF CACHE INTERNAL "")
 
-add_subdirectory(${NON_IDF_LIB_DIR}/json ${CMAKE_BINARY_DIR}/json)
+# Add json library as a subdirectory and build it in "build/json"
+add_subdirectory(${NON_COMPONENT_LIB_DIR}/json ${CMAKE_BINARY_DIR}/json)
 target_link_libraries(${COMPONENT_LIB} PUBLIC nlohmann_json::nlohmann_json)
