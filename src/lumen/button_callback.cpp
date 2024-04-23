@@ -9,6 +9,8 @@
 #include "esp_log.h"
 #include "esp_sleep.h"
 
+#include "freertos/task.h"
+
 namespace lumen {
 namespace {
 
@@ -36,7 +38,7 @@ void power_button_single_click(void* /* button */, void* context)
     ));
 
     // Delay to account for button debouncing.
-    vTaskDelay(1000 * portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(150));
     esp_deep_sleep_start();
 }
 

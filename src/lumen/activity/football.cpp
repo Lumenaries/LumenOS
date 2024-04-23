@@ -41,10 +41,7 @@ field::Timer& Football::timer()
     return timer_;
 }
 
-void Football::update_display()
-{
-    // TODO: Configure how football will be displayed
-}
+void Football::update_display() {}
 
 void Football::button_pressed(ButtonEvent event)
 {
@@ -97,26 +94,38 @@ void Football::load(json data)
     }
 
     if (data.contains("quarter")) {
-        auto quarter = data["quarter"];
+        if (data["quarter"].contains("value") &&
+            data["quarter"]["value"].is_number_unsigned()) {
+            quarter_.set_value(data["quarter"]["value"]);
+        }
 
-        if (quarter.is_number_unsigned()) {
-            quarter_.set_value(quarter);
+        if (data["quarter"].contains("startValue") &&
+            data["quarter"]["startValue"].is_number_unsigned()) {
+            quarter_.set_start_value(data["quarter"]["startValue"]);
         }
     }
 
     if (data.contains("down")) {
-        auto down = data["down"];
+        if (data["down"].contains("value") &&
+            data["down"]["value"].is_number_unsigned()) {
+            down_.set_value(data["down"]["value"]);
+        }
 
-        if (down.is_number_unsigned()) {
-            down_.set_value(down);
+        if (data["down"].contains("startValue") &&
+            data["down"]["startValue"].is_number_unsigned()) {
+            down_.set_start_value(data["down"]["startValue"]);
         }
     }
 
     if (data.contains("yards")) {
-        auto yards = data["yards"];
+        if (data["yards"].contains("value") &&
+            data["yards"]["value"].is_number_unsigned()) {
+            yards_.set_value(data["yards"]["value"]);
+        }
 
-        if (yards.is_number_unsigned()) {
-            yards_.set_value(yards);
+        if (data["yards"].contains("startValue") &&
+            data["yards"]["startValue"].is_number_unsigned()) {
+            yards_.set_start_value(data["yards"]["startValue"]);
         }
     }
 
@@ -148,9 +157,15 @@ json Football::to_json()
         {"teamTwo",
          {{"name", team_two_.name().get_value()},
           {"score", team_two_.score().get_value()}}},
-        {"quarter", quarter_.get_value()},
-        {"down", down_.get_value()},
-        {"yards", yards_.get_value()},
+        {"quarter",
+         {{"value", quarter_.get_value()},
+          {"startValue", quarter_.get_start_value()}}},
+        {"down",
+         {{"value", down_.get_value()}, {"startValue", down_.get_start_value()}}
+        },
+        {"yards",
+         {{"value", yards_.get_value()},
+          {"startValue", yards_.get_start_value()}}},
         {"timer",
          {{"value", timer_.get_value()},
           {"startTime", timer_.get_start_time()},

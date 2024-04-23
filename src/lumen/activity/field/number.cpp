@@ -2,7 +2,20 @@
 
 namespace lumen::activity::field {
 
-Number::Number(uint increment /* = 1 */) : Field{}, increment_{increment} {}
+Number::Number(uint start_value /* = 0 */, uint increment /* = 1 */)
+    : Field{start_value}, start_value_{start_value}, increment_{increment}
+{
+}
+
+uint Number::get_start_value()
+{
+    return start_value_;
+}
+
+void Number::set_start_value(uint start_value)
+{
+    start_value_ = start_value;
+}
 
 Number& Number::increase()
 {

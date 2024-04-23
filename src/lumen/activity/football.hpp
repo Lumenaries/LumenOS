@@ -56,9 +56,9 @@ private:
     field::Team team_one_{"Home"};
     field::Team team_two_{"Away"};
 
-    field::Number quarter_{};
-    field::Number down_{};
-    field::Number yards_{};
+    field::Number quarter_{1};
+    field::Number down_{1};
+    field::Number yards_{10};
 
     // High school Football games have 12 minute quarters
     field::Timer timer_{12 * 60};
