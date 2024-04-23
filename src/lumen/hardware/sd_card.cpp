@@ -22,7 +22,7 @@ bool initialized = false;
 
 void init_sd_card()
 {
-    esp_err_t ret;
+    esp_err_t ret = ESP_OK;
 
     ESP_LOGI(tag, "Initializing SD card using the SPI peripheral");
 
@@ -113,13 +113,13 @@ json read_json(std::string const& filepath)
         return {};
     }
 
-    json data;
+    json data{};
     file >> data;
 
     return data;
 }
 
-void write_json(std::string const& filepath, json data)
+void write_json(std::string const& filepath, json const& data)
 {
     if (!initialized) {
         ESP_LOGE(tag, "SD card was not initialized");

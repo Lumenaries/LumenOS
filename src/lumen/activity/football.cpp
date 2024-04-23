@@ -67,7 +67,7 @@ void Football::button_pressed(ButtonEvent event)
     }
 }
 
-void Football::load(json& data)
+void Football::load(json const& data)
 {
     if (data.contains("teamOne")) {
         if (data["teamOne"].contains("name") &&
@@ -130,19 +130,19 @@ void Football::load(json& data)
     }
 
     if (data.contains("timer")) {
-        if (data["contains"].contains("value") &&
-            data["contains"]["value"].is_number_unsigned()) {
-            timer_.set_value(data["contains"]["value"]);
+        if (data["timer"].contains("value") &&
+            data["timer"]["value"].is_number_unsigned()) {
+            timer_.set_value(data["timer"]["value"]);
         }
 
-        if (data["contains"].contains("startTime") &&
-            data["contains"]["startTime"].is_number_unsigned()) {
-            timer_.set_start_time(data["contains"]["startTime"]);
+        if (data["timer"].contains("startTime") &&
+            data["timer"]["startTime"].is_number_unsigned()) {
+            timer_.set_start_time(data["timer"]["startTime"]);
         }
 
-        if (data["contains"].contains("countUp") &&
-            data["contains"]["countUp"].is_boolean()) {
-            timer_.set_count_up(data["contains"]["countUp"]);
+        if (data["timer"].contains("countUp") &&
+            data["timer"]["countUp"].is_boolean()) {
+            timer_.set_count_up(data["timer"]["countUp"]);
         }
     }
 }

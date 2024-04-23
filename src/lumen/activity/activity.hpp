@@ -40,7 +40,7 @@ public:
      *
      * \param data The JSON object with the saved activity data.
      */
-    virtual void load(nlohmann::json& data);
+    virtual void load(nlohmann::json const& data);
 
     /** Constructs a JSON object from the `Activity` object.
      *

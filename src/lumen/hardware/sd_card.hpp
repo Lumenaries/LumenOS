@@ -27,7 +27,7 @@ nlohmann::json read_json(std::string const& filepath);
  *
  * \note `filepath` must be prepended by '/'
  */
-void write_json(std::string const& filepath, nlohmann::json data);
+void write_json(std::string const& filepath, nlohmann::json const& data);
 
 /** Delete a file.
  *

@@ -117,7 +117,7 @@ void Context::store_activity()
 
 bool Context::load_activity()
 {
-    json activity_data = hardware::read_json(activity_file);
+    auto activity_data = hardware::read_json(activity_file);
 
     if (activity_data.is_null()) {
         ESP_LOGI(tag, "No activity was previously saved");
@@ -137,7 +137,6 @@ bool Context::load_activity()
     }
 
     hardware::delete_file(activity_file);
-
     return true;
 }
 
