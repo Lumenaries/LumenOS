@@ -8,7 +8,7 @@ function ActivityField(props) {
   const defaultField = fieldNames.indexOf(props.defaultField);
 
   const [field, setField] = createSignal(
-    defaultField == -1 ? 0 : defaultField
+    defaultField === -1 ? 0 : defaultField
   );
 
   const putToEndpoint = function () {

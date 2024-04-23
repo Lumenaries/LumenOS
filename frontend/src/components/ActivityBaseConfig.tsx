@@ -105,8 +105,8 @@ function Score(props) {
   const decreaseScore = function () {
     if (score() != 0) {
       setScore(score() - 1);
+      putScore();
     }
-    putScore();
   };
 
   const increaseScore = function () {

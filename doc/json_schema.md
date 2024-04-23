@@ -99,11 +99,11 @@ response:
   },
   "down": int,
   "quarter": int,
+  "yards": int,
   "timer": {
     "isRunning": bool,
-    "time": int
-  },
-  "yards": int,
+    "value": int
+  }
 }
 ```
 
@@ -124,15 +124,15 @@ request:
     },
     { "down": int },
     { "quarter": int },
+    { "yards": int },
     {
       "timer": {
         "anyOf": [
           { "isRunning": bool },
-          { "time": int }
+          { "value": int }
         ]
       }
-    },
-    { "yards": int },
+    }
   ]
 }
 ```

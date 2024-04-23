@@ -37,7 +37,7 @@ esp_err_t football_put(httpd_req_t* request)
 
     if (content_length > buffer_size - 1) {
         ESP_LOGW(tag, "Received more data than can be processed");
-        httpd_resp_send_500(request, nullptr, 0);
+        httpd_resp_send_500(request);
         return ESP_FAIL;
     }
 
@@ -49,7 +49,7 @@ esp_err_t football_put(httpd_req_t* request)
 
     if (received_bytes <= 0) {
         ESP_LOGW(tag, "Error reading request content");
-        httpd_resp_send_500(request, nullptr, 0);
+        httpd_resp_send_500(request);
         return ESP_FAIL;
     }
 
@@ -123,9 +123,9 @@ esp_err_t football_put(httpd_req_t* request)
             }
         }
 
-        if (request_json["timer"].contains("time") &&
+        if (request_json["timer"].contains("value") &&
             request_json["timer"]["timer"].is_number_unsigned()) {
-            football->timer().set_value(request_json["timer"]["time"]);
+            football->timer().set_value(request_json["timer"]["value"]);
         }
     }
 

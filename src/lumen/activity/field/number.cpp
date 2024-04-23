@@ -3,7 +3,7 @@
 namespace lumen::activity::field {
 
 Number::Number(uint start_value /* = 0 */, uint increment /* = 1 */)
-    : Field{start_value}, increment_{increment}
+    : Field{start_value}, start_value_{start_value}, increment_{increment}
 {
 }
 

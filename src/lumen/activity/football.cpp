@@ -3,11 +3,6 @@
 #include "lumen/hardware/display.hpp"
 
 namespace lumen::activity {
-namespace {
-
-constexpr auto tag = "activity/football";
-
-} // namespace
 
 field::Team& Football::team_one()
 {
@@ -39,9 +34,7 @@ field::Timer& Football::timer()
     return timer_;
 }
 
-void Football::update_display()
-{
-}
+void Football::update_display() {}
 
 void Football::button_pressed(ButtonEvent event)
 {

@@ -24,6 +24,7 @@ public:
     [[nodiscard]] std::string to_string() const override;
 
 private:
+    uint start_value_{};
     uint increment_{};
 };
 

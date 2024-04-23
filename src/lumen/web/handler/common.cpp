@@ -13,9 +13,11 @@ constexpr auto tag = "web/handler/common";
 /* Compare the extension of the filepath with a given extension.
  *
  * \param filepath The path to the file.
+ *
  * \param ext The extension to compare the file to.
  *
  * \returns true if the filepath extension matches the given extension.
+ *
  * \returns false if the filepath extension does not match the given extension.
  */
 bool check_file_extension(char const* filepath, char const* ext);
