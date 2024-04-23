@@ -15,6 +15,7 @@ idf_component_register(SRCS
                            "lumen/hardware/button/rocker_switch.cpp"
                            "lumen/hardware/display.cpp"
                            "lumen/hardware/led_pin.cpp"
+                           "lumen/hardware/sd_card.cpp"
                            "lumen/net/mdns.cpp"
                            "lumen/net/wifi.cpp"
                            "lumen/web/handler/common.cpp"
@@ -34,6 +35,7 @@ idf_component_register(SRCS
                             esp_hw_support  # esp_mac
                             esp_netif
                             esp_wifi
+                            fatfs           # esp_vfs_fat
                             log             # esp_log
                             lwip
                             mdns

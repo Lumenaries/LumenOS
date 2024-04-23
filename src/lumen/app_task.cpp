@@ -12,6 +12,7 @@ namespace lumen {
 namespace {
 
 constexpr auto tag = "app_task";
+
 TaskHandle_t app_task_handle = nullptr;
 
 } // namespace
@@ -33,7 +34,7 @@ void app_task(void* /* parameters */)
         CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN
     };
     power_button.register_callback(
-        BUTTON_SINGLE_CLICK, power_button_single_click, nullptr
+        BUTTON_SINGLE_CLICK, power_button_single_click, &activity_context
     );
     power_button.register_callback(
         BUTTON_LONG_PRESS_START, power_button_long_press, &activity_context

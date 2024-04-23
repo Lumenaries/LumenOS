@@ -69,6 +69,34 @@ bool Timer::is_count_up() const
     return is_count_up_;
 }
 
+void Timer::set_value(uint64_t const& time)
+{
+    if (time == 0) {
+        stop();
+    }
+
+    Field::set_value(time);
+}
+
+bool Timer::set_value_from_isr(uint64_t const& time)
+{
+    if (time == 0) {
+        stop();
+    }
+
+    return Field::set_value_from_isr(time);
+}
+
+void Timer::set_start_time(uint64_t start_time)
+{
+    start_time_ = start_time;
+}
+
+void Timer::set_count_up(bool is_count_up)
+{
+    is_count_up_ = is_count_up;
+}
+
 std::string Timer::to_string() const
 {
     auto time = get_value();
@@ -118,24 +146,6 @@ void Timer::reset()
 {
     stop();
     set_value(start_time_);
-}
-
-void Timer::set_value(uint64_t const& time)
-{
-    if (time == 0) {
-        stop();
-    }
-
-    Field::set_value(time);
-}
-
-bool Timer::set_value_from_isr(uint64_t const& time)
-{
-    if (time == 0) {
-        stop();
-    }
-
-    return Field::set_value_from_isr(time);
 }
 
 namespace {

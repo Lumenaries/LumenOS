@@ -2,6 +2,8 @@
 
 #include "lumen/hardware/display.hpp"
 
+#include "nlohmann/json.hpp"
+
 #include <memory>
 
 namespace lumen::activity {
@@ -33,6 +35,18 @@ public:
      * \param event The button event.
      */
     virtual void button_pressed(ButtonEvent event);
+
+    /** Load a saved activity.
+     *
+     * \param data The JSON object with the saved activity data.
+     */
+    virtual void load(nlohmann::json const& data);
+
+    /** Constructs a JSON object from the `Activity` object.
+     *
+     * \returns The JSON object.
+     */
+    virtual nlohmann::json to_json();
 
 protected:
     hardware::Display* get_display();

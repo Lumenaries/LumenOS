@@ -226,6 +226,33 @@ menu "Lumen"
                     Set the active level (high or low) of the down switch pin.
 
         endmenu
+
+        menu "SD Card"
+            config HARDWARE_SD_CARD_CLK_PIN
+                int "SD Card SPI Clock Pin"
+                default 48
+                help
+                    Set the GPIO number of the SD card's clock pin.
+
+            config HARDWARE_SD_CARD_MISO_PIN
+                int "SD Card SPI Serial Out Pin"
+                default 47
+                help
+                    Set the GPIO number of the SD card's serial out pin for data sent from the SD card.
+
+            config HARDWARE_SD_CARD_MOSI_PIN
+                int "SD Card SPI Serial In Pin"
+                default 2
+                help
+                    Set the GPIO number of the SD card's serial out pin for data sent to the SD card.
+
+            config HARDWARE_SD_CARD_CS_PIN
+                int "SD Card SPI Chip Select Pin"
+                default 41
+                help
+                    Set the GPIO number of the SD card's chip select pin.
+
+        endmenu
     endmenu
 
     menu "Networking"

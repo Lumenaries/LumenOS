@@ -7,6 +7,16 @@ Number::Number(uint start_value /* = 0 */, uint increment /* = 1 */)
 {
 }
 
+uint Number::get_start_value()
+{
+    return start_value_;
+}
+
+void Number::set_start_value(uint start_value)
+{
+    start_value_ = start_value;
+}
+
 Number& Number::increase()
 {
     set_value(get_value() + increment_);
