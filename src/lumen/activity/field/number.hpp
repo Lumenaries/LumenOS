@@ -16,7 +16,7 @@ public:
      */
     explicit Number(uint start_value = 0, uint increment = 1);
 
-    uint get_start_value() const;
+    [[nodiscard]] uint get_start_value() const;
 
     /** Set the starting value of the field.
      *
