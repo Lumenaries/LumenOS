@@ -91,8 +91,7 @@ private:
 
     // The number pixels on the Y axis in the entire display.
     int displayResY_{
-        CONFIG_HARDWARE_DISPLAY_PANEL_RES_X *
-        CONFIG_HARDWARE_DISPLAY_PANEL_COLUMNS
+        CONFIG_HARDWARE_DISPLAY_PANEL_RES_Y * CONFIG_HARDWARE_DISPLAY_PANEL_ROWS
     };
 
     // The width of the chain in pixels (as the DMA engine sees it).
