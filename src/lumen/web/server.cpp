@@ -44,8 +44,6 @@ Server::Server(activity::Context& context)
 
     httpd_start(&server, &config);
     register_endpoints(server, context);
-
-    ESP_LOGI(tag, "Web server started");
 }
 
 Server::~Server()
