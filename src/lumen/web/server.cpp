@@ -6,6 +6,8 @@
 #include "esp_http_server.h"
 #include "esp_log.h"
 
+#include "freertos/task.h"
+
 namespace lumen::web {
 namespace {
 
@@ -19,17 +21,33 @@ constexpr auto tag = "web/server";
  */
 void register_endpoints(httpd_handle_t& server, activity::Context& context);
 
+/** The handler for a new socket connection.
+ *
+ * \param handle The instance of the server.
+ *
+ * \param socket_fd The session socket file descriptor.
+ *
+ * \returns `ESP_OK` on success.
+ */
+esp_err_t on_open(httpd_handle_t handle, int socket_fd);
+
 } // namespace
 
 Server::Server(activity::Context& context)
 {
     ESP_LOGI(tag, "Starting web server");
 
-    config.uri_match_fn = httpd_uri_match_wildcard;
     config.stack_size = 8192;
+
+    config.global_user_ctx = &context;
+    config.open_fn = on_open;
+
+    config.uri_match_fn = httpd_uri_match_wildcard;
 
     httpd_start(&server, &config);
     register_endpoints(server, context);
+
+    ESP_LOGI(tag, "Web server started");
 }
 
 Server::~Server()
@@ -58,6 +76,20 @@ void register_endpoints(httpd_handle_t& server, activity::Context& context)
 
     httpd_register_uri_handler(server, &football_put_uri);
     httpd_register_uri_handler(server, &common_get_uri);
+}
+
+esp_err_t on_open(httpd_handle_t handle, int /* socket_fd */)
+{
+    auto* activity_context =
+        static_cast<activity::Context*>(httpd_get_global_user_ctx(handle));
+
+    // The connect activity is over when the user opens the website.
+    // Restore the previous activity.
+    if (activity_context->get_activity_type() == activity::Type::connect) {
+        activity_context->restore_activity();
+    }
+
+    return ESP_OK;
 }
 
 } // namespace

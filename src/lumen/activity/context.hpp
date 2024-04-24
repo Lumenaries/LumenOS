@@ -25,6 +25,9 @@ public:
      */
     void set_activity(Type type);
 
+    /// Sets current activity to be the saved activity.
+    void restore_activity();
+
     /** Redraw the display.
      *
      * Should be used when a state change occurs that should be reflected on
@@ -52,6 +55,9 @@ public:
 private:
     std::unique_ptr<Activity> activity_{};
     Type activity_type_{};
+
+    std::unique_ptr<Activity> saved_activity_{};
+    Type saved_activity_type_{};
 };
 
 } // namespace lumen::activity

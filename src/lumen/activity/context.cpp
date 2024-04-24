@@ -50,17 +50,16 @@ void Context::set_activity(Type type)
         return;
     }
 
-    // TODO: Before switching to a new activity, save the state of the current
-    // activity if the activity is active.
-
-    activity_type_ = type;
-
     switch (type) {
     case Type::none:
         activity_.reset();
+        activity_type_ = type;
         return;
 
     case Type::connect:
+        saved_activity_ = std::move(activity_);
+        saved_activity_type_ = activity_type_;
+
         activity_ = std::move(std::make_unique<Connect>());
         break;
 
@@ -73,12 +72,24 @@ void Context::set_activity(Type type)
         return;
     }
 
+    activity_type_ = type;
     update_display();
 }
 
 Type Context::get_activity_type() const
 {
     return activity_type_;
+}
+
+void Context::restore_activity()
+{
+    activity_ = std::move(saved_activity_);
+    activity_type_ = saved_activity_type_;
+
+    saved_activity_.reset();
+    saved_activity_type_ = Type::none;
+
+    update_display();
 }
 
 void Context::update_display()
