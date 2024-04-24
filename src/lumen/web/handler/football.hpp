@@ -4,6 +4,12 @@
 
 namespace lumen::web::handler {
 
+/** The GET handler for the football endpoint.
+ *
+ * \param request Valid pointer to the request being handled.
+ */
+esp_err_t football_get(httpd_req_t* request);
+
 /** The PUT handler for the football endpoint.
  *
  * \param request Valid pointer to the request being handled.

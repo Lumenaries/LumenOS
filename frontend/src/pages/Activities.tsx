@@ -15,10 +15,10 @@ function Activities() {
       <Header>Lumenaries</Header>
       <div class="flex justify-center font-medium">
         <div class="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-3">
-          <ActivityCard name="Baseball" icon={<BaseballIcon />} />
-          <ActivityCard name="Basketball" icon={<BasketballIcon />} />
           <ActivityCard name="Football" icon={<FootballIcon />} />
           <ActivityCard name="Soccer" icon={<SoccerIcon />} />
+          <ActivityCard name="Baseball" icon={<BaseballIcon />} />
+          <ActivityCard name="Basketball" icon={<BasketballIcon />} />
           <ActivityCard name="Tennis" icon={<TennisIcon />} />
           <ActivityCard name="Volleyball" icon={<VolleyballIcon />} />
         </div>

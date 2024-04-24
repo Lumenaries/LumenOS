@@ -7,7 +7,7 @@ Number::Number(uint start_value /* = 0 */, uint increment /* = 1 */)
 {
 }
 
-uint Number::get_start_value()
+uint Number::get_start_value() const
 {
     return start_value_;
 }

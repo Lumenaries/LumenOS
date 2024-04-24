@@ -56,20 +56,28 @@ namespace {
 
 void register_endpoints(httpd_handle_t& server, activity::Context& context)
 {
+    httpd_uri_t football_get_uri = {
+        .uri = "/api/v1/football",
+        .method = HTTP_GET,
+        .handler = handler::football_get,
+        .user_ctx = nullptr
+    };
+
     httpd_uri_t football_put_uri = {
         .uri = "/api/v1/football",
         .method = HTTP_PUT,
         .handler = handler::football_put,
-        .user_ctx = &context
+        .user_ctx = nullptr
     };
 
     httpd_uri_t common_get_uri = {
         .uri = "/*",
         .method = HTTP_GET,
         .handler = handler::common_get,
-        .user_ctx = &context
+        .user_ctx = nullptr
     };
 
+    httpd_register_uri_handler(server, &football_get_uri);
     httpd_register_uri_handler(server, &football_put_uri);
     httpd_register_uri_handler(server, &common_get_uri);
 }

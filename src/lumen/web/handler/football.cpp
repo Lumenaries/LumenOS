@@ -17,16 +17,34 @@ constexpr auto buffer_size = 128;
 
 } // namespace
 
+esp_err_t football_get(httpd_req_t* request)
+{
+    auto* activity_context = static_cast<activity::Context*>(
+        httpd_get_global_user_ctx(request->handle)
+    );
+
+    activity_context->set_activity(activity::Type::football);
+
+    auto football_data = activity_context->get_activity_json();
+
+    httpd_resp_set_type(request, "application/json");
+    httpd_resp_sendstr(request, football_data.dump().c_str());
+
+    return ESP_OK;
+}
+
 esp_err_t football_put(httpd_req_t* request)
 {
     // Make sure the correct endpoint was hit
-    auto* context = static_cast<activity::Context*>(request->user_ctx);
+    auto* activity_context = static_cast<activity::Context*>(
+        httpd_get_global_user_ctx(request->handle)
+    );
 
-    if (context->get_activity_type() != activity::Type::football) {
+    if (activity_context->get_activity_type() != activity::Type::football) {
         ESP_LOGW(
             tag,
             "Current activity is not football: %d",
-            static_cast<int>(context->get_activity_type())
+            static_cast<int>(activity_context->get_activity_type())
         );
         httpd_resp_send(request, nullptr, 0);
         return ESP_FAIL;
@@ -55,7 +73,8 @@ esp_err_t football_put(httpd_req_t* request)
 
     auto const request_json = json::parse(buffer);
 
-    auto* football = static_cast<activity::Football*>(context->get_activity());
+    auto* football =
+        static_cast<activity::Football*>(activity_context->get_activity());
 
     // Parse and validate the request JSON
 
