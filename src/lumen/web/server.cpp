@@ -6,8 +6,6 @@
 #include "esp_http_server.h"
 #include "esp_log.h"
 
-#include "freertos/task.h"
-
 namespace lumen::web {
 namespace {
 
