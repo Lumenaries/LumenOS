@@ -82,6 +82,7 @@ esp_err_t football_put(httpd_req_t* request)
         if (request_json["teamOne"].contains("name")) {
             auto name = request_json["teamOne"]["name"];
 
+            // Set a limit of six characters
             if (name.is_string() && name.size() <= 6) {
                 football->team_one().name().set_value(name);
             }
@@ -99,6 +100,7 @@ esp_err_t football_put(httpd_req_t* request)
         if (request_json["teamTwo"].contains("name")) {
             auto name = request_json["teamTwo"]["name"];
 
+            // Set a limit of six characters
             if (name.is_string() && name.size() <= 6) {
                 football->team_two().name().set_value(name);
             }
