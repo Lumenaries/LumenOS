@@ -28,6 +28,8 @@ function FootballConfig() {
     <Show when={!data.loading}>
       <ActivityBaseConfig
         name="Football"
+        teamOneName={data().teamOne.name}
+        teamTwoName={data().teamTwo.name}
         teamOneCurrentScore={data().teamOne.score}
         teamTwoCurrentScore={data().teamTwo.score}
         timerValue={data().timer.value}
