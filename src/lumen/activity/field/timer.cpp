@@ -101,15 +101,19 @@ std::string Timer::to_string() const
 {
     auto time = get_value();
 
-    auto minutes = time / 60;
-    auto seconds = std::to_string(time - minutes * 60);
+    auto minutes = std::to_string(time / 60);
+    auto seconds = std::to_string(time % 60);
 
     // Display single digit numbers with a leading 0
     if (seconds.size() == 1) {
         seconds = "0" + seconds;
     }
 
-    return {std::to_string(minutes) + ":" + seconds};
+    if (minutes.size() == 1) {
+        minutes = "0" + minutes;
+    }
+
+    return minutes + ":" + seconds;
 }
 
 void Timer::start()

@@ -41,7 +41,76 @@ field::Timer& Football::timer()
     return timer_;
 }
 
-void Football::update_display() {}
+void Football::update_display()
+{
+
+    auto* display = get_display();
+
+    display->clearScreen();
+    display->setTextWrap(false);
+    display->setTextSize(1);
+
+    display->setTextColor(g_secondary_color);
+    display->setCursor(5, 0);
+    display->print("HOME");
+    display->setCursor(40, 3);
+    display->print("QTR");
+    display->setCursor(68, 0);
+    display->print("AWAY");
+
+    // Team One Score
+    display->setTextColor(g_primary_color);
+    display->setTextSize(3);
+    display->setCursor(0, 9);
+    // Print leading 0 if score is a single digit
+    if (team_one_.score().get_value() < 10) {
+        display->print("0");
+    }
+    display->print(team_one_.score().to_string().c_str());
+
+    // Quarter
+    display->setTextColor(g_tertiary_color);
+    display->setTextSize(2);
+    display->setCursor(43, 12);
+    display->print(quarter_.to_string().c_str());
+
+    // Team Two Score
+    display->setTextColor(g_primary_color);
+    display->setTextSize(3);
+    display->setCursor(63, 9);
+    // Print leading 0 if score is a single digit
+    if (team_two_.score().get_value() < 10) {
+        display->print("0");
+    }
+    display->print(team_two_.score().to_string().c_str());
+
+    // Down
+    display->setTextSize(2);
+    display->setTextColor(g_secondary_color);
+    display->setCursor(9, 33);
+    display->print("D");
+    display->setTextSize(2);
+    display->setTextColor(g_tertiary_color);
+    display->print(down_.to_string().c_str());
+
+    // Yards
+    display->setTextColor(g_secondary_color);
+    if (yards_.get_value() < 10) {
+        display->setCursor(65, 33);
+    } else {
+        display->setCursor(53, 33);
+    }
+    display->print("Y");
+    display->setTextSize(2);
+    display->setTextColor(g_tertiary_color);
+    display->print(yards_.to_string().c_str());
+
+    // Timer
+    display->setTextColor(g_primary_color);
+    display->setCursor(19, 50);
+    display->setTextSize(2);
+    display->print(timer_.to_string().c_str());
+}
 
 void Football::button_pressed(ButtonEvent event)
 {

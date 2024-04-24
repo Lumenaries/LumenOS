@@ -8,6 +8,13 @@
 
 namespace lumen::activity {
 
+// White
+constexpr auto g_primary_color = hardware::Display::color565(200, 200, 200);
+// Dark Orange
+constexpr auto g_secondary_color = hardware::Display::color565(255, 128, 0);
+// Light Orange
+constexpr auto g_tertiary_color = hardware::Display::color565(255, 163, 71);
+
 enum class Type {
     none = 0,
     connect,
