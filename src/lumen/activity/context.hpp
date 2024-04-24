@@ -2,6 +2,8 @@
 
 #include "lumen/activity/activity.hpp"
 
+#include "nlohmann/json.hpp"
+
 #include <memory>
 
 namespace lumen::activity {
@@ -24,6 +26,12 @@ public:
      * \param type The activity type.
      */
     void set_activity(Type type);
+
+    /** Get the equivalent JSON object of the current activity.
+     *
+     * \returns The JSON object.
+     */
+    [[nodiscard]] nlohmann::json get_activity_json();
 
     /// Sets current activity to be the saved activity.
     void restore_activity();

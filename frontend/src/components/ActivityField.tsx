@@ -5,10 +5,10 @@ import { LeftArrowIcon, RightArrowIcon } from "./UtilityIcons";
 function ActivityField(props) {
   const fieldNames = props.fields;
 
-  const defaultField = fieldNames.indexOf(props.defaultField);
+  const currentIndex = fieldNames.indexOf(props.currentIndex);
 
   const [field, setField] = createSignal(
-    defaultField === -1 ? 0 : defaultField
+    currentIndex === -1 ? 0 : currentIndex
   );
 
   const putToEndpoint = function () {

@@ -5,7 +5,6 @@
 #include "lumen/hardware/sd_card.hpp"
 
 #include "esp_log.h"
-#include "nlohmann/json.hpp"
 
 #include <string>
 
@@ -44,6 +43,11 @@ Activity* Context::get_activity()
     return activity_.get();
 }
 
+Type Context::get_activity_type() const
+{
+    return activity_type_;
+}
+
 void Context::set_activity(Type type)
 {
     if (activity_type_ == type) {
@@ -76,9 +80,9 @@ void Context::set_activity(Type type)
     update_display();
 }
 
-Type Context::get_activity_type() const
+json Context::get_activity_json()
 {
-    return activity_type_;
+    return activity_->to_json();
 }
 
 void Context::restore_activity()

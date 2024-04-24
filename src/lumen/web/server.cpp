@@ -17,7 +17,7 @@ constexpr auto tag = "web/server";
  *
  * \param context A reference to a Context object.
  */
-void register_endpoints(httpd_handle_t& server, activity::Context& context);
+void register_endpoints(httpd_handle_t& server);
 
 /** The handler for a new socket connection.
  *
@@ -43,7 +43,7 @@ Server::Server(activity::Context& context)
     config.uri_match_fn = httpd_uri_match_wildcard;
 
     httpd_start(&server, &config);
-    register_endpoints(server, context);
+    register_endpoints(server);
 }
 
 Server::~Server()
@@ -54,22 +54,30 @@ Server::~Server()
 
 namespace {
 
-void register_endpoints(httpd_handle_t& server, activity::Context& context)
+void register_endpoints(httpd_handle_t& server)
 {
+    httpd_uri_t football_get_uri = {
+        .uri = "/api/v1/football",
+        .method = HTTP_GET,
+        .handler = handler::football_get,
+        .user_ctx = nullptr
+    };
+
     httpd_uri_t football_put_uri = {
         .uri = "/api/v1/football",
         .method = HTTP_PUT,
         .handler = handler::football_put,
-        .user_ctx = &context
+        .user_ctx = nullptr
     };
 
     httpd_uri_t common_get_uri = {
         .uri = "/*",
         .method = HTTP_GET,
         .handler = handler::common_get,
-        .user_ctx = &context
+        .user_ctx = nullptr
     };
 
+    httpd_register_uri_handler(server, &football_get_uri);
     httpd_register_uri_handler(server, &football_put_uri);
     httpd_register_uri_handler(server, &common_get_uri);
 }

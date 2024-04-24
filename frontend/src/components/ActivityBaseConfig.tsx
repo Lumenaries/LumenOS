@@ -28,19 +28,19 @@ function ActivityBaseConfig(props) {
       <div class="flex justify-center font-normal">
         <div class="grid grid-cols-2 gap-10">
           <div class="col-span-2 text-center">
-            <Timer sport={props.name} />
+            <Timer sport={props.name} value={props.timerValue} />
           </div>
           <Score
             sport={props.name}
             teamName="Home"
             team="one"
-            defaultScore={props.defaultScore}
+            currentScore={props.teamOneCurrentScore}
           />
           <Score
             sport={props.name}
             teamName="Away"
             team="two"
-            defaultScore={props.defaultScore}
+            currentScore={props.teamTwoCurrentScore}
           />
           <Show when={typeof props.children === "object"}>
             <div class="col-span-2">{props.children}</div>
@@ -61,9 +61,14 @@ function Timer(props) {
     });
   };
 
+  const minutes = Math.floor(props.value / 60);
+  const seconds = String(props.value % 60).padStart(2, "0");
+
   return (
     <div class="flex justify-center">
-      <p class="mr-3 font-medium text-5xl">10:00</p>
+      <p class="mr-3 font-medium text-5xl">
+        {minutes}:{seconds}
+      </p>
       <Show when={isRunning()}>
         <button
           class="my-auto"
@@ -93,7 +98,7 @@ function Timer(props) {
 function Score(props) {
   const [teamName, setTeamName] = createSignal(props.teamName);
   const team = props.team === "two" ? "teamTwo" : "teamOne";
-  const [score, setScore] = createSignal(0);
+  const [score, setScore] = createSignal(props.currentScore);
 
   const putScore = function () {
     fetch(`/api/v1/${props.sport.toLowerCase()}`, {
@@ -128,7 +133,7 @@ function Score(props) {
           <MinusIcon />
         </button>
         <div class="mx-3 min-w-16 text-center font-normal text-5xl sm:mx-10">
-          {score}
+          {String(score()).padStart(2, "0")}
         </div>
         <button
           class="my-auto touch-none rounded-full bg-primary p-1 text-4xl text-white"
