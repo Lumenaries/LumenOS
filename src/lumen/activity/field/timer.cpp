@@ -102,7 +102,7 @@ std::string Timer::to_string() const
     auto time = get_value();
 
     auto minutes = time / 60;
-    auto minutes_str = std::to_string(time / 60);
+    auto minutes_str = std::to_string(minutes);
     auto seconds_str = std::to_string(time - minutes * 60);
 
     // Display single digit numbers with a leading 0
