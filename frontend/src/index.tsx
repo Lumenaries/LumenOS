@@ -2,6 +2,7 @@ import { Route, Router } from "@solidjs/router";
 import { lazy } from "solid-js";
 import { render } from "solid-js/web";
 
+import { EventProvider } from "./Event";
 import "./index.css";
 
 const root = document.getElementById("root");
@@ -39,17 +40,19 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 
 render(
   () => (
-    <Router root={App}>
-      <Route path="/" component={Activities} />
-      <Route path="/ads" component={Advertisements} />
-      <Route path="/settings" component={Settings} />
-      <Route path="/baseball" component={BaseballConfig} />
-      <Route path="/basketball" component={BasketballConfig} />
-      <Route path="/football" component={FootballConfig} />
-      <Route path="/soccer" component={SoccerConfig} />
-      <Route path="/tennis" component={TennisConfig} />
-      <Route path="/volleyball" component={VolleyballConfig} />
-    </Router>
+    <EventProvider>
+      <Router root={App}>
+        <Route path="/" component={Activities} />
+        <Route path="/ads" component={Advertisements} />
+        <Route path="/settings" component={Settings} />
+        <Route path="/baseball" component={BaseballConfig} />
+        <Route path="/basketball" component={BasketballConfig} />
+        <Route path="/football" component={FootballConfig} />
+        <Route path="/soccer" component={SoccerConfig} />
+        <Route path="/tennis" component={TennisConfig} />
+        <Route path="/volleyball" component={VolleyballConfig} />
+      </Router>
+    </EventProvider>
   ),
   root!
 );
