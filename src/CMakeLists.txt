@@ -20,6 +20,7 @@ idf_component_register(SRCS
                            "lumen/net/wifi.cpp"
                            "lumen/web/error.cpp"
                            "lumen/web/handler/common.cpp"
+                           "lumen/web/handler/event.cpp"
                            "lumen/web/handler/football.cpp"
                            "lumen/web/server.cpp"
                            "main.cpp"

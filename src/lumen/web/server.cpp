@@ -7,6 +7,12 @@
 
 #include "esp_http_server.h"
 #include "esp_log.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
+#include "freertos/semphr.h"
+#include "nlohmann/json.hpp"
+
+#include <cstring> // strcmp
 
 using json = nlohmann::json;
 
@@ -14,6 +20,9 @@ namespace lumen::web {
 namespace {
 
 constexpr auto tag = "web/server";
+
+SemaphoreHandle_t event_stream_semaphore{};
+QueueHandle_t event_stream_queue{};
 
 void start_event_stream_task();
 
@@ -35,6 +44,8 @@ void register_endpoints(httpd_handle_t& server);
  */
 esp_err_t on_open(httpd_handle_t handle, int socket_fd);
 void on_close(httpd_handle_t handle, int socket_fd);
+
+esp_err_t event_get_handler(httpd_req_t* request);
 
 /// TODO: Have an array of 5 event stream tasks instead of a single one.
 /// HTTP 1.1 is limited to 6 concurrent TCP connections, so we could have 5
@@ -91,13 +102,37 @@ int Server::get_event_stream_socket() const
     return event_socket_fd_;
 }
 
-esp_err_t Server::set_event_stream(httpd_req_t* request)
+esp_err_t dispatch_event_handler(httpd_req_t* request)
 {
-    if (event_stream_ == nullptr) {
+    httpd_req_t* copy = nullptr;
+
+    auto error = httpd_req_async_handler_begin(request, &copy);
+
+    if (error != ESP_OK) {
+        return error;
+    }
+
+    auto handler_message =
+        EventMessage{EventMessage::Type::event_stream_started, copy};
+
+    if (xSemaphoreTake(event_stream_semaphore, 0) == pdFALSE) {
+        ESP_LOGE(tag, "No workers are available");
+        httpd_req_async_handler_complete(copy); // cleanup
         return ESP_FAIL;
     }
 
-    event_stream_ = std::make_unique<event::Stream>(request);
+    if (xQueueSend(event_stream_queue, &handler_message, 0) == pdFALSE) {
+        ESP_LOGE(tag, "worker queue is full");
+        httpd_req_async_handler_complete(copy); // cleanup
+        return ESP_FAIL;
+    }
+
+    auto* server =
+        static_cast<Server*>(httpd_get_global_user_ctx(request->handle));
+
+    server->set_event_stream_socket(httpd_req_to_sockfd(copy));
+
+    return ESP_OK;
 }
 
 namespace {
@@ -126,7 +161,6 @@ void register_endpoints(httpd_handle_t& server)
         .user_ctx = nullptr
     };
 
-    // This needs to be the last GET handler
     httpd_uri_t common_get_uri = {
         .uri = "/*",
         .method = HTTP_GET,
@@ -157,12 +191,9 @@ esp_err_t on_open(httpd_handle_t handle, int socket_fd)
 
 void on_close(httpd_handle_t handle, int socket_fd)
 {
-    auto* event_stream = static_cast<Server*>(httpd_get_global_user_ctx(handle))
-                             ->get_event_stream();
+    ESP_LOGI(tag, "Server socket closed: %d", socket_fd);
 
-    if (socket_fd == event_stream->get_socket()) {
-        server->close_event_stream();
-    }
+    auto* server = static_cast<Server*>(httpd_get_global_user_ctx(handle));
 
     if (socket_fd == server->get_event_stream_socket()) {
         server->send_event_message(

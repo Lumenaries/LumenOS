@@ -1,19 +1,33 @@
 #pragma once
 
 #include "lumen/activity/context.hpp"
-#include "lumen/web/event/stream.hpp"
 
 #include "esp_http_server.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "nlohmann/json.hpp"
-
-#include <memory>
 
 namespace lumen::web {
 
-/// Handles the creation and destruction of HTTP web servers.
+esp_err_t dispatch_event_handler(httpd_req_t* request);
 
+struct EventMessage {
+    enum class Type {
+        none,
+        event_stream_closed,
+        event_stream_started,
+        event_occurred,
+    };
+
+    Type type{};
+    httpd_req_t* new_request{};
+
+    explicit EventMessage(Type type = Type::none) : type{type} {}
+
+    EventMessage(Type type, httpd_req_t* new_request)
+        : type{type}, new_request{new_request}
+    {
+    }
+};
+
+/// Handles the creation and destruction of HTTP web servers.
 class Server {
 public:
     /** Server constructor.
@@ -24,8 +38,6 @@ public:
     ~Server();
 
     [[nodiscard]] activity::Context* get_activity_context() const;
-
-    esp_err_t set_event_stream(httpd_req_t* request);
 
     void send_event_message(EventMessage const& message);
 
@@ -40,8 +52,6 @@ private:
     activity::Context* activity_context_;
 
     int event_socket_fd_{};
-
-    std::unique_ptr<event::Stream> event_stream_{};
 };
 
 } // namespace lumen::web
