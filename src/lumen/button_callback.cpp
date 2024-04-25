@@ -9,6 +9,8 @@
 #include "esp_log.h"
 #include "esp_sleep.h"
 
+#include "freertos/task.h"
+
 namespace lumen {
 namespace {
 
@@ -24,11 +26,19 @@ void power_button_single_click(void* /* button */, void* context)
 
     auto* button_context =
         static_cast<hardware::button::ButtonContext*>(context);
+
+    auto* activity_context =
+        static_cast<activity::Context*>(button_context->user_context);
+    activity_context->store_activity();
+
     auto* button = button_context->button;
 
     ESP_ERROR_CHECK(esp_sleep_enable_ext0_wakeup(
         button->get_pin(), button->get_active_level()
     ));
+
+    // Delay to account for button debouncing.
+    vTaskDelay(pdMS_TO_TICKS(150));
     esp_deep_sleep_start();
 }
 

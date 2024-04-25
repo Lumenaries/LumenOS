@@ -1,4 +1,4 @@
-import { Show, createSignal, lazy } from "solid-js";
+import { Show, createResource, createSignal, lazy } from "solid-js";
 
 import { useEvent } from "../../Events";
 import ActivityBaseConfig from "../../components/ActivityBaseConfig";
@@ -18,15 +18,48 @@ function FootballConfig() {
     yards.push(i + " Yards");
   }
 
+  const endpoint = "/api/v1/football";
+
+  const getFromEndpoint = async function () {
+    const data = await fetch(endpoint);
+    return data.json();
+  };
+
+  const [data] = createResource(getFromEndpoint);
+
   return (
-    <ActivityBaseConfig name="Football">
+    <Show when={!data.loading}>
+      <ActivityBaseConfig
+        name="Football"
+        teamOneName={data().teamOne.name}
+        teamTwoName={data().teamTwo.name}
+        teamOneCurrentScore={data().teamOne.score}
+        teamTwoCurrentScore={data().teamTwo.score}
+        timerValue={data().timer.value}
+      >
       <div>test{JSON.stringify(eventData())}</div>
-      <div class="grid grid-cols-1 gap-4">
-        <ActivityField fields={quarters} default_field="1st Quarter" />
-        <ActivityField fields={downs} default_field="1st Down" />
-        <ActivityField fields={yards} default_field="10 Yards" />
-      </div>
-    </ActivityBaseConfig>
+        <div class="grid grid-cols-1 gap-4">
+          <ActivityField
+            name="quarter"
+            endpoint={endpoint}
+            fields={quarters}
+            currentIndex={quarters[data().quarter.value - 1]}
+          />
+          <ActivityField
+            name="down"
+            endpoint={endpoint}
+            fields={downs}
+            currentIndex={downs[data().down.value - 1]}
+          />
+          <ActivityField
+            name="yards"
+            endpoint={endpoint}
+            fields={yards}
+            currentIndex={yards[data().yards.value - 1]}
+          />
+        </div>
+      </ActivityBaseConfig>
+    </Show>
   );
 }
 

@@ -13,6 +13,8 @@ import {
 // TODO: Allow user to change team names
 // TODO: Add a configurable timer element
 function ActivityBaseConfig(props) {
+  const [isRunning, setRunning] = createSignal(false);
+
   return (
     <>
       <Header>
@@ -28,17 +30,26 @@ function ActivityBaseConfig(props) {
       <div class="flex justify-center font-normal">
         <div class="grid grid-cols-2 gap-10">
           <div class="col-span-2 text-center">
-            <Timer />
+            <Timer
+              sport={props.name}
+              value={props.timerValue}
+              isRunning={isRunning()}
+              setRunning={setRunning}
+            />
           </div>
-          <Score
-            team_name="Home"
-            team="one"
-            default_score={props.default_score}
+          <Team
+            sport={props.name}
+            teamIndex="one"
+            teamName={props.teamOneName}
+            currentScore={props.teamOneCurrentScore}
+            isRunning={isRunning()}
           />
-          <Score
-            team_name="Away"
-            team="two"
-            default_score={props.default_score}
+          <Team
+            sport={props.name}
+            teamIndex="two"
+            teamName={props.teamTwoName}
+            currentScore={props.teamTwoCurrentScore}
+            isRunning={isRunning()}
           />
           <Show when={typeof props.children === "object"}>
             <div class="col-span-2">{props.children}</div>
@@ -49,27 +60,39 @@ function ActivityBaseConfig(props) {
   );
 }
 
-function Timer() {
-  const [is_active, set_active] = createSignal(false);
+function Timer(props) {
+  const putIsRunning = function () {
+    fetch(`/api/v1/${props.sport.toLowerCase()}`, {
+      method: "PUT",
+      body: JSON.stringify({ timer: { isRunning: props.isRunning } }),
+    });
+  };
+
+  const minutes = Math.floor(props.value / 60);
+  const seconds = String(props.value % 60).padStart(2, "0");
 
   return (
     <div class="flex justify-center">
-      <p class="mr-3 font-medium text-5xl">10:00</p>
-      <Show when={is_active()}>
+      <p class="mr-3 font-medium text-5xl">
+        {minutes}:{seconds}
+      </p>
+      <Show when={props.isRunning}>
         <button
           class="my-auto"
           onClick={function () {
-            set_active(false);
+            props.setRunning(false);
+            putIsRunning();
           }}
         >
           <PauseIcon />
         </button>
       </Show>
-      <Show when={!is_active()}>
+      <Show when={!props.isRunning}>
         <button
           class="my-auto"
           onClick={function () {
-            set_active(true);
+            props.setRunning(true);
+            putIsRunning();
           }}
         >
           <PlayIcon />
@@ -79,40 +102,82 @@ function Timer() {
   );
 }
 
-function Score(props) {
-  const [team_name, set_team_name] = createSignal(props.team_name);
-  const team = props.team;
-  const [score, set_score] = createSignal(0);
+function Team(props) {
+  const [teamName, setTeamName] = createSignal(props.teamName);
+  const [score, setScore] = createSignal(props.currentScore);
 
-  const decrease_score = function () {
-    if (score() != 0) {
-      set_score(score() - 1);
+  const team = props.teamIndex === "one" ? "teamOne" : "teamTwo";
+  const defaultTeamName = team === "teamOne" ? "Home" : "Away";
+
+  const putTeamName = function () {
+    fetch(`/api/v1/${props.sport.toLowerCase()}`, {
+      method: "PUT",
+      body: JSON.stringify({ [team]: { name: teamName() } }),
+    });
+  };
+
+  const putScore = function () {
+    fetch(`/api/v1/${props.sport.toLowerCase()}`, {
+      method: "PUT",
+      body: JSON.stringify({ [team]: { score: score() } }),
+    });
+  };
+
+  const changeTeamName = function (name) {
+    if (name != teamName()) {
+      setTeamName(name.length > 0 ? name : defaultName);
+      putTeamName();
     }
   };
 
-  const increase_score = function () {
-    set_score(score() + 1);
+  const decreaseScore = function () {
+    if (score() != 0) {
+      setScore(score() - 1);
+      putScore();
+    }
+  };
+
+  const increaseScore = function () {
+    setScore(score() + 1);
+    putScore();
   };
 
   return (
     <div>
       <div class="flex justify-center">
-        <p class="pb-5 font-bold text-2xl">{team_name}</p>
+        <Show when={props.isRunning}>
+          <p class="pb-5 pt-1 font-bold text-2xl">{teamName()}</p>
+        </Show>
+        <Show when={!props.isRunning}>
+          <div class="pb-4">
+            <input
+              class="max-w-32 select-all rounded-lg border border-gray-300 bg-gray-50 p-1 text-center font-bold text-2xl focus:border-accent focus:outline-none focus:ring-0 focus:ring-gray-800"
+              type="text"
+              aria-label={`team ${props.teamIndex} name`}
+              value={teamName()}
+              size="10"
+              maxlength="6"
+              onChange={(e) => {
+                changeTeamName(e.target.value);
+              }}
+            />
+          </div>
+        </Show>
       </div>
 
       <div class="flex">
         <button
           class="my-auto touch-none rounded-full bg-primary p-1 text-4xl text-white"
-          onClick={decrease_score}
+          onClick={decreaseScore}
         >
           <MinusIcon />
         </button>
         <div class="mx-3 min-w-16 text-center font-normal text-5xl sm:mx-10">
-          {score}
+          {String(score()).padStart(2, "0")}
         </div>
         <button
           class="my-auto touch-none rounded-full bg-primary p-1 text-4xl text-white"
-          onClick={increase_score}
+          onClick={increaseScore}
         >
           <PlusIcon />
         </button>

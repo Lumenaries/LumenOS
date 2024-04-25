@@ -2,9 +2,18 @@
 
 #include "lumen/hardware/display.hpp"
 
+#include "nlohmann/json.hpp"
+
 #include <memory>
 
 namespace lumen::activity {
+
+// White
+constexpr auto g_primary_color = hardware::Display::color565(200, 200, 200);
+// Dark Orange
+constexpr auto g_secondary_color = hardware::Display::color565(255, 128, 0);
+// Light Orange
+constexpr auto g_tertiary_color = hardware::Display::color565(255, 163, 71);
 
 enum class Type {
     none = 0,
@@ -33,6 +42,18 @@ public:
      * \param event The button event.
      */
     virtual void button_pressed(ButtonEvent event);
+
+    /** Load a saved activity.
+     *
+     * \param data The JSON object with the saved activity data.
+     */
+    virtual void load(nlohmann::json const& data);
+
+    /** Constructs a JSON object from the `Activity` object.
+     *
+     * \returns The JSON object.
+     */
+    virtual nlohmann::json to_json();
 
 protected:
     hardware::Display* get_display();

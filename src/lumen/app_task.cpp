@@ -12,6 +12,7 @@ namespace lumen {
 namespace {
 
 constexpr auto tag = "app_task";
+
 TaskHandle_t app_task_handle = nullptr;
 
 } // namespace
@@ -26,17 +27,17 @@ void app_task(void* /* parameters */)
 
     auto web_server = web::Server{activity_context};
 
-    // auto power_button = hardware::button::RGLEDButton{
-    //     CONFIG_HARDWARE_POWER_BUTTON_PIN,
-    //     CONFIG_HARDWARE_POWER_BUTTON_ACTIVE_LEVEL,
-    //     CONFIG_HARDWARE_POWER_BUTTON_RED_PIN,
-    //     CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN
-    // };
-    // power_button.register_callback(
-    //     BUTTON_SINGLE_CLICK, power_button_single_click, nullptr
+    //auto power_button = hardware::button::RGLEDButton{
+    //    CONFIG_HARDWARE_POWER_BUTTON_PIN,
+    //    CONFIG_HARDWARE_POWER_BUTTON_ACTIVE_LEVEL,
+    //    CONFIG_HARDWARE_POWER_BUTTON_RED_PIN,
+    //    CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN
+    //};
+    //power_button.register_callback(
+    //    BUTTON_SINGLE_CLICK, power_button_single_click, &activity_context
     //);
-    // power_button.register_callback(
-    //     BUTTON_LONG_PRESS_START, power_button_long_press, &activity_context
+    //power_button.register_callback(
+    //    BUTTON_LONG_PRESS_START, power_button_long_press, &activity_context
     //);
 
     // auto timer_button = hardware::button::LEDButton{
