@@ -97,6 +97,10 @@ Display::Coordinate Display::mapCoord(int16_t x, int16_t y)
         return {-1, -1};
     }
 
+    // Flip about the horizontal axis
+    x = displayResX_ - 1 - x;
+    y = displayResY_ - 1 - y;
+
     Coordinate coord{x, y};
 
     // First, remap the requested grid coordinate to a chain coordinate

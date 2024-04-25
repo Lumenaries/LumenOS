@@ -1,9 +1,15 @@
-[submodule "lib/Adafruit_BusIO"]
-	path = lib/Adafruit_BusIO
+[submodule "components/Adafruit_BusIO"]
+	path = components/Adafruit_BusIO
 	url = https://github.com/adafruit/Adafruit_BusIO
-[submodule "lib/Adafruit-GFX-Library"]
-	path = lib/Adafruit-GFX-Library
+[submodule "components/Adafruit-GFX-Library"]
+	path = components/Adafruit-GFX-Library
 	url = https://github.com/adafruit/Adafruit-GFX-Library
-[submodule "lib/ESP32-HUB75-MatrixPanel-DMA"]
-	path = lib/ESP32-HUB75-MatrixPanel-DMA
+[submodule "components/ESP32-HUB75-MatrixPanel-DMA"]
+	path = components/ESP32-HUB75-MatrixPanel-DMA
 	url = https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA
+[submodule "lib/json"]
+	path = lib/json
+	url = https://github.com/nlohmann/json.git
+[submodule "components/esp_http_server"]
+	path = components/esp_http_server
+	url = https://github.com/Lumenaries/esp_http_server.git

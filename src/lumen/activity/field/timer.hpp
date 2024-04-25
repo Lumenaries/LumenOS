@@ -36,19 +36,6 @@ public:
     [[nodiscard]] uint64_t get_start_time() const;
     [[nodiscard]] bool is_running() const;
     [[nodiscard]] bool is_count_up() const;
-    [[nodiscard]] std::string to_string() const override;
-
-    /// Start the timer if it is not running already.
-    void start();
-
-    /// Stop the timer if it is running.
-    void stop();
-
-    /// Either start or stop the timer depending on the current state.
-    void toggle();
-
-    /// Stop the timer and reset its value to `start_time` given in constructor.
-    void reset();
 
     /** Set the number of seconds in the timer.
      *
@@ -76,6 +63,34 @@ public:
      * setting the valule.
      */
     bool set_value_from_isr(uint64_t const& time) override;
+
+    /** Set the start time of the timer.
+     *
+     * \param start_time The number of seconds from which the timer should begin
+     * counting.
+     */
+    void set_start_time(uint64_t start_time);
+
+    /** Set whether the timer is count up or count down.
+     *
+     * \param count_up Whether or not the timer will count up or count down.
+     */
+    void set_count_up(bool is_count_up);
+
+    /// Convert the contents of the timer to a string.
+    [[nodiscard]] std::string to_string() const override;
+
+    /// Start the timer if it is not running already.
+    void start();
+
+    /// Stop the timer if it is running.
+    void stop();
+
+    /// Either start or stop the timer depending on the current state.
+    void toggle();
+
+    /// Stop the timer and reset its value to `start_time` given in constructor.
+    void reset();
 
 private:
     gptimer_handle_t timer_{};

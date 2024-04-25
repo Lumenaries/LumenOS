@@ -1,44 +1,57 @@
-import { Show, createSignal } from "solid-js";
+import { Show, createEffect, createSignal } from "solid-js";
 
 import { LeftArrowIcon, RightArrowIcon } from "./UtilityIcons";
 
 function ActivityField(props) {
-  const field_names = props.fields;
+  const fieldNames = props.fields;
 
-  const default_field = field_names.indexOf(props.default_field);
-
-  const [field, set_field] = createSignal(
-    default_field == -1 ? 0 : default_field
-  );
-
-  const decrease_field = function () {
-    if (field() != 0) {
-      set_field(field() - 1);
-
-      // TODO: Use an API prop to PUT a JSON object of the updated value to an endpoint.
+  const getIndex = () => {
+    if (props.index > 0 && props.index <= fieldNames.length) {
+      return props.index - 1;
+    } else {
+      return 0;
     }
   };
 
-  const increase_field = function () {
-    if (field() + 1 != field_names.length) {
-      set_field(field() + 1);
+  const [field, setField] = createSignal(getIndex());
 
-      // TODO: Use an API prop to PUT a JSON object of the updated value to an endpoint.
+  createEffect(() => {
+    setField(getIndex());
+  });
+
+  const putToEndpoint = function () {
+    fetch(props.endpoint, {
+      method: "PUT",
+      body: JSON.stringify({ [props.name]: field() + 1 }),
+    });
+  };
+
+  const decreaseField = function () {
+    if (field() != 0) {
+      setField(field() - 1);
+      putToEndpoint();
+    }
+  };
+
+  const increaseField = function () {
+    if (field() + 1 != fieldNames.length) {
+      setField(field() + 1);
+      putToEndpoint();
     }
   };
 
   return (
     <div class="grid grid-flow-dense grid-cols-4">
-      <button class="flex justify-start" onClick={decrease_field}>
+      <button class="flex touch-none justify-start" onClick={decreaseField}>
         <Show when={field() > 0}>
           <LeftArrowIcon />
         </Show>
       </button>
       <p class="col-span-2 flex items-center justify-center text-2xl">
-        {field_names[field()]}
+        {fieldNames[field()]}
       </p>
-      <button class="flex justify-end" onClick={increase_field}>
-        <Show when={field() < field_names.length - 1}>
+      <button class="flex touch-none justify-end" onClick={increaseField}>
+        <Show when={field() < fieldNames.length - 1}>
           <RightArrowIcon />
         </Show>
       </button>

@@ -27,6 +27,8 @@ public:
 
     [[nodiscard]] bool is_displaying() const;
 
+    [[nodiscard]] bool should_display(uint64_t time) const;
+
 private:
     // The time interval in seconds at which the advertisements should play
     uint64_t display_interval_{};

@@ -67,7 +67,7 @@ bool Advertisement::is_displaying() const
     return is_displaying_;
 }
 
-bool Advertisement::should_display(uint64_t time)
+bool Advertisement::should_display(uint64_t time) const
 {
     if (time % display_interval_ == 0 || is_displaying_) {
         return true;
