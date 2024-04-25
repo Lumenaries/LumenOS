@@ -101,7 +101,7 @@ function Advertisements() {
 
               <tbody>
                 <For each={adList()}>
-                  {(item, index) => (
+                  {(item) => (
                     <tr>
                       <th
                         scope="row"
