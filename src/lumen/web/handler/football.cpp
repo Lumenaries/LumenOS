@@ -47,8 +47,8 @@ esp_err_t football_put(httpd_req_t* request)
             "Current activity is not football: %d",
             static_cast<int>(activity_context->get_activity_type())
         );
-        httpd_resp_send(request, nullptr, 0);
-        return ESP_FAIL;
+
+        return send_error(request, 400, "The current activity is not football");
     }
 
     // Make sure we can store the request JSON in our buffer
@@ -56,8 +56,9 @@ esp_err_t football_put(httpd_req_t* request)
 
     if (content_length > buffer_size - 1) {
         ESP_LOGW(tag, "Received more data than can be processed");
-        httpd_resp_send_500(request);
-        return ESP_FAIL;
+        return send_error(
+            request, 500, "More data was received than can be processed"
+        );
     }
 
     char buffer[buffer_size];
@@ -67,9 +68,7 @@ esp_err_t football_put(httpd_req_t* request)
     buffer[content_length] = '\0';
 
     if (received_bytes <= 0) {
-        ESP_LOGW(tag, "Error reading request content");
-        httpd_resp_send_500(request);
-        return ESP_FAIL;
+        return send_error(request, 500, "Error reading request content");
     }
 
     auto const request_json = json::parse(buffer);

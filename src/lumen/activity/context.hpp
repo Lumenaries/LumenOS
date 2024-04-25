@@ -4,6 +4,7 @@
 
 #include "nlohmann/json.hpp"
 
+#include <map>
 #include <memory>
 
 namespace lumen::activity {
@@ -33,8 +34,28 @@ public:
      */
     [[nodiscard]] nlohmann::json get_activity_json();
 
+    /** Get the equivalent JSON object of the advertisement list.
+     *
+     * \returns The JSON object.
+     */
+    [[nodiscard]] nlohmann::json get_advertisement_json();
+
     /// Sets current activity to be the saved activity.
     void restore_activity();
+
+    /** Add an advertisement.
+     *
+     * \param ad The advertisement.
+     *
+     * \returns The unique advertisement ID.
+     */
+    int add_advertisement(std::string const& ad);
+
+    /** Delete an advertisement.
+     *
+     * \param ad_id The ID of the advertisement to delete.
+     */
+    void delete_advertisement(int ad_id);
 
     /** Redraw the display.
      *
@@ -66,6 +87,8 @@ private:
 
     std::unique_ptr<Activity> saved_activity_{};
     Type saved_activity_type_{};
+
+    std::map<int, std::string> advertisements_{};
 };
 
 } // namespace lumen::activity
