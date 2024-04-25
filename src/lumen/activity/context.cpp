@@ -129,6 +129,7 @@ void Context::delete_advertisement(int ad_id)
 {
     auto ad = advertisements_.find(ad_id);
 
+    // If the postition is at the end, the key was not found.
     if (ad != advertisements_.end()) {
         advertisements_.erase(ad);
     }

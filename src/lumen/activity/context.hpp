@@ -34,8 +34,9 @@ public:
      */
     [[nodiscard]] nlohmann::json get_activity_json();
 
-    /**
+    /** Get the equivalent JSON object of the advertisement list.
      *
+     * \returns The JSON object.
      */
     [[nodiscard]] nlohmann::json get_advertisement_json();
 
