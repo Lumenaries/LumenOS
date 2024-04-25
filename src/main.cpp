@@ -27,7 +27,7 @@ extern "C" void app_main()
     ESP_ERROR_CHECK(nvs_flash_init());
 
     // Initialize the SD card
-    //lumen::hardware::init_sd_card();
+    lumen::hardware::init_sd_card();
 
     // Initialize the file system
     ESP_ERROR_CHECK(init_filesystem());

@@ -84,7 +84,7 @@ activity::Context* Server::get_activity_context() const
     return activity_context_;
 }
 
-void Server::send_event_message(EventMessage const& message)
+void send_event_message(EventMessage const& message)
 {
     // Send message if the event stream is running
     if (uxSemaphoreGetCount(event_stream_semaphore) == 0) {
@@ -196,8 +196,7 @@ void on_close(httpd_handle_t handle, int socket_fd)
     auto* server = static_cast<Server*>(httpd_get_global_user_ctx(handle));
 
     if (socket_fd == server->get_event_stream_socket()) {
-        server->send_event_message(
-            EventMessage{EventMessage::Type::event_stream_closed}
+        send_event_message(EventMessage{EventMessage::Type::event_stream_closed}
         );
     }
 

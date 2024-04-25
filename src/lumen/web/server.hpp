@@ -6,8 +6,6 @@
 
 namespace lumen::web {
 
-esp_err_t dispatch_event_handler(httpd_req_t* request);
-
 struct EventMessage {
     enum class Type {
         none,
@@ -39,8 +37,6 @@ public:
 
     [[nodiscard]] activity::Context* get_activity_context() const;
 
-    void send_event_message(EventMessage const& message);
-
     void set_event_stream_socket(int socket_fd);
 
     [[nodiscard]] int get_event_stream_socket() const;
@@ -53,5 +49,8 @@ private:
 
     int event_socket_fd_{};
 };
+
+esp_err_t dispatch_event_handler(httpd_req_t* request);
+void send_event_message(EventMessage const& message);
 
 } // namespace lumen::web
