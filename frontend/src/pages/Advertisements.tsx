@@ -1,4 +1,4 @@
-import { For, Show, createResource, createSignal, onMount } from "solid-js";
+import { For, Show, createSignal, onMount } from "solid-js";
 
 import Header from "../components/Header";
 
