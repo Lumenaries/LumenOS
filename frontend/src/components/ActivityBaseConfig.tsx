@@ -76,13 +76,21 @@ function Timer(props) {
   };
 
   const getSeconds = () => {
-    return String(props.value % 60).padStart(2, "0");
+    return props.value % 60;
   };
+
+  const timerAlarm = new Audio("audio/timerAlarm.mp3");
+
+  createEffect(() => {
+    if (getMinutes() === 0 && getSeconds() === 0) {
+      timerAlarm.play();
+    }
+  });
 
   return (
     <div class="flex justify-center">
       <p class="mr-3 font-medium text-5xl">
-        {getMinutes()}:{getSeconds()}
+        {getMinutes()}:{String(getSeconds()).padStart(2, "0")}
       </p>
       <Show when={props.isRunning}>
         <button
@@ -115,8 +123,8 @@ function Team(props) {
   const [score, setScore] = createSignal(props.currentScore);
 
   createEffect(() => {
-      setTeamName(props.teamName);
-      setScore(props.currentScore);
+    setTeamName(props.teamName);
+    setScore(props.currentScore);
   });
 
   const team = props.teamIndex === "one" ? "teamOne" : "teamTwo";
