@@ -238,7 +238,8 @@ json Football::to_json()
         {"timer",
          {{"value", timer_.get_value()},
           {"startTime", timer_.get_start_time()},
-          {"countUp", timer_.is_count_up()}}}
+          {"countUp", timer_.is_count_up()},
+          {"isRunning", timer_.is_running()}}}
     };
 }
 

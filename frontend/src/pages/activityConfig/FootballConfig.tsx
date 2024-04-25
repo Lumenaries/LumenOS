@@ -1,4 +1,11 @@
-import { Show, createResource, createSignal, lazy } from "solid-js";
+import {
+  Show,
+  createEffect,
+  createResource,
+  createSignal,
+  lazy,
+  onMount,
+} from "solid-js";
 
 import { useEvent } from "../../Event";
 import ActivityBaseConfig from "../../components/ActivityBaseConfig";
@@ -20,15 +27,25 @@ function FootballConfig() {
 
   const endpoint = "/api/v1/football";
 
-  const getFromEndpoint = async function () {
-    const data = await fetch(endpoint);
-    return data.json();
-  };
+  const [data, setData] = createSignal(null);
 
-  const [data] = createResource(getFromEndpoint);
+  onMount(async () => {
+    const res = await fetch(endpoint);
+    const json = await res.json();
+
+    if (json != null) {
+      setData(json);
+    }
+  });
+
+  createEffect(() => {
+    if (eventData() != null) {
+      setData(eventData());
+    }
+  });
 
   return (
-    <Show when={!data.loading}>
+    <Show when={data() != null && data().type == "football"}>
       <ActivityBaseConfig
         name="Football"
         teamOneName={data().teamOne.name}
@@ -36,25 +53,28 @@ function FootballConfig() {
         teamOneCurrentScore={data().teamOne.score}
         teamTwoCurrentScore={data().teamTwo.score}
         timerValue={data().timer.value}
+        timerIsRunning={data().timer.isRunning}
       >
-      <div>test{JSON.stringify(eventData())}</div>
         <div class="grid grid-cols-1 gap-4">
           <ActivityField
             name="quarter"
             endpoint={endpoint}
             fields={quarters}
+            index={data().quarter.value}
             currentIndex={quarters[data().quarter.value - 1]}
           />
           <ActivityField
             name="down"
             endpoint={endpoint}
             fields={downs}
+            index={data().down.value}
             currentIndex={downs[data().down.value - 1]}
           />
           <ActivityField
             name="yards"
             endpoint={endpoint}
             fields={yards}
+            index={data().yards.value}
             currentIndex={yards[data().yards.value - 1]}
           />
         </div>

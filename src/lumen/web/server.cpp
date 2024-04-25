@@ -2,14 +2,11 @@
 
 #include "lumen/web/error.hpp"
 #include "lumen/web/handler/common.hpp"
+#include "lumen/web/handler/event.hpp"
 #include "lumen/web/handler/football.hpp"
 
 #include "esp_http_server.h"
 #include "esp_log.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/queue.h"
-
-#include <cstring> // strcmp
 
 using json = nlohmann::json;
 
@@ -17,6 +14,8 @@ namespace lumen::web {
 namespace {
 
 constexpr auto tag = "web/server";
+
+void start_event_stream_task();
 
 /** Register all of the endpoints.
  *
@@ -37,8 +36,11 @@ void register_endpoints(httpd_handle_t& server);
 esp_err_t on_open(httpd_handle_t handle, int socket_fd);
 void on_close(httpd_handle_t handle, int socket_fd);
 
-esp_err_t event_get_handler(httpd_req_t* request);
-void event_handler_task(void* parameters);
+/// TODO: Have an array of 5 event stream tasks instead of a single one.
+/// HTTP 1.1 is limited to 6 concurrent TCP connections, so we could have 5
+/// tasks available (up to 5 browser tabs), and leave one TCP connection
+/// available for synchronous requests.
+void event_stream_task(void* parameters);
 
 } // namespace
 
@@ -47,11 +49,12 @@ Server::Server(activity::Context& activity_context)
 {
     ESP_LOGI(tag, "Starting web server");
 
+    start_event_stream_task();
+
     config_.stack_size = 8192;
-
     config_.global_user_ctx = this;
-
     config_.uri_match_fn = httpd_uri_match_wildcard;
+
     config_.open_fn = on_open;
     config_.close_fn = on_close;
 
@@ -70,43 +73,34 @@ activity::Context* Server::get_activity_context() const
     return activity_context_;
 }
 
+void Server::send_event_message(EventMessage const& message)
+{
+    // Send message if the event stream is running
+    if (uxSemaphoreGetCount(event_stream_semaphore) == 0) {
+        xQueueSend(event_stream_queue, &message, 0);
+    }
+}
+
+void Server::set_event_stream_socket(int socket_fd)
+{
+    event_socket_fd_ = socket_fd;
+}
+
+int Server::get_event_stream_socket() const
+{
+    return event_socket_fd_;
+}
+
+esp_err_t Server::set_event_stream(httpd_req_t* request)
+{
+    if (event_stream_ == nullptr) {
+        return ESP_FAIL;
+    }
+
+    event_stream_ = std::make_unique<event::Stream>(request);
+}
+
 namespace {
-
-esp_err_t dispatch_event_handler(httpd_req_t* request)
-{
-    // Get the socketfd from the session ctx
-    return ESP_OK;
-}
-
-esp_err_t event_get_handler(httpd_req_t* request)
-{
-    ESP_LOGI(tag, "uri: /api/v1/event");
-
-    auto header_len = httpd_req_get_hdr_value_len(request, "Accept");
-    char buffer[header_len + 1] = {0};
-
-    httpd_req_get_hdr_value_str(request, "Accept", buffer, header_len + 1);
-
-    if (strcmp(buffer, "text/event-stream") != 0) {
-        ESP_LOGI(tag, "Accept: %s", buffer);
-        return send_error(
-            request, 400, "Accept header is not \"text/event-stream\"."
-        );
-    }
-
-    httpd_resp_set_type(request, "text/event-stream");
-
-    // Check if there is an available event handler task
-
-    // if (dispatch_event_handler(request) == ESP_OK) {
-    if (false) {
-        return ESP_OK;
-    } else {
-        return send_error(
-            request, 503, "No event-handler threads are available."
-        );
-    }
-}
 
 void register_endpoints(httpd_handle_t& server)
 {
@@ -114,7 +108,7 @@ void register_endpoints(httpd_handle_t& server)
     httpd_uri_t event_get_uri = {
         .uri = "/api/v1/event",
         .method = HTTP_GET,
-        .handler = event_get_handler,
+        .handler = handler::event_get,
         .user_ctx = nullptr
     };
 
@@ -132,6 +126,7 @@ void register_endpoints(httpd_handle_t& server)
         .user_ctx = nullptr
     };
 
+    // This needs to be the last GET handler
     httpd_uri_t common_get_uri = {
         .uri = "/*",
         .method = HTTP_GET,
@@ -147,16 +142,9 @@ void register_endpoints(httpd_handle_t& server)
 
 esp_err_t on_open(httpd_handle_t handle, int socket_fd)
 {
-    ESP_LOGI(tag, "Server socket opened: %d", socket_fd);
-
-    auto* server = static_cast<Server*>(httpd_get_global_user_ctx(handle));
-
-    // Save socket fd in session context
-    // httpd_sess_set_ctx(handle, sockfd, server->add_session(sockfd), [](void*)
-    // {
-    //});
-
-    auto* activity_context = server->get_activity_context();
+    auto* activity_context =
+        static_cast<Server*>(httpd_get_global_user_ctx(handle))
+            ->get_activity_context();
 
     // The connect activity is over when the user opens the website.
     // Restore the previous activity.
@@ -167,36 +155,106 @@ esp_err_t on_open(httpd_handle_t handle, int socket_fd)
     return ESP_OK;
 }
 
-void on_close(httpd_handle_t server, int sockfd)
+void on_close(httpd_handle_t handle, int socket_fd)
 {
-    ESP_LOGI(tag, "Server socket closed: %d", sockfd);
-    close(sockfd);
+    auto* event_stream = static_cast<Server*>(httpd_get_global_user_ctx(handle))
+                             ->get_event_stream();
+
+    if (socket_fd == event_stream->get_socket()) {
+        server->close_event_stream();
+    }
+
+    if (socket_fd == server->get_event_stream_socket()) {
+        server->send_event_message(
+            EventMessage{EventMessage::Type::event_stream_closed}
+        );
+    }
+
+    close(socket_fd);
 }
 
-void event_handler_task(void* /* parameters */)
+void event_stream_task(void* /* parameters */)
 {
-    // ESP_LOGI(tag, "Starting event handler task");
+    EventMessage message{};
+    httpd_req_t* event_stream{};
 
-    //// We need to get the request pointer, from which we can receive a context
-    //// pointer
+    while (true) {
+        xQueueReceive(event_stream_queue, &message, portMAX_DELAY);
 
-    // auto context;
+        if (message.type == EventMessage::Type::event_stream_closed) {
+            if (event_stream != nullptr) {
+                auto* server = static_cast<Server*>(
+                    httpd_get_global_user_ctx(event_stream->handle)
+                );
 
-    // while (true) {
-    //     if (xQueueReceive(event_handler_queue, &event_data, portMAX_DELAY)) {
-    //         ESP_LOGI(tag, "Sending event");
-    //     }
+                server->set_event_stream_socket(0);
 
-    //    auto dump = context->to_json().dump();
+                httpd_req_async_handler_complete(event_stream);
 
-    //    auto ret = httpd_resp_send_chunk(request, dump.c_str(), dump.size());
+                event_stream = nullptr;
 
-    //    if (ret != ESP_OK) {
-    //        ESP_LOGW(tag, "Error in sending event data");
+                // Signal that we're ready to receive a new event stream
+                xSemaphoreGive(event_stream_semaphore);
+            }
 
-    //    }
+        } else if (message.type == EventMessage::Type::event_stream_started) {
+            if (message.new_request != nullptr) {
+                event_stream = message.new_request;
+            }
 
-    //}
+        } else if (message.type == EventMessage::Type::event_occurred) {
+            if (event_stream != nullptr) {
+
+                auto* activity_context =
+                    static_cast<Server*>(
+                        httpd_get_global_user_ctx(event_stream->handle)
+                    )
+                        ->get_activity_context();
+
+                /// TODO: Only send the values that have changed. This can be
+                /// done by adding a "has_changed" flag to each field and
+                /// creating a "get_change_json()" on the context that will
+                /// compile all modified values into a json object. This could
+                /// also be used to reduce display flashing when updating.
+                auto data =
+                    "data:" + activity_context->get_activity_json().dump() +
+                    "\n\n";
+
+                httpd_resp_send_chunk(
+                    event_stream, data.c_str(), HTTPD_RESP_USE_STRLEN
+                );
+            }
+        }
+    }
+}
+
+void start_event_stream_task()
+{
+    // Create semaphore
+    event_stream_semaphore = xSemaphoreCreateBinary();
+    if (event_stream_semaphore == nullptr) {
+        ESP_LOGE(tag, "Failed to create semaphore");
+        return;
+    }
+
+    xSemaphoreGive(event_stream_semaphore);
+
+    // Create queue
+    event_stream_queue = xQueueCreate(1, sizeof(EventMessage));
+    if (event_stream_queue == nullptr) {
+        ESP_LOGE(tag, "Failed to create event_stream_queue");
+        vSemaphoreDelete(event_stream_semaphore);
+        return;
+    }
+
+    // Start worker task
+    auto success = xTaskCreate(
+        event_stream_task, "Event Stream Task", 8192, nullptr, 5, nullptr
+    );
+
+    if (success == pdFALSE) {
+        ESP_LOGE(tag, "Failed to start event stream task");
+    }
 }
 
 } // namespace

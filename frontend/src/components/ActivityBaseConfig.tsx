@@ -1,5 +1,5 @@
 import { A } from "@solidjs/router";
-import { Show, createSignal } from "solid-js";
+import { Show, createEffect, createSignal } from "solid-js";
 
 import Header from "./Header";
 import {
@@ -13,7 +13,11 @@ import {
 // TODO: Allow user to change team names
 // TODO: Add a configurable timer element
 function ActivityBaseConfig(props) {
-  const [isRunning, setRunning] = createSignal(false);
+  const [isRunning, setRunning] = createSignal(props.timerIsRunning);
+
+  createEffect(() => {
+    setRunning(props.timerIsRunning);
+  });
 
   return (
     <>
@@ -61,6 +65,8 @@ function ActivityBaseConfig(props) {
 }
 
 function Timer(props) {
+  //const [value, setValue] = createSignal();
+
   const putIsRunning = function () {
     fetch(`/api/v1/${props.sport.toLowerCase()}`, {
       method: "PUT",
@@ -68,13 +74,18 @@ function Timer(props) {
     });
   };
 
-  const minutes = Math.floor(props.value / 60);
-  const seconds = String(props.value % 60).padStart(2, "0");
+  const getMinutes = () => {
+    return Math.floor(props.value / 60);
+  };
+
+  const getSeconds = () => {
+    return String(props.value % 60).padStart(2, "0");
+  };
 
   return (
     <div class="flex justify-center">
       <p class="mr-3 font-medium text-5xl">
-        {minutes}:{seconds}
+        {getMinutes()}:{getSeconds()}
       </p>
       <Show when={props.isRunning}>
         <button
@@ -105,6 +116,11 @@ function Timer(props) {
 function Team(props) {
   const [teamName, setTeamName] = createSignal(props.teamName);
   const [score, setScore] = createSignal(props.currentScore);
+
+  createEffect(() => {
+      setTeamName(props.teamName);
+      setScore(props.currentScore);
+  });
 
   const team = props.teamIndex === "one" ? "teamOne" : "teamTwo";
   const defaultTeamName = team === "teamOne" ? "Home" : "Away";

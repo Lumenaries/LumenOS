@@ -134,6 +134,9 @@ void Timer::stop()
     if (is_running_) {
         gptimer_stop(timer_);
         is_running_ = false;
+
+        // Send a signal to the website that the timer has paused
+        signal_update();
     }
 }
 

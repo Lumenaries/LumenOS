@@ -9,7 +9,7 @@ import {
 const EventContext = createContext();
 
 function EventProvider(props) {
-  const [eventData, setEventData] = createSignal({ name: "none" });
+  const [eventData, setEventData] = createSignal(null);
 
   createEffect(() => {
     console.log("Running event effect");

@@ -27,17 +27,17 @@ void app_task(void* /* parameters */)
 
     auto web_server = web::Server{activity_context};
 
-    //auto power_button = hardware::button::RGLEDButton{
-    //    CONFIG_HARDWARE_POWER_BUTTON_PIN,
-    //    CONFIG_HARDWARE_POWER_BUTTON_ACTIVE_LEVEL,
-    //    CONFIG_HARDWARE_POWER_BUTTON_RED_PIN,
-    //    CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN
-    //};
-    //power_button.register_callback(
-    //    BUTTON_SINGLE_CLICK, power_button_single_click, &activity_context
+    // auto power_button = hardware::button::RGLEDButton{
+    //     CONFIG_HARDWARE_POWER_BUTTON_PIN,
+    //     CONFIG_HARDWARE_POWER_BUTTON_ACTIVE_LEVEL,
+    //     CONFIG_HARDWARE_POWER_BUTTON_RED_PIN,
+    //     CONFIG_HARDWARE_POWER_BUTTON_GREEN_PIN
+    // };
+    // power_button.register_callback(
+    //     BUTTON_SINGLE_CLICK, power_button_single_click, &activity_context
     //);
-    //power_button.register_callback(
-    //    BUTTON_LONG_PRESS_START, power_button_long_press, &activity_context
+    // power_button.register_callback(
+    //     BUTTON_LONG_PRESS_START, power_button_long_press, &activity_context
     //);
 
     // auto timer_button = hardware::button::LEDButton{
@@ -83,8 +83,14 @@ void app_task(void* /* parameters */)
     while (true) {
         xTaskNotifyWait(pdFALSE, ULONG_MAX, &event_buffer, portMAX_DELAY);
 
+        ESP_LOGI(tag, "App task awakened");
+
         if ((event_buffer & g_update_display_signal) != 0) {
             activity_context.update_display();
+
+            web_server.send_event_message(
+                web::EventMessage{web::EventMessage::Type::event_occurred}
+            );
         }
     }
 }
