@@ -13,6 +13,8 @@ constexpr auto tag = "web/error";
 /** Convert a status code integer into a string.
  *
  * \param status_code The HTTP status code to respond with.
+ *
+ * \returns The stringified status code.
  */
 std::string status_to_string(uint status_code);
 

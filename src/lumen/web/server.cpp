@@ -188,8 +188,6 @@ esp_err_t on_open(httpd_handle_t handle, int socket_fd)
 
 void on_close(httpd_handle_t handle, int socket_fd)
 {
-    ESP_LOGI(tag, "Server socket closed: %d", socket_fd);
-
     auto* server = static_cast<Server*>(httpd_get_global_user_ctx(handle));
 
     if (socket_fd == g_event_stream_socket) {
