@@ -40,7 +40,7 @@ and source it.
 
 `lumen` was written with the
 [ESP32-S3](https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf)
-in mind, but it'll probably works on other ESP32 variants.
+in mind, but it'll probably work on other ESP32 variants.
 
 ```
 $ idf.py set-target esp32s3
