@@ -1,15 +1,23 @@
-import { Show, createSignal } from "solid-js";
+import { Show, createEffect, createSignal } from "solid-js";
 
 import { LeftArrowIcon, RightArrowIcon } from "./UtilityIcons";
 
 function ActivityField(props) {
   const fieldNames = props.fields;
 
-  const currentIndex = fieldNames.indexOf(props.currentIndex);
+  const getIndex = () => {
+    if (props.index > 0 && props.index <= fieldNames.length) {
+      return props.index - 1;
+    } else {
+      return 0;
+    }
+  };
 
-  const [field, setField] = createSignal(
-    currentIndex === -1 ? 0 : currentIndex
-  );
+  const [field, setField] = createSignal(getIndex());
+
+  createEffect(() => {
+    setField(getIndex());
+  });
 
   const putToEndpoint = function () {
     fetch(props.endpoint, {

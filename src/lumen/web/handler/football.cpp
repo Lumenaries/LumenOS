@@ -2,6 +2,7 @@
 
 #include "lumen/activity/context.hpp"
 #include "lumen/activity/football.hpp"
+#include "lumen/web/server.hpp"
 
 #include "esp_log.h"
 #include "nlohmann/json.hpp"
@@ -19,9 +20,9 @@ constexpr auto buffer_size = 128;
 
 esp_err_t football_get(httpd_req_t* request)
 {
-    auto* activity_context = static_cast<activity::Context*>(
-        httpd_get_global_user_ctx(request->handle)
-    );
+    auto* activity_context =
+        static_cast<Server*>(httpd_get_global_user_ctx(request->handle))
+            ->get_activity_context();
 
     activity_context->set_activity(activity::Type::football);
 
@@ -36,9 +37,9 @@ esp_err_t football_get(httpd_req_t* request)
 esp_err_t football_put(httpd_req_t* request)
 {
     // Make sure the correct endpoint was hit
-    auto* activity_context = static_cast<activity::Context*>(
-        httpd_get_global_user_ctx(request->handle)
-    );
+    auto* activity_context =
+        static_cast<Server*>(httpd_get_global_user_ctx(request->handle))
+            ->get_activity_context();
 
     if (activity_context->get_activity_type() != activity::Type::football) {
         ESP_LOGW(

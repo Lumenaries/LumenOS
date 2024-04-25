@@ -85,6 +85,10 @@ void app_task(void* /* parameters */)
 
         if ((event_buffer & g_update_display_signal) != 0) {
             activity_context.update_display();
+
+            web::send_event_message(
+                web::EventMessage{web::EventMessage::Type::event_occurred}
+            );
         }
     }
 }
