@@ -13,7 +13,7 @@ function EventProvider(props) {
 
   createEffect(() => {
     console.log("Running event effect");
-    const eventSource = new EventSource("/api/v1/events");
+    const eventSource = new EventSource("/api/v1/event");
 
     eventSource.onmessage = (event) => {
       console.log(event.data);

@@ -10,20 +10,21 @@
 namespace lumen::web {
 
 /// Handles the creation and destruction of HTTP web servers.
-struct Server {
-    httpd_handle_t server = nullptr;
-    httpd_config_t config = HTTPD_DEFAULT_CONFIG();
-
+class Server {
+public:
     /** Server constructor.
      *
      * \param context A reference to a context object.
      */
-    explicit Server(activity::Context& context);
+    explicit Server(activity::Context& activity_context);
     ~Server();
 
-    activity::Context* get_activity_context();
+    [[nodiscard]] activity::Context* get_activity_context() const;
 
 private:
+    httpd_handle_t handle_ = nullptr;
+    httpd_config_t config_ = HTTPD_DEFAULT_CONFIG();
+
     activity::Context* activity_context_;
 
     std::list<int> session_sockets_;

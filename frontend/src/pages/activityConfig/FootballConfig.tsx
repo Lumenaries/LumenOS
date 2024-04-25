@@ -1,6 +1,6 @@
 import { Show, createResource, createSignal, lazy } from "solid-js";
 
-import { useEvent } from "../../Events";
+import { useEvent } from "../../Event";
 import ActivityBaseConfig from "../../components/ActivityBaseConfig";
 import ActivityField from "../../components/ActivityField";
 

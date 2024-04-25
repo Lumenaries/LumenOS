@@ -2,7 +2,7 @@ import { Route, Router } from "@solidjs/router";
 import { lazy } from "solid-js";
 import { render } from "solid-js/web";
 
-import { EventProvider } from "./Events";
+import { EventProvider } from "./Event";
 import "./index.css";
 
 const root = document.getElementById("root");

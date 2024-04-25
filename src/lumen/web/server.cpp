@@ -35,36 +35,39 @@ void register_endpoints(httpd_handle_t& server);
  * \returns `ESP_OK` on success.
  */
 esp_err_t on_open(httpd_handle_t handle, int socket_fd);
+void on_close(httpd_handle_t handle, int socket_fd);
 
 esp_err_t event_get_handler(httpd_req_t* request);
 void event_handler_task(void* parameters);
 
-esp_err_t on_open(httpd_handle_t hd, int sockfd);
-void on_close(httpd_handle_t hd, int sockfd);
-
 } // namespace
 
-Server::Server(activity::Context& context)
+Server::Server(activity::Context& activity_context)
+    : activity_context_{&activity_context}
 {
     ESP_LOGI(tag, "Starting web server");
 
-    config.stack_size = 8192;
+    config_.stack_size = 8192;
 
-    config.global_user_ctx = &context;
-    config.open_fn = on_open;
+    config_.global_user_ctx = this;
 
-    config.uri_match_fn = httpd_uri_match_wildcard;
-    config.open_fn = on_open;
-    config.close_fn = on_close;
+    config_.uri_match_fn = httpd_uri_match_wildcard;
+    config_.open_fn = on_open;
+    config_.close_fn = on_close;
 
-    httpd_start(&server, &config);
-    register_endpoints(server);
+    httpd_start(&handle_, &config_);
+    register_endpoints(handle_);
 }
 
 Server::~Server()
 {
     ESP_LOGI(tag, "Stopping web server");
-    httpd_stop(server);
+    httpd_stop(handle_);
+}
+
+activity::Context* Server::get_activity_context() const
+{
+    return activity_context_;
 }
 
 namespace {
@@ -77,7 +80,7 @@ esp_err_t dispatch_event_handler(httpd_req_t* request)
 
 esp_err_t event_get_handler(httpd_req_t* request)
 {
-    ESP_LOGI(tag, "uri: /api/v1/events");
+    ESP_LOGI(tag, "uri: /api/v1/event");
 
     auto header_len = httpd_req_get_hdr_value_len(request, "Accept");
     char buffer[header_len + 1] = {0};
@@ -109,7 +112,7 @@ void register_endpoints(httpd_handle_t& server)
 {
 
     httpd_uri_t event_get_uri = {
-        .uri = "/api/v1/events",
+        .uri = "/api/v1/event",
         .method = HTTP_GET,
         .handler = event_get_handler,
         .user_ctx = nullptr
@@ -149,8 +152,9 @@ esp_err_t on_open(httpd_handle_t handle, int socket_fd)
     auto* server = static_cast<Server*>(httpd_get_global_user_ctx(handle));
 
     // Save socket fd in session context
-    httpd_sess_set_ctx(handle, sockfd, server->add_session(sockfd), [](void*) {
-    });
+    // httpd_sess_set_ctx(handle, sockfd, server->add_session(sockfd), [](void*)
+    // {
+    //});
 
     auto* activity_context = server->get_activity_context();
 
