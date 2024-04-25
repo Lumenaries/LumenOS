@@ -5,14 +5,11 @@
 #include "lumen/web/handler/event.hpp"
 #include "lumen/web/handler/football.hpp"
 
-#include "esp_http_server.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/semphr.h"
 #include "nlohmann/json.hpp"
-
-#include <cstring> // strcmp
 
 using json = nlohmann::json;
 
@@ -21,9 +18,14 @@ namespace {
 
 constexpr auto tag = "web/server";
 
+// Not the best, but I'm not of a better option that doesn't make the variable
+// visible outside of this file.
+int g_event_stream_socket{};
+
 SemaphoreHandle_t event_stream_semaphore{};
 QueueHandle_t event_stream_queue{};
 
+/// Initialize all structures required for the event stream task.
 void start_event_stream_task();
 
 /** Register all of the endpoints.
@@ -43,14 +45,19 @@ void register_endpoints(httpd_handle_t& server);
  * \returns `ESP_OK` on success.
  */
 esp_err_t on_open(httpd_handle_t handle, int socket_fd);
+
+/** The handler that's called before a socket is closed.
+ *
+ * \param handle The instance of the server.
+ *
+ * \param socket_fd The session socket file descriptor.
+ */
 void on_close(httpd_handle_t handle, int socket_fd);
 
-esp_err_t event_get_handler(httpd_req_t* request);
-
-/// TODO: Have an array of 5 event stream tasks instead of a single one.
-/// HTTP 1.1 is limited to 6 concurrent TCP connections, so we could have 5
-/// tasks available (up to 5 browser tabs), and leave one TCP connection
-/// available for synchronous requests.
+/** Asynchronous handler for long-running event-stream requests.
+ *
+ * \param parameters Unused, but required for FreeRTOS tasks.
+ */
 void event_stream_task(void* parameters);
 
 } // namespace
@@ -92,16 +99,6 @@ void send_event_message(EventMessage const& message)
     }
 }
 
-void Server::set_event_stream_socket(int socket_fd)
-{
-    event_socket_fd_ = socket_fd;
-}
-
-int Server::get_event_stream_socket() const
-{
-    return event_socket_fd_;
-}
-
 esp_err_t dispatch_event_handler(httpd_req_t* request)
 {
     httpd_req_t* copy = nullptr;
@@ -130,7 +127,7 @@ esp_err_t dispatch_event_handler(httpd_req_t* request)
     auto* server =
         static_cast<Server*>(httpd_get_global_user_ctx(request->handle));
 
-    server->set_event_stream_socket(httpd_req_to_sockfd(copy));
+    g_event_stream_socket = httpd_req_to_sockfd(copy);
 
     return ESP_OK;
 }
@@ -195,7 +192,7 @@ void on_close(httpd_handle_t handle, int socket_fd)
 
     auto* server = static_cast<Server*>(httpd_get_global_user_ctx(handle));
 
-    if (socket_fd == server->get_event_stream_socket()) {
+    if (socket_fd == g_event_stream_socket) {
         send_event_message(EventMessage{EventMessage::Type::event_stream_closed}
         );
     }
@@ -203,6 +200,10 @@ void on_close(httpd_handle_t handle, int socket_fd)
     close(socket_fd);
 }
 
+/// TODO: Have an array of 5 event stream tasks instead of a single one.
+/// HTTP 1.1 is limited to 6 concurrent TCP connections, so we could have 5
+/// tasks available (up to 5 browser tabs), and leave one TCP connection
+/// available for synchronous requests.
 void event_stream_task(void* /* parameters */)
 {
     EventMessage message{};
@@ -217,7 +218,7 @@ void event_stream_task(void* /* parameters */)
                     httpd_get_global_user_ctx(event_stream->handle)
                 );
 
-                server->set_event_stream_socket(0);
+                g_event_stream_socket = 0;
 
                 httpd_req_async_handler_complete(event_stream);
 

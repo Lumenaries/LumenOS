@@ -5,8 +5,6 @@ import { LeftArrowIcon, RightArrowIcon } from "./UtilityIcons";
 function ActivityField(props) {
   const fieldNames = props.fields;
 
-  const currentIndex = fieldNames.indexOf(props.currentIndex);
-
   const [field, setField] = createSignal(props.index - 1);
 
   createEffect(() => {

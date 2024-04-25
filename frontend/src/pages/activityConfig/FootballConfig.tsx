@@ -61,21 +61,18 @@ function FootballConfig() {
             endpoint={endpoint}
             fields={quarters}
             index={data().quarter.value}
-            currentIndex={quarters[data().quarter.value - 1]}
           />
           <ActivityField
             name="down"
             endpoint={endpoint}
             fields={downs}
             index={data().down.value}
-            currentIndex={downs[data().down.value - 1]}
           />
           <ActivityField
             name="yards"
             endpoint={endpoint}
             fields={yards}
             index={data().yards.value}
-            currentIndex={yards[data().yards.value - 1]}
           />
         </div>
       </ActivityBaseConfig>

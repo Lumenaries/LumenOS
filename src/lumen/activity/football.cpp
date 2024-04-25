@@ -199,7 +199,7 @@ void Football::load(json const& data)
     }
 
     if (data.contains("timer")) {
-        // Timer will always be paused after loading, so we can ignore it if
+        // Timer will always be paused after loading, so we can ignore it here
 
         if (data["timer"].contains("value") &&
             data["timer"]["value"].is_number_unsigned()) {
