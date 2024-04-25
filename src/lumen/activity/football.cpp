@@ -34,9 +34,27 @@ field::Timer& Football::timer()
     return timer_;
 }
 
+field::Advertisement& Football::advertisements()
+{
+    return advertisements_;
+}
+
 void Football::update_display()
 {
     // TODO: Configure how football will be displayed
+
+    // if (timer_.is_running() &&
+    //     advertisements.should_display(timer_.get_value())) {
+    //     ESP_LOGI(tag, "%s", advertisements.to_string());
+    // }
+    auto* display = get_display();
+
+    if (timer_.is_running() &&
+        advertisements_.should_display(timer_.get_value())) {
+        advertisements_.display(display);
+    } else {
+        // Display what would usually be there
+    }
 }
 
 } // namespace lumen::activity

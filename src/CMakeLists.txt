@@ -2,6 +2,7 @@ idf_component_register(SRCS
                            "lumen/activity/activity.cpp"
                            "lumen/activity/connect.cpp"
                            "lumen/activity/context.cpp"
+                           "lumen/activity/field/advertisement.cpp"
                            "lumen/activity/field/number.cpp"
                            "lumen/activity/field/team.cpp"
                            "lumen/activity/field/text.cpp"

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lumen/activity/activity.hpp"
+#include "lumen/activity/field/advertisement.hpp"
 #include "lumen/activity/field/number.hpp"
 #include "lumen/activity/field/team.hpp"
 #include "lumen/activity/field/text.hpp"
@@ -29,6 +30,8 @@ public:
     /// Return the timer field
     field::Timer& timer();
 
+    field::Advertisement& advertisements();
+
     /// Draw the fields to the display.
     void update_display() override;
 
@@ -42,6 +45,8 @@ private:
 
     // High school Football games have 12 minute quarters
     field::Timer timer_{12 * 60};
+
+    field::Advertisement advertisements_{"This is an advertisement!"};
 };
 
 } // namespace lumen::activity
