@@ -2,6 +2,7 @@
 
 #include "lumen/activity/context.hpp"
 #include "lumen/activity/football.hpp"
+#include "lumen/web/error.hpp"
 #include "lumen/web/server.hpp"
 
 #include "esp_log.h"
