@@ -3,6 +3,9 @@
 #include "lumen/activity/context.hpp"
 
 #include "esp_http_server.h"
+#include "nlohmann/json.hpp"
+
+#include <list>
 
 namespace lumen::web {
 
@@ -17,6 +20,13 @@ struct Server {
      */
     explicit Server(activity::Context& context);
     ~Server();
+
+    activity::Context* get_activity_context();
+
+private:
+    activity::Context* activity_context_;
+
+    std::list<int> session_sockets_;
 };
 
 } // namespace lumen::web

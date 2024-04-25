@@ -1,15 +1,25 @@
 #include "lumen/web/server.hpp"
 
-#include "esp_http_server.h"
+#include "lumen/web/error.hpp"
+
 #include "esp_log.h"
 #include "esp_vfs.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
 
+#include <cstring> // strcmp
 #include <fcntl.h>
+#include <string>
+
+using json = nlohmann::json;
 
 namespace lumen::web {
 namespace {
 
 constexpr auto tag = "web/server";
+
+constexpr auto chunk_buffer_size = 10240;
+char chunk[chunk_buffer_size];
 
 /** Register all of the endpoints.
  *
@@ -19,6 +29,12 @@ constexpr auto tag = "web/server";
  */
 void register_endpoints(httpd_handle_t& server, activity::Context& context);
 
+esp_err_t event_get_handler(httpd_req_t* request);
+void event_handler_task(void* parameters);
+
+esp_err_t on_open(httpd_handle_t hd, int sockfd);
+void on_close(httpd_handle_t hd, int sockfd);
+
 } // namespace
 
 Server::Server(activity::Context& context)
@@ -26,6 +42,8 @@ Server::Server(activity::Context& context)
     ESP_LOGI(tag, "Starting web server");
 
     config.uri_match_fn = httpd_uri_match_wildcard;
+    config.open_fn = on_open;
+    config.close_fn = on_close;
 
     httpd_start(&server, &config);
     register_endpoints(server, context);
@@ -113,24 +131,17 @@ esp_err_t common_get_handler(httpd_req_t* req)
     if (fd == -1) {
         ESP_LOGE(tag, "Failed to open file : %s", filepath);
 
-        // Respond with 500 Internal Server Error
-        httpd_resp_send_err(
-            req, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to read existing file"
-        );
+        send_error(req, 500, "Failed to read existing file");
         return ESP_FAIL;
     }
 
     set_content_type_from_file(req, filepath);
 
-    // TODO: Allocate this 10240 bytes outside of the http task to reduce load
-    // times
-    uint32_t scratch_buffer_size = 1024;
-    char chunk[scratch_buffer_size];
     ssize_t read_bytes;
 
     do {
         // Read the file in the scratch buffer in chunks
-        read_bytes = read(fd, chunk, scratch_buffer_size);
+        read_bytes = read(fd, chunk, chunk_buffer_size);
 
         if (read_bytes == -1) {
             ESP_LOGE(tag, "Failed to read file : %s", filepath);
@@ -144,9 +155,7 @@ esp_err_t common_get_handler(httpd_req_t* req)
                 httpd_resp_sendstr_chunk(req, nullptr);
 
                 // Respond with 500 Internal Server Error
-                httpd_resp_send_err(
-                    req, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to send file"
-                );
+                send_error(req, 500, "Failed to read existing file");
 
                 return ESP_FAIL;
             }
@@ -163,8 +172,50 @@ esp_err_t common_get_handler(httpd_req_t* req)
     return ESP_OK;
 }
 
+esp_err_t dispatch_event_handler(httpd_req_t* request)
+{
+    // Get the socketfd from the session ctx
+}
+
+esp_err_t event_get_handler(httpd_req_t* request)
+{
+    ESP_LOGI(tag, "uri: /api/v1/events");
+
+    auto header_len = httpd_req_get_hdr_value_len(request, "Accept");
+    char buffer[header_len + 1] = {0};
+
+    httpd_req_get_hdr_value_str(request, "Accept", buffer, header_len + 1);
+
+    if (strcmp(buffer, "text/event-stream") != 0) {
+        ESP_LOGI(tag, "Accept: %s", buffer);
+        return send_error(
+            request, 400, "Accept header is not \"text/event-stream\"."
+        );
+    }
+
+    httpd_resp_set_type(request, "text/event-stream");
+
+    // Check if there is an available event handler task
+
+    // if (dispatch_event_handler(request) == ESP_OK) {
+    if (false) {
+        return ESP_OK;
+    } else {
+        return send_error(
+            request, 503, "No event-handler threads are available."
+        );
+    }
+}
+
 void register_endpoints(httpd_handle_t& server, activity::Context& context)
 {
+    httpd_uri_t event_uri = {
+        .uri = "/api/v1/events",
+        .method = HTTP_GET,
+        .handler = event_get_handler,
+        .user_ctx = nullptr
+    };
+
     httpd_uri_t common_get_uri = {
         .uri = "/*",
         .method = HTTP_GET,
@@ -172,7 +223,52 @@ void register_endpoints(httpd_handle_t& server, activity::Context& context)
         .user_ctx = &context
     };
 
+    httpd_register_uri_handler(server, &event_uri);
     httpd_register_uri_handler(server, &common_get_uri);
+}
+
+esp_err_t on_open(httpd_handle_t server, int sockfd)
+{
+    ESP_LOGI(tag, "Server socket opened: %d", sockfd);
+
+    // Save socket fd in session context
+    httpd_sess_set_ctx(
+        server, sockfd, session_sockets_.emplace(sockfd), [](void*) {}
+    );
+
+    return ESP_OK;
+}
+
+void on_close(httpd_handle_t server, int sockfd)
+{
+    ESP_LOGI(tag, "Server socket closed: %d", sockfd);
+    close(sockfd);
+}
+
+void event_handler_task(void* /* parameters */)
+{
+    // ESP_LOGI(tag, "Starting event handler task");
+
+    //// We need to get the request pointer, from which we can receive a context
+    //// pointer
+
+    // auto context;
+
+    // while (true) {
+    //     if (xQueueReceive(event_handler_queue, &event_data, portMAX_DELAY)) {
+    //         ESP_LOGI(tag, "Sending event");
+    //     }
+
+    //    auto dump = context->to_json().dump();
+
+    //    auto ret = httpd_resp_send_chunk(request, dump.c_str(), dump.size());
+
+    //    if (ret != ESP_OK) {
+    //        ESP_LOGW(tag, "Error in sending event data");
+
+    //    }
+
+    //}
 }
 
 } // namespace

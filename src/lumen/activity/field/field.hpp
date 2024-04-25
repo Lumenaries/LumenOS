@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lumen/app_task.hpp"
+#include "lumen/web/server.hpp"
 
 #include <string>
 
@@ -73,6 +74,8 @@ public:
 
         return higher_priority_task_awoken == pdTRUE;
     }
+
+    bool was_updated();
 
 private:
     T value_{};

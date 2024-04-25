@@ -1,10 +1,13 @@
 import { Show, createSignal, lazy } from "solid-js";
 
+import { useEvent } from "../../Events";
 import ActivityBaseConfig from "../../components/ActivityBaseConfig";
 import ActivityField from "../../components/ActivityField";
 
 function FootballConfig() {
   // TODO: Add an API prop
+
+  const eventData = useEvent();
 
   const quarters = ["1st Quarter", "2nd Quarter", "3rd Quarter", "4th Quarter"];
 
@@ -17,6 +20,7 @@ function FootballConfig() {
 
   return (
     <ActivityBaseConfig name="Football">
+      <div>test{JSON.stringify(eventData())}</div>
       <div class="grid grid-cols-1 gap-4">
         <ActivityField fields={quarters} default_field="1st Quarter" />
         <ActivityField fields={downs} default_field="1st Down" />
