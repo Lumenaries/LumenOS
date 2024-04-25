@@ -43,7 +43,13 @@ function Advertisements() {
     });
 
     const data = await response.json();
-    setAdList(data);
+    console.log(data);
+
+    if (data != null) {
+      setAdList(data);
+    } else {
+      setAdList([]);
+    }
   };
 
   return (

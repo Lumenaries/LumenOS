@@ -58,7 +58,7 @@ esp_err_t advertisement_post(httpd_req_t* request)
     if (request_json.contains("ad")) {
         auto ad = request_json["ad"];
 
-        if (ad.is_string() && ad.size() > 0) {
+        if (ad.is_string() && 0 < ad.size() && ad.size() <= 50) {
             auto* activity_context = static_cast<activity::Context*>(
                 httpd_get_global_user_ctx(request->handle)
             );
