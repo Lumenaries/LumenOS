@@ -1,5 +1,6 @@
 #include "lumen/web/server.hpp"
 
+#include "lumen/web/handler/advertisement.hpp"
 #include "lumen/web/handler/common.hpp"
 #include "lumen/web/handler/football.hpp"
 
@@ -70,6 +71,27 @@ void register_endpoints(httpd_handle_t& server)
         .user_ctx = nullptr
     };
 
+    httpd_uri_t advertisement_get_uri = {
+        .uri = "/api/v1/advertisement",
+        .method = HTTP_GET,
+        .handler = handler::advertisement_get,
+        .user_ctx = nullptr
+    };
+
+    httpd_uri_t advertisement_post_uri = {
+        .uri = "/api/v1/advertisement",
+        .method = HTTP_POST,
+        .handler = handler::advertisement_post,
+        .user_ctx = nullptr
+    };
+
+    httpd_uri_t advertisement_delete_uri = {
+        .uri = "/api/v1/advertisement",
+        .method = HTTP_DELETE,
+        .handler = handler::advertisement_delete,
+        .user_ctx = nullptr
+    };
+
     httpd_uri_t common_get_uri = {
         .uri = "/*",
         .method = HTTP_GET,
@@ -79,6 +101,9 @@ void register_endpoints(httpd_handle_t& server)
 
     httpd_register_uri_handler(server, &football_get_uri);
     httpd_register_uri_handler(server, &football_put_uri);
+    httpd_register_uri_handler(server, &advertisement_get_uri);
+    httpd_register_uri_handler(server, &advertisement_post_uri);
+    httpd_register_uri_handler(server, &advertisement_delete_uri);
     httpd_register_uri_handler(server, &common_get_uri);
 }
 

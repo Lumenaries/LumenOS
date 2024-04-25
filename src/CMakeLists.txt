@@ -18,6 +18,7 @@ idf_component_register(SRCS
                            "lumen/hardware/sd_card.cpp"
                            "lumen/net/mdns.cpp"
                            "lumen/net/wifi.cpp"
+                           "lumen/web/handler/advertisement.cpp"
                            "lumen/web/handler/common.cpp"
                            "lumen/web/handler/football.cpp"
                            "lumen/web/server.cpp"

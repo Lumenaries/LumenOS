@@ -85,6 +85,20 @@ json Context::get_activity_json()
     return activity_->to_json();
 }
 
+json Context::get_advertisement_json()
+{
+    json ads_json;
+
+    ESP_LOGI(tag, "advertisement size: %d", advertisements_.size());
+    for (auto& element : advertisements_) {
+        //ads_json[element.first] = element.second;
+        ads_json.push_back({{"id", element.first}, {"ad", element.second}});
+    }
+
+    ESP_LOGI(tag, "advertisement size: %s", ads_json.dump().c_str());
+    return ads_json;
+}
+
 void Context::restore_activity()
 {
     activity_ = std::move(saved_activity_);
@@ -94,6 +108,25 @@ void Context::restore_activity()
     saved_activity_type_ = Type::none;
 
     update_display();
+}
+
+int Context::add_advertisement(std::string const& ad)
+{
+    if (advertisements_.empty()) {
+        advertisements_[1] = ad;
+        return 1;
+    }
+
+    auto next_key = advertisements_.rbegin()->first + 1;
+    advertisements_[next_key] = ad;
+
+    return next_key;
+}
+
+void Context::delete_advertisement(int ad_id)
+{
+    auto ad = advertisements_.find(ad_id);
+    advertisements_.erase(ad);
 }
 
 void Context::update_display()
