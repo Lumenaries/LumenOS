@@ -87,15 +87,16 @@ json Context::get_activity_json()
 
 json Context::get_advertisement_json()
 {
+    if (advertisements_.empty()) {
+        return {};
+    }
+
     json ads_json;
 
-    ESP_LOGI(tag, "advertisement size: %d", advertisements_.size());
     for (auto& element : advertisements_) {
-        //ads_json[element.first] = element.second;
         ads_json.push_back({{"id", element.first}, {"ad", element.second}});
     }
 
-    ESP_LOGI(tag, "advertisement size: %s", ads_json.dump().c_str());
     return ads_json;
 }
 
@@ -117,6 +118,7 @@ int Context::add_advertisement(std::string const& ad)
         return 1;
     }
 
+    // Get the ID of the last ad and increment.
     auto next_key = advertisements_.rbegin()->first + 1;
     advertisements_[next_key] = ad;
 
@@ -126,7 +128,10 @@ int Context::add_advertisement(std::string const& ad)
 void Context::delete_advertisement(int ad_id)
 {
     auto ad = advertisements_.find(ad_id);
-    advertisements_.erase(ad);
+
+    if (ad != advertisements_.end()) {
+        advertisements_.erase(ad);
+    }
 }
 
 void Context::update_display()
