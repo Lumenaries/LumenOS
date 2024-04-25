@@ -10,7 +10,6 @@ import {
   PlusIcon,
 } from "./UtilityIcons";
 
-// TODO: Allow user to change team names
 // TODO: Add a configurable timer element
 function ActivityBaseConfig(props) {
   const [isRunning, setRunning] = createSignal(props.timerIsRunning);
@@ -65,8 +64,6 @@ function ActivityBaseConfig(props) {
 }
 
 function Timer(props) {
-  //const [value, setValue] = createSignal();
-
   const putIsRunning = function () {
     fetch(`/api/v1/${props.sport.toLowerCase()}`, {
       method: "PUT",

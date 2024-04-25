@@ -12,8 +12,6 @@ import ActivityBaseConfig from "../../components/ActivityBaseConfig";
 import ActivityField from "../../components/ActivityField";
 
 function FootballConfig() {
-  // TODO: Add an API prop
-
   const eventData = useEvent();
 
   const quarters = ["1st Quarter", "2nd Quarter", "3rd Quarter", "4th Quarter"];
@@ -29,6 +27,7 @@ function FootballConfig() {
 
   const [data, setData] = createSignal(null);
 
+  // GET the relevant data on first load
   onMount(async () => {
     const res = await fetch(endpoint);
     const json = await res.json();
@@ -38,6 +37,7 @@ function FootballConfig() {
     }
   });
 
+  // After first load, rely on server-sent events for updates
   createEffect(() => {
     if (eventData() != null) {
       setData(eventData());
