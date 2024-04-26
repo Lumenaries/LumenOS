@@ -30,6 +30,7 @@ void power_button_single_click(void* /* button */, void* context)
     auto* activity_context =
         static_cast<activity::Context*>(button_context->user_context);
     activity_context->store_activity();
+    activity_context->store_advertisements();
 
     auto* button = button_context->button;
 

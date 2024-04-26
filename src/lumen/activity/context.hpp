@@ -73,6 +73,9 @@ public:
     /// Saves the current activity to the `activity_file`.
     void store_activity();
 
+    /// Saves all advertisements to the `advertisement_file`.
+    void store_advertisements();
+
     /* Load the previously saved activity.
      *
      * \returns true if an activity was previously saved.
@@ -80,6 +83,9 @@ public:
      * \returns false if an activity was not previously saved.
      */
     bool load_activity();
+
+    /// Load the previously saved activity.
+    void load_advertisements();
 
 private:
     std::unique_ptr<Activity> activity_{};

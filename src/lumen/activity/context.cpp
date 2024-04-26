@@ -17,6 +17,7 @@ namespace {
 constexpr auto tag = "activity/context";
 
 constexpr auto activity_file = "/activity.json";
+constexpr auto advertisement_file = "/advertisement.json";
 
 /** Convert a string to an activity type.
  *
@@ -33,6 +34,7 @@ Type str_to_type(std::string const& type);
 Context::Context(Type type /* = Type::none */)
 {
     bool loaded_activity = load_activity();
+    load_advertisements();
 
     if (!loaded_activity && type != Type::none) {
         set_activity(type);
@@ -174,6 +176,16 @@ void Context::store_activity()
     hardware::write_json(activity_file, activity_->to_json());
 }
 
+void Context::store_advertisements()
+{
+    if (advertisements_.empty()) {
+        ESP_LOGI(tag, "There are no advertisements to store");
+        return;
+    }
+
+    hardware::write_json(advertisement_file, get_advertisement_json());
+}
+
 bool Context::load_activity()
 {
     auto activity_data = hardware::read_json(activity_file);
@@ -197,6 +209,26 @@ bool Context::load_activity()
 
     hardware::delete_file(activity_file);
     return true;
+}
+
+void Context::load_advertisements()
+{
+    auto advertisement_data = hardware::read_json(advertisement_file);
+
+    if (advertisement_data.is_null()) {
+        ESP_LOGI(tag, "No advertisement data");
+        return;
+    }
+
+    for (auto it : advertisement_data) {
+        if (it.contains("id") && it["id"].is_number_unsigned() &&
+            it.contains("ad") && it["ad"].is_string()) {
+            auto ad_id = it["id"].get<int>();
+            auto ad = it["ad"].get<std::string>();
+
+            advertisements_[ad_id] = ad;
+        }
+    }
 }
 
 namespace {
