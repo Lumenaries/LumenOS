@@ -9,11 +9,16 @@
 
 #include "nlohmann/json.hpp"
 
+#include <map>
+#include <string>
+
 namespace lumen::activity {
 
 /// Stores and displays the data for a Football game.
 class Football : public Activity {
 public:
+    Football(std::map<int, std::string> const& advertisements);
+
     /// Return the first team.
     field::Team& team_one();
 
@@ -55,6 +60,8 @@ public:
      */
     nlohmann::json to_json() override;
 
+    void pause() override;
+
 private:
     field::Team team_one_{"Home"};
     field::Team team_two_{"Away"};
@@ -66,7 +73,7 @@ private:
     // High school Football games have 12 minute quarters
     field::Timer timer_{12 * 60};
 
-    field::Advertisement advertisements_{"This is an advertisement!"};
+    field::Advertisement advertisements_;
 };
 
 } // namespace lumen::activity

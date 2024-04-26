@@ -37,6 +37,10 @@ Display::Display()
         }
     );
 
+    config.i2sspeed = HUB75_I2S_CFG::clk_speed::HZ_20M;
+    config.min_refresh_rate = 120;
+    config.double_buff = true;
+
     display_ = std::make_unique<MatrixPanel_I2S_DMA>(config);
 
     display_->begin();

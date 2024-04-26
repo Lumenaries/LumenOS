@@ -2,9 +2,10 @@
 
 #include "lumen/activity/field/field.hpp"
 #include "lumen/hardware/display.hpp"
+#include "lumen/hardware/timer.hpp"
 
+#include <map>
 #include <string>
-#include <vector>
 
 namespace lumen::activity::field {
 
@@ -17,9 +18,10 @@ namespace lumen::activity::field {
 /// timer
 class Advertisement : public Field<std::string> {
 public:
-    Advertisement(std::string const& ad);
-
-    void set_value(std::string const& value);
+    Advertisement(
+        uint64_t display_interval,
+        std::map<int, std::string> const& advertisements
+    );
 
     [[nodiscard]] std::string to_string() const override;
 
@@ -27,15 +29,18 @@ public:
 
     [[nodiscard]] bool is_displaying() const;
 
-    [[nodiscard]] bool should_display(uint64_t time) const;
+    [[nodiscard]] bool should_display(uint64_t time);
 
 private:
     // The time interval in seconds at which the advertisements should play
-    uint64_t display_interval_{};
+    uint64_t display_interval_{60};
     bool is_displaying_{};
 
     // Will this be updated within the lifetime of the object?
-    std::vector<std::string> advertisements_{};
+    std::map<int, std::string> const* advertisements_;
+    int current_ad_key_;
+
+    hardware::Timer timer_;
 };
 
 } // namespace lumen::activity::field

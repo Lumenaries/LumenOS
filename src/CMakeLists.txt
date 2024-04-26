@@ -17,6 +17,7 @@ idf_component_register(SRCS
                            "lumen/hardware/display.cpp"
                            "lumen/hardware/led_pin.cpp"
                            "lumen/hardware/sd_card.cpp"
+                           "lumen/hardware/timer.cpp"
                            "lumen/net/mdns.cpp"
                            "lumen/net/wifi.cpp"
                            "lumen/web/error.cpp"

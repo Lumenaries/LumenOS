@@ -6,6 +6,7 @@
 namespace lumen {
 
 constexpr auto g_update_display_signal = 0x01UL;
+constexpr auto g_update_event_stream = 0x02UL;
 
 /** The main task that handles the firmware.
  *

@@ -21,37 +21,12 @@ bool timer_alarm_callback(
     void* context
 );
 
-gptimer_event_callbacks_t const callbacks = {.on_alarm = timer_alarm_callback};
-
-gptimer_alarm_config_t const alarm_config = {
-    .alarm_count = 1'000'000, // period = 1s
-    .reload_count = 0,
-    .flags = {.auto_reload_on_alarm = 1}
-};
-
 } // namespace
 
 Timer::Timer(uint64_t start_time, bool count_up /* = false */)
-    : Field{start_time}, start_time_{start_time}, is_count_up_{count_up}
+    : Field{start_time}, start_time_{start_time}, is_count_up_{count_up},
+      hardware_timer_{1'000'000, timer_alarm_callback, this}
 {
-    auto err = gptimer_new_timer(&config_, &timer_);
-
-    if (err != ESP_OK) {
-        ESP_LOGE(tag, "Unable to initialize new timer");
-    }
-
-    gptimer_register_event_callbacks(timer_, &callbacks, this);
-
-    gptimer_set_alarm_action(timer_, &alarm_config);
-
-    gptimer_enable(timer_);
-}
-
-Timer::~Timer()
-{
-    stop();
-    gptimer_disable(timer_);
-    gptimer_del_timer(timer_);
 }
 
 uint64_t Timer::get_start_time() const
@@ -61,7 +36,7 @@ uint64_t Timer::get_start_time() const
 
 bool Timer::is_running() const
 {
-    return is_running_;
+    return hardware_timer_.is_running();
 }
 
 bool Timer::is_count_up() const
@@ -72,7 +47,7 @@ bool Timer::is_count_up() const
 void Timer::set_value(uint64_t const& time)
 {
     if (time == 0) {
-        stop();
+        hardware_timer_.stop();
     }
 
     Field::set_value(time);
@@ -81,7 +56,7 @@ void Timer::set_value(uint64_t const& time)
 bool Timer::set_value_from_isr(uint64_t const& time)
 {
     if (time == 0) {
-        stop();
+        hardware_timer_.stop();
     }
 
     return Field::set_value_from_isr(time);
@@ -123,35 +98,25 @@ void Timer::start()
         return;
     }
 
-    if (!is_running_) {
-        gptimer_start(timer_);
-        is_running_ = true;
-    }
+    hardware_timer_.start();
 }
 
 void Timer::stop()
 {
-    if (is_running_) {
-        gptimer_stop(timer_);
-        is_running_ = false;
+    hardware_timer_.stop();
 
-        // Let the website know that the timer has paused
-        signal_update();
-    }
+    // Let the website know that the timer has paused
+    signal_update(g_update_event_stream);
 }
 
 void Timer::toggle()
 {
-    if (is_running_) {
-        stop();
-    } else {
-        start();
-    }
+    hardware_timer_.toggle();
 }
 
 void Timer::reset()
 {
-    stop();
+    hardware_timer_.stop();
     set_value(start_time_);
 }
 

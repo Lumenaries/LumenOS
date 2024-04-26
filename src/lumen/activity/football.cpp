@@ -11,6 +11,11 @@ constexpr auto tag = "activity/football";
 
 } // namespace
 
+Football::Football(std::map<int, std::string> const& advertisements)
+    : advertisements_{20, advertisements}
+{
+}
+
 field::Team& Football::team_one()
 {
     return team_one_;
@@ -55,13 +60,6 @@ void Football::update_display()
     //     ESP_LOGI(tag, "%s", advertisements.to_string());
     // }
     auto* display = get_display();
-
-    if (timer_.is_running() &&
-        advertisements_.should_display(timer_.get_value())) {
-        advertisements_.display(display);
-    } else {
-        // Display what would usually be there
-    }
 
     display->clearScreen();
     display->setTextWrap(false);
@@ -122,11 +120,17 @@ void Football::update_display()
     display->setTextColor(g_tertiary_color);
     display->print(yards_.to_string().c_str());
 
-    // Timer
     display->setTextColor(g_primary_color);
-    display->setCursor(19, 50);
-    display->setTextSize(2);
-    display->print(timer_.to_string().c_str());
+    if (timer_.is_running() &&
+        advertisements_.should_display(timer_.get_value())) {
+        advertisements_.display(display);
+    } else {
+        // Timer
+        display->setCursor(19, 50);
+        display->setTextSize(2);
+        display->print(timer_.to_string().c_str());
+    }
+    display->flipDMABuffer();
 }
 
 void Football::button_pressed(ButtonEvent event)
@@ -260,6 +264,11 @@ json Football::to_json()
           {"countUp", timer_.is_count_up()},
           {"isRunning", timer_.is_running()}}}
     };
+}
+
+void Football::pause()
+{
+    timer_.stop();
 }
 
 } // namespace lumen::activity
