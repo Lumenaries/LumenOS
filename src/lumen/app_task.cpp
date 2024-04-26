@@ -40,6 +40,8 @@ void app_task(void* /* parameters */)
         BUTTON_LONG_PRESS_START, power_button_long_press, &activity_context
     );
 
+    power_button.set_color(hardware::button::RGLEDButton::LEDColor::green);
+
     auto timer_button = hardware::button::LEDButton{
         CONFIG_HARDWARE_TIMER_BUTTON_PIN,
         CONFIG_HARDWARE_TIMER_BUTTON_ACTIVE_LEVEL,
