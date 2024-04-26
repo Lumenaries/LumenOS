@@ -241,7 +241,7 @@ function Team(props) {
         <Show when={!props.isRunning}>
           <div class="pb-4">
             <input
-              class="max-w-32 select-all rounded-lg border border-gray-300 bg-gray-50 p-1 text-center font-bold text-2xl focus:border-accent focus:outline-none focus:ring-0 focus:ring-gray-800"
+              class="max-w-32 select-all rounded-lg border border-gray-300 bg-gray-50 p-1 text-center font-bold text-2xl uppercase focus:border-accent focus:outline-none focus:ring-0 focus:ring-gray-800"
               type="text"
               aria-label={`team ${props.teamIndex} name`}
               value={teamName()}

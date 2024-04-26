@@ -5,6 +5,7 @@
 #include "lumen/web/handler/common.hpp"
 #include "lumen/web/handler/event.hpp"
 #include "lumen/web/handler/football.hpp"
+#include "lumen/web/handler/soccer.hpp"
 
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -71,6 +72,7 @@ Server::Server(activity::Context& activity_context)
     start_event_stream_task();
 
     config_.stack_size = 8192;
+    config_.max_uri_handlers = 16;
     config_.global_user_ctx = this;
     config_.uri_match_fn = httpd_uri_match_wildcard;
 
@@ -159,6 +161,20 @@ void register_endpoints(httpd_handle_t& server)
         .user_ctx = nullptr
     };
 
+    httpd_uri_t soccer_get_uri = {
+        .uri = "/api/v1/soccer",
+        .method = HTTP_GET,
+        .handler = handler::soccer_get,
+        .user_ctx = nullptr
+    };
+
+    httpd_uri_t soccer_put_uri = {
+        .uri = "/api/v1/soccer",
+        .method = HTTP_PUT,
+        .handler = handler::soccer_put,
+        .user_ctx = nullptr
+    };
+
     httpd_uri_t advertisement_get_uri = {
         .uri = "/api/v1/advertisement",
         .method = HTTP_GET,
@@ -190,6 +206,8 @@ void register_endpoints(httpd_handle_t& server)
     httpd_register_uri_handler(server, &event_get_uri);
     httpd_register_uri_handler(server, &football_get_uri);
     httpd_register_uri_handler(server, &football_put_uri);
+    httpd_register_uri_handler(server, &soccer_get_uri);
+    httpd_register_uri_handler(server, &soccer_put_uri);
     httpd_register_uri_handler(server, &advertisement_get_uri);
     httpd_register_uri_handler(server, &advertisement_post_uri);
     httpd_register_uri_handler(server, &advertisement_delete_uri);
