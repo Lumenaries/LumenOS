@@ -69,7 +69,6 @@ void Context::set_activity(Type type)
         break;
 
     case Type::football:
-        if (saved_act_type_ == type::football) -> restore_acitivty()
         activity_ = std::move(std::make_unique<Football>());
         break;
 

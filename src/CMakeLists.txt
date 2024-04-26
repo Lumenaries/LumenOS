@@ -24,6 +24,7 @@ idf_component_register(SRCS
                            "lumen/web/handler/common.cpp"
                            "lumen/web/handler/event.cpp"
                            "lumen/web/handler/football.cpp"
+                           "lumen/web/handler/soccer.cpp"
                            "lumen/web/server.cpp"
                            "main.cpp"
                        INCLUDE_DIRS "."
