@@ -19,6 +19,7 @@ enum class Type {
     none = 0,
     connect,
     football,
+    soccer,
 };
 
 enum class ButtonEvent {

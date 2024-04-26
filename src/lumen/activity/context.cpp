@@ -2,6 +2,7 @@
 
 #include "lumen/activity/connect.hpp"
 #include "lumen/activity/football.hpp"
+#include "lumen/activity/soccer.hpp"
 #include "lumen/hardware/sd_card.hpp"
 
 #include "esp_log.h"
@@ -68,7 +69,12 @@ void Context::set_activity(Type type)
         break;
 
     case Type::football:
+        if (saved_act_type_ == type::football) -> restore_acitivty()
         activity_ = std::move(std::make_unique<Football>());
+        break;
+
+    case Type::soccer:
+        activity_ = std::move(std::make_unique<Soccer>());
         break;
 
     default:
