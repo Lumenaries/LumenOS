@@ -21,18 +21,11 @@ constexpr auto buffer_size = 128;
 
 esp_err_t football_get(httpd_req_t* request)
 {
-    ESP_LOGI(tag, "Football GET Handler");
     auto* activity_context =
         static_cast<Server*>(httpd_get_global_user_ctx(request->handle))
             ->get_activity_context();
 
     activity_context->set_activity(activity::Type::football);
-
-    ESP_LOGI(
-        tag,
-        "GET activity: %d",
-        static_cast<int>(activity_context->get_activity_type())
-    );
 
     auto football_data = activity_context->get_activity_json();
 
@@ -44,7 +37,6 @@ esp_err_t football_get(httpd_req_t* request)
 
 esp_err_t football_put(httpd_req_t* request)
 {
-    ESP_LOGI(tag, "Football PUT Handler");
     // Make sure the correct endpoint was hit
     auto* activity_context =
         static_cast<Server*>(httpd_get_global_user_ctx(request->handle))
@@ -81,8 +73,6 @@ esp_err_t football_put(httpd_req_t* request)
     }
 
     auto const request_json = json::parse(buffer);
-
-    ESP_LOGI(tag, "PUT JSON: %s", request_json.dump().c_str());
 
     auto* football =
         static_cast<activity::Football*>(activity_context->get_activity());
