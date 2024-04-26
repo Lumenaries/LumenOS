@@ -10,3 +10,6 @@
 [submodule "lib/json"]
 	path = lib/json
 	url = https://github.com/nlohmann/json.git
+[submodule "components/esp_http_server"]
+	path = components/esp_http_server
+	url = https://github.com/Lumenaries/esp_http_server.git

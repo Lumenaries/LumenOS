@@ -1,5 +1,7 @@
 #include "lumen/web/handler/common.hpp"
 
+#include "lumen/web/error.hpp"
+
 #include "esp_log.h"
 #include "esp_vfs.h"
 
@@ -9,6 +11,9 @@ namespace lumen::web::handler {
 namespace {
 
 constexpr auto tag = "web/handler/common";
+
+constexpr auto chunk_buffer_size = 10240;
+char chunk[chunk_buffer_size];
 
 /* Compare the extension of the filepath with a given extension.
  *
@@ -53,23 +58,18 @@ esp_err_t common_get(httpd_req_t* req)
         ESP_LOGE(tag, "Failed to open file : %s", filepath);
 
         // Respond with 500 Internal Server Error
-        httpd_resp_send_err(
-            req, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to read existing file"
-        );
+        send_error(req, 500, "Failed to read existing file");
+
         return ESP_FAIL;
     }
 
     set_content_type_from_file(req, filepath);
 
-    // TODO: Allocate this 10240 bytes outside of the http task to reduce load
-    // times
-    uint32_t scratch_buffer_size = 1024;
-    char chunk[scratch_buffer_size];
     ssize_t read_bytes;
 
     do {
         // Read the file in the scratch buffer in chunks
-        read_bytes = read(fd, chunk, scratch_buffer_size);
+        read_bytes = read(fd, chunk, chunk_buffer_size);
 
         if (read_bytes == -1) {
             ESP_LOGE(tag, "Failed to read file : %s", filepath);
@@ -83,9 +83,7 @@ esp_err_t common_get(httpd_req_t* req)
                 httpd_resp_sendstr_chunk(req, nullptr);
 
                 // Respond with 500 Internal Server Error
-                httpd_resp_send_err(
-                    req, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to send file"
-                );
+                send_error(req, 500, "Failed to send file.");
 
                 return ESP_FAIL;
             }

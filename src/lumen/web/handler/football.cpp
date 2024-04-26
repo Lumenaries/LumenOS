@@ -2,6 +2,8 @@
 
 #include "lumen/activity/context.hpp"
 #include "lumen/activity/football.hpp"
+#include "lumen/web/error.hpp"
+#include "lumen/web/server.hpp"
 
 #include "esp_log.h"
 #include "nlohmann/json.hpp"
@@ -19,9 +21,9 @@ constexpr auto buffer_size = 128;
 
 esp_err_t football_get(httpd_req_t* request)
 {
-    auto* activity_context = static_cast<activity::Context*>(
-        httpd_get_global_user_ctx(request->handle)
-    );
+    auto* activity_context =
+        static_cast<Server*>(httpd_get_global_user_ctx(request->handle))
+            ->get_activity_context();
 
     activity_context->set_activity(activity::Type::football);
 
@@ -36,9 +38,9 @@ esp_err_t football_get(httpd_req_t* request)
 esp_err_t football_put(httpd_req_t* request)
 {
     // Make sure the correct endpoint was hit
-    auto* activity_context = static_cast<activity::Context*>(
-        httpd_get_global_user_ctx(request->handle)
-    );
+    auto* activity_context =
+        static_cast<Server*>(httpd_get_global_user_ctx(request->handle))
+            ->get_activity_context();
 
     if (activity_context->get_activity_type() != activity::Type::football) {
         ESP_LOGW(
@@ -46,8 +48,8 @@ esp_err_t football_put(httpd_req_t* request)
             "Current activity is not football: %d",
             static_cast<int>(activity_context->get_activity_type())
         );
-        httpd_resp_send(request, nullptr, 0);
-        return ESP_FAIL;
+
+        return send_error(request, 400, "The current activity is not football");
     }
 
     // Make sure we can store the request JSON in our buffer
@@ -55,8 +57,9 @@ esp_err_t football_put(httpd_req_t* request)
 
     if (content_length > buffer_size - 1) {
         ESP_LOGW(tag, "Received more data than can be processed");
-        httpd_resp_send_500(request);
-        return ESP_FAIL;
+        return send_error(
+            request, 500, "More data was received than can be processed"
+        );
     }
 
     char buffer[buffer_size];
@@ -66,9 +69,7 @@ esp_err_t football_put(httpd_req_t* request)
     buffer[content_length] = '\0';
 
     if (received_bytes <= 0) {
-        ESP_LOGW(tag, "Error reading request content");
-        httpd_resp_send_500(request);
-        return ESP_FAIL;
+        return send_error(request, 500, "Error reading request content");
     }
 
     auto const request_json = json::parse(buffer);
@@ -145,7 +146,7 @@ esp_err_t football_put(httpd_req_t* request)
         }
 
         if (request_json["timer"].contains("value") &&
-            request_json["timer"]["timer"].is_number_unsigned()) {
+            request_json["timer"]["value"].is_number_unsigned()) {
             football->timer().set_value(request_json["timer"]["value"]);
         }
     }

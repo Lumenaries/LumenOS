@@ -1,10 +1,18 @@
-import { Show, createResource, createSignal, lazy } from "solid-js";
+import {
+  Show,
+  createEffect,
+  createResource,
+  createSignal,
+  lazy,
+  onMount,
+} from "solid-js";
 
+import { useEvent } from "../../Event";
 import ActivityBaseConfig from "../../components/ActivityBaseConfig";
 import ActivityField from "../../components/ActivityField";
 
 function FootballConfig() {
-  // TODO: Add an API prop
+  const eventData = useEvent();
 
   const quarters = ["1st Quarter", "2nd Quarter", "3rd Quarter", "4th Quarter"];
 
@@ -17,15 +25,27 @@ function FootballConfig() {
 
   const endpoint = "/api/v1/football";
 
-  const getFromEndpoint = async function () {
-    const data = await fetch(endpoint);
-    return data.json();
-  };
+  const [data, setData] = createSignal(null);
 
-  const [data] = createResource(getFromEndpoint);
+  // GET the relevant data on first load
+  onMount(async () => {
+    const res = await fetch(endpoint);
+    const json = await res.json();
+
+    if (json != null) {
+      setData(json);
+    }
+  });
+
+  // After first load, rely on server-sent events for updates
+  createEffect(() => {
+    if (eventData() != null) {
+      setData(eventData());
+    }
+  });
 
   return (
-    <Show when={!data.loading}>
+    <Show when={data() != null && data().type == "football"}>
       <ActivityBaseConfig
         name="Football"
         teamOneName={data().teamOne.name}
@@ -33,25 +53,26 @@ function FootballConfig() {
         teamOneCurrentScore={data().teamOne.score}
         teamTwoCurrentScore={data().teamTwo.score}
         timerValue={data().timer.value}
+        timerIsRunning={data().timer.isRunning}
       >
         <div class="grid grid-cols-1 gap-4">
           <ActivityField
             name="quarter"
             endpoint={endpoint}
             fields={quarters}
-            currentIndex={quarters[data().quarter.value - 1]}
+            index={data().quarter.value}
           />
           <ActivityField
             name="down"
             endpoint={endpoint}
             fields={downs}
-            currentIndex={downs[data().down.value - 1]}
+            index={data().down.value}
           />
           <ActivityField
             name="yards"
             endpoint={endpoint}
             fields={yards}
-            currentIndex={yards[data().yards.value - 1]}
+            index={data().yards.value}
           />
         </div>
       </ActivityBaseConfig>

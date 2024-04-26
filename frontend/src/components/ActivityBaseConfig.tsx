@@ -1,5 +1,5 @@
 import { A } from "@solidjs/router";
-import { Show, createSignal } from "solid-js";
+import { Show, createEffect, createSignal } from "solid-js";
 
 import Header from "./Header";
 import {
@@ -10,10 +10,13 @@ import {
   PlusIcon,
 } from "./UtilityIcons";
 
-// TODO: Allow user to change team names
 // TODO: Add a configurable timer element
 function ActivityBaseConfig(props) {
-  const [isRunning, setRunning] = createSignal(false);
+  const [isRunning, setRunning] = createSignal(props.timerIsRunning);
+
+  createEffect(() => {
+    setRunning(props.timerIsRunning);
+  });
 
   return (
     <>
@@ -68,17 +71,98 @@ function Timer(props) {
     });
   };
 
-  const minutes = Math.floor(props.value / 60);
-  const seconds = String(props.value % 60).padStart(2, "0");
+  const putTimerValue = function () {
+    const timerValue =
+      Number.parseInt(minutes()) * 60 + Number.parseInt(seconds());
+    fetch(`/api/v1/${props.sport.toLowerCase()}`, {
+      method: "PUT",
+      body: JSON.stringify({ timer: { value: timerValue } }),
+    });
+  };
+
+  const [minutes, setMinutes] = createSignal(Math.floor(props.value / 60));
+  const [seconds, setSeconds] = createSignal(props.value % 60);
+
+  createEffect(() => {
+    setMinutes(Math.floor(props.value / 60));
+    setSeconds(props.value % 60);
+  });
+
+  const changeMinutes = function (minutes) {
+    const parsed_min = Number.parseInt(minutes, 10);
+    if (Number.isInteger(parsed_min)) {
+      setMinutes(parsed_min);
+    } else {
+      setMinutes(getMinutes());
+    }
+
+    putTimerValue();
+  };
+
+  const changeSeconds = function (seconds) {
+    const parsed_sec = Number.parseInt(seconds, 10);
+    if (Number.isInteger(parsed_sec)) {
+      setSeconds(parsed_sec);
+    } else {
+      setSeconds(seconds());
+    }
+
+    putTimerValue();
+  };
+
+  const timerAlarm = new Audio("audio/timerAlarm.mp3");
+
+  createEffect(() => {
+    if (minutes() === 0 && seconds() === 0) {
+      timerAlarm.play();
+    }
+  });
 
   return (
-    <div class="flex justify-center">
-      <p class="mr-3 font-medium text-5xl">
-        {minutes}:{seconds}
-      </p>
+    <div class="col-span-2 flex justify-center">
+      <Show when={props.isRunning}>
+        <span class="mr-3 font-medium text-5xl">
+          {String(minutes()).padStart(2, "0")}
+        </span>
+
+        <span class="mr-3 font-medium text-5xl">:</span>
+
+        <span class="mr-3 font-medium text-5xl">
+          {String(seconds()).padStart(2, "0")}
+        </span>
+      </Show>
+
+      <Show when={!props.isRunning}>
+        <input
+          type="text"
+          id="timerMinutes"
+          class="max-w-20 select-all rounded-lg border border-gray-300 bg-gray-50 px-1 text-center font-bold font-medium text-2xl text-5xl focus:border-accent focus:outline-none focus:ring-0 focus:ring-gray-800"
+          value={String(minutes()).padStart(2, "0")}
+          onChange={(e) => {
+            changeMinutes(e.target.value);
+            e.target.value = String(minutes()).padStart(2, "0");
+          }}
+          maxlength="2"
+        />
+
+        <span class="px-2 font-medium text-5xl">:</span>
+
+        <input
+          type="text"
+          id="timerMinutes"
+          class="max-w-20 select-all rounded-lg border border-gray-300 bg-gray-50 px-1 text-center font-bold font-medium text-2xl text-5xl focus:border-accent focus:outline-none focus:ring-0 focus:ring-gray-800"
+          value={String(seconds()).padStart(2, "0")}
+          onChange={(e) => {
+            changeSeconds(e.target.value);
+            e.target.value = String(seconds()).padStart(2, "0");
+          }}
+          maxlength="2"
+        />
+      </Show>
+
       <Show when={props.isRunning}>
         <button
-          class="my-auto"
+          class="ml-3 touch-none"
           onClick={function () {
             props.setRunning(false);
             putIsRunning();
@@ -87,9 +171,10 @@ function Timer(props) {
           <PauseIcon />
         </button>
       </Show>
+
       <Show when={!props.isRunning}>
         <button
-          class="my-auto"
+          class="ml-3 touch-none"
           onClick={function () {
             props.setRunning(true);
             putIsRunning();
@@ -105,6 +190,11 @@ function Timer(props) {
 function Team(props) {
   const [teamName, setTeamName] = createSignal(props.teamName);
   const [score, setScore] = createSignal(props.currentScore);
+
+  createEffect(() => {
+    setTeamName(props.teamName);
+    setScore(props.currentScore);
+  });
 
   const team = props.teamIndex === "one" ? "teamOne" : "teamTwo";
   const defaultTeamName = team === "teamOne" ? "Home" : "Away";
