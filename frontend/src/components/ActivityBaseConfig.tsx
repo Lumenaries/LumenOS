@@ -34,14 +34,14 @@ function ActivityBaseConfig(props) {
         <div class="grid grid-cols-2 gap-10">
           <div class="col-span-2 text-center">
             <Timer
-              sport={props.name}
+              sport={props.name.toUpperCase()}
               value={props.timerValue}
               isRunning={isRunning()}
               setRunning={setRunning}
             />
           </div>
           <Team
-            sport={props.name}
+            sport={props.name.toUpperCase()}
             teamIndex="one"
             teamName={props.teamOneName}
             currentScore={props.teamOneCurrentScore}

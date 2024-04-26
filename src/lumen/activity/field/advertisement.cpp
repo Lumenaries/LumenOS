@@ -27,7 +27,7 @@ Advertisement::Advertisement(
       current_ad_key_{
           advertisements_->size() ? advertisements_->begin()->first : -1
       },
-      timer_{25'000, timer_alarm_callback, this}
+      timer_{50'000, timer_alarm_callback, this}
 {
     // Load in the first advertisement in the map if it is nonempty
     if (current_ad_key_ >= 0) {
@@ -74,14 +74,15 @@ void Advertisement::display(hardware::Display* display)
     display->setTextWrap(false);
     display->setTextSize(2);
 
-    display->drawFastHLine(0, 48, display_width, g_primary_color);
-
     display->setCursor(current_x, 50);
+    display->setTextColor(g_primary_color);
     display->print(get_value().c_str());
+    display->fillRect(0, 50, 23, 16, 0);
+    display->drawFastVLine(24, 50, 16, 0);
 
     current_x -= 1;
 
-    if (current_x < -string_width) {
+    if (current_x < -string_width + 23) {
         current_x = display_width - 1;
         is_displaying_ = false;
 

@@ -10,6 +10,15 @@ The source code for the ESP32-S3 microcontroller is stored in the `src`
 directory. The source code for the web frontend is stored in the `frontend/src`
 directory.
 
+## Note About `expo` Branch
+
+The `expo` branch contains the code and features added during the week before
+expo. Bugs are more likely to appear in this branch as we were unable to keep up
+the rigorous code review and testing with the code in `dev` and `main`. As well,
+certain features were added specifically for our EXPO exhibition to engage
+audience members. Still, the `expo` branch is more feature-complete than the
+other branches.
+
 ## Dependencies
 
 This project requires `arduino core`. You have a few options here:

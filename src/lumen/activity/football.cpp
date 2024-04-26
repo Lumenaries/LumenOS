@@ -9,6 +9,10 @@ namespace {
 
 constexpr auto tag = "activity/football";
 
+constexpr int left_team_name_offset[] = {14, 11, 8, 5, 2, 0};
+
+constexpr int right_team_name_offset[] = {77, 74, 71, 68, 65, 63};
+
 } // namespace
 
 Football::Football(std::map<int, std::string> const& advertisements)
@@ -53,25 +57,28 @@ field::Advertisement& Football::advertisements()
 
 void Football::update_display()
 {
-    // TODO: Configure how football will be displayed
-
-    // if (timer_.is_running() &&
-    //     advertisements.should_display(timer_.get_value())) {
-    //     ESP_LOGI(tag, "%s", advertisements.to_string());
-    // }
     auto* display = get_display();
 
     display->clearScreen();
     display->setTextWrap(false);
     display->setTextSize(1);
 
+    // Team One Name
     display->setTextColor(g_secondary_color);
-    display->setCursor(5, 0);
-    display->print("HOME");
+    display->setCursor(
+        left_team_name_offset[team_one_.name().get_value().length() - 1], 0
+    );
+    display->print(team_one_.name().get_value().c_str());
+
+    // Quarter Heading
     display->setCursor(40, 3);
     display->print("QTR");
-    display->setCursor(68, 0);
-    display->print("AWAY");
+
+    // Team Two Name
+    display->setCursor(
+        right_team_name_offset[team_two_.name().get_value().length() - 1], 0
+    );
+    display->print(team_two_.name().get_value().c_str());
 
     // Team One Score
     display->setTextColor(g_primary_color);
@@ -99,37 +106,63 @@ void Football::update_display()
     }
     display->print(team_two_.score().to_string().c_str());
 
-    // Down
-    display->setTextSize(2);
-    display->setTextColor(g_secondary_color);
-    display->setCursor(9, 33);
-    display->print("D");
-    display->setTextSize(2);
-    display->setTextColor(g_tertiary_color);
-    display->print(down_.to_string().c_str());
-
-    // Yards
-    display->setTextColor(g_secondary_color);
-    if (yards_.get_value() < 10) {
-        display->setCursor(65, 33);
-    } else {
-        display->setCursor(53, 33);
-    }
-    display->print("Y");
-    display->setTextSize(2);
-    display->setTextColor(g_tertiary_color);
-    display->print(yards_.to_string().c_str());
-
-    display->setTextColor(g_primary_color);
     if (timer_.is_running() &&
         advertisements_.should_display(timer_.get_value())) {
-        advertisements_.display(display);
-    } else {
+        // Yards
+        display->setTextColor(g_secondary_color);
+        display->setCursor(0, 33);
+        display->setTextSize(2);
+        display->print("Y");
+        display->setTextColor(g_tertiary_color);
+        display->print(yards_.to_string().c_str());
+
         // Timer
+        display->setTextColor(g_primary_color);
+        display->setCursor(38, 33);
+        display->setTextSize(2);
+        display->print(timer_.to_string().c_str());
+
+        // Advertisements
+        display->drawRect(23, 48, 74, 17, g_primary_color);
+        advertisements_.display(display);
+
+        // Down
+        display->setTextSize(2);
+        display->setTextColor(g_secondary_color);
+        display->setCursor(0, 50);
+        display->print("D");
+        display->setTextSize(2);
+        display->setTextColor(g_tertiary_color);
+        display->print(down_.to_string().c_str());
+    } else {
+        // Down
+        display->setTextSize(2);
+        display->setTextColor(g_secondary_color);
+        display->setCursor(9, 33);
+        display->print("D");
+        display->setTextSize(2);
+        display->setTextColor(g_tertiary_color);
+        display->print(down_.to_string().c_str());
+
+        // Yards
+        display->setTextColor(g_secondary_color);
+        if (yards_.get_value() < 10) {
+            display->setCursor(65, 33);
+        } else {
+            display->setCursor(53, 33);
+        }
+        display->print("Y");
+        display->setTextSize(2);
+        display->setTextColor(g_tertiary_color);
+        display->print(yards_.to_string().c_str());
+
+        // Timer
+        display->setTextColor(g_primary_color);
         display->setCursor(19, 50);
         display->setTextSize(2);
         display->print(timer_.to_string().c_str());
     }
+
     display->flipDMABuffer();
 }
 
