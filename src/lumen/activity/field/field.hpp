@@ -34,6 +34,13 @@ public:
         }
     }
 
+    virtual void set_value_only(T const& value)
+    {
+        if (value_ != value) {
+            value_ = value;
+        }
+    }
+
     /** Set the value of the field and trigger a display update.
      *
      * \note This function is only meant to be used inside of an ISR.
@@ -53,20 +60,32 @@ public:
     /// Convert the contents of the field to a string.
     [[nodiscard]] virtual std::string to_string() const = 0;
 
-    /// Signal the App Task to refresh the display.
-    void signal_update()
+    /** Send a signal to the app task.
+     *
+     * By default, this function will signal an update to the display and the
+     * client event stream.
+     */
+    void signal_update(
+        uint32_t signal = g_update_display_signal | g_update_event_stream
+    )
     {
-        xTaskNotify(get_app_task_handle(), g_update_display_signal, eSetBits);
+        xTaskNotify(get_app_task_handle(), signal, eSetBits);
     }
 
-    /// Signal the App Task to refresh the display.
-    bool signal_update_from_isr()
+    /** Send a signal to the app task.
+     *
+     * By default, this function will signal an update to the display and the
+     * client event stream.
+     */
+    bool signal_update_from_isr(
+        uint32_t signal = g_update_display_signal | g_update_event_stream
+    )
     {
         auto higher_priority_task_awoken = pdFALSE;
 
         xTaskNotifyFromISR(
             get_app_task_handle(),
-            g_update_display_signal,
+            signal,
             eSetBits,
             &higher_priority_task_awoken
         );

@@ -38,16 +38,6 @@ void start_event_stream_task();
  */
 void register_endpoints(httpd_handle_t& server);
 
-/** The handler for a new socket connection.
- *
- * \param handle The instance of the server.
- *
- * \param socket_fd The session socket file descriptor.
- *
- * \returns `ESP_OK` on success.
- */
-esp_err_t on_open(httpd_handle_t handle, int socket_fd);
-
 /** The handler that's called before a socket is closed.
  *
  * \param handle The instance of the server.
@@ -76,7 +66,6 @@ Server::Server(activity::Context& activity_context)
     config_.global_user_ctx = this;
     config_.uri_match_fn = httpd_uri_match_wildcard;
 
-    config_.open_fn = on_open;
     config_.close_fn = on_close;
 
     httpd_start(&handle_, &config_);
@@ -214,21 +203,6 @@ void register_endpoints(httpd_handle_t& server)
     httpd_register_uri_handler(server, &common_get_uri);
 }
 
-esp_err_t on_open(httpd_handle_t handle, int socket_fd)
-{
-    auto* activity_context =
-        static_cast<Server*>(httpd_get_global_user_ctx(handle))
-            ->get_activity_context();
-
-    // The connect activity is over when the user opens the website.
-    // Restore the previous activity.
-    if (activity_context->get_activity_type() == activity::Type::connect) {
-        activity_context->restore_activity();
-    }
-
-    return ESP_OK;
-}
-
 void on_close(httpd_handle_t handle, int socket_fd)
 {
     auto* server = static_cast<Server*>(httpd_get_global_user_ctx(handle));
@@ -276,6 +250,7 @@ void event_stream_task(void* /* parameters */)
 
         } else if (message.type == EventMessage::Type::event_occurred) {
             if (event_stream != nullptr) {
+                ESP_LOGI(tag, "SENDING EVENT STREAM MESSAGE");
 
                 auto* activity_context =
                     static_cast<Server*>(

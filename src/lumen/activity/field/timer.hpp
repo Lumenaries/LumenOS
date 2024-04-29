@@ -1,8 +1,7 @@
 #pragma once
 
 #include "lumen/activity/field/field.hpp"
-
-#include "driver/gptimer.h"
+#include "lumen/hardware/timer.hpp"
 
 #include <string>
 
@@ -31,7 +30,6 @@ public:
      * \param count_up Whether or not the timer will count up or count down.
      */
     explicit Timer(uint64_t start_time, bool count_up = false);
-    ~Timer() override;
 
     [[nodiscard]] uint64_t get_start_time() const;
     [[nodiscard]] bool is_running() const;
@@ -93,16 +91,10 @@ public:
     void reset();
 
 private:
-    gptimer_handle_t timer_{};
-    gptimer_config_t config_ = {
-        .clk_src = GPTIMER_CLK_SRC_DEFAULT,
-        .direction = GPTIMER_COUNT_UP,
-        .resolution_hz = 1'000'000 // 1 tick = 1us
-    };
-
     uint64_t start_time_{};
-    bool is_running_{};
     bool is_count_up_{};
+
+    hardware::Timer hardware_timer_;
 };
 
 } // namespace lumen::activity::field

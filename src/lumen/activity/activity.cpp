@@ -29,4 +29,9 @@ json Activity::to_json()
     return {};
 }
 
+void Activity::pause()
+{
+    ESP_LOGE(tag, "Pause is not implemented");
+}
+
 } // namespace lumen::activity

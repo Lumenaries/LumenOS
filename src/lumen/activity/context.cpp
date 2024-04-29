@@ -62,6 +62,10 @@ void Context::set_activity(Type type)
         return;
 
     case Type::connect:
+        if (activity_ != nullptr) {
+            activity_->pause();
+        };
+
         saved_activity_ = std::move(activity_);
         saved_activity_type_ = activity_type_;
 
@@ -69,7 +73,13 @@ void Context::set_activity(Type type)
         break;
 
     case Type::football:
-        activity_ = std::move(std::make_unique<Football>());
+        if (saved_activity_type_ == type) {
+            restore_activity();
+
+            return;
+        } else {
+            activity_ = std::move(std::make_unique<Football>(advertisements_));
+        }
         break;
 
     case Type::soccer:

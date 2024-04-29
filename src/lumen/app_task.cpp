@@ -87,7 +87,9 @@ void app_task(void* /* parameters */)
 
         if ((event_buffer & g_update_display_signal) != 0) {
             activity_context.update_display();
+        }
 
+        if ((event_buffer & g_update_event_stream) != 0) {
             web::send_event_message(
                 web::EventMessage{web::EventMessage::Type::event_occurred}
             );

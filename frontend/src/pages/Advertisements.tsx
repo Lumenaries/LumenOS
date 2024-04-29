@@ -68,7 +68,7 @@ function Advertisements() {
             placeholder="Enter new ad message.."
             maxlength="50"
             class="text-md block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 placeholder:italic focus:border-gray-800 focus:outline-none focus:ring-0 focus:ring-gray-800"
-            onChange={(e) => setNewAd(e.target.value)}
+            onChange={(e) => setNewAd(e.target.value.toUpperCase())}
           />
 
           <button

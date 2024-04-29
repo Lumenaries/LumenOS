@@ -56,6 +56,13 @@ public:
      */
     virtual nlohmann::json to_json();
 
+    /** Pause the activity.
+     *
+     * What actually happens depends on the activity, but
+     * it could be as simple as pausing a field::Timer.
+     */
+    virtual void pause();
+
 protected:
     hardware::Display* get_display();
 

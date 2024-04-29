@@ -60,7 +60,11 @@ public:
         return ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | (blue >> 3);
     }
 
-    /// Swap the display buffer when double buffering is enabled.
+    /** Swap the display buffer when double buffering is enabled.
+     *
+     * This must be called after every screen render when double buffering is
+     * enabled or you likely won't like what you see.
+     */
     void flipDMABuffer();
 
 private:
