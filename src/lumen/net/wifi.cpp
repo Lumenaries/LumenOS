@@ -138,7 +138,7 @@ void randomize_wifi_password()
     // x.g. "aabbccdd". This will create a simpler user experience.
     for (int i = 0; i < length; i++) {
         if (i % 2 == 0) {
-            password[i] = static_cast<uint8_t>(rand() % 26 + 97);
+            password[i] = static_cast<uint8_t>(rand() % 26 + 65);
             continue;
         }
 
@@ -169,10 +169,12 @@ void wifi_event_handler(
             event->aid
         );
     } else if (event_id == WIFI_EVENT_AP_STADISCONNECTED) {
-        auto* connect_activity = get_connect_activity(context);
-
-        disconnect_user();
-        connect_activity->set_connected(false);
+        // This is required because otherwise our event stream task won't
+        // know that the user has disconnected. There's probably a better
+        // way to do this. Also, if a user is connected when the
+        // "randomize_wifi_password" function is called, the wifi config will
+        // be set twice.
+        ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &config));
 
         auto* event = static_cast<wifi_event_ap_stadisconnected_t*>(event_data);
         ESP_LOGI(
