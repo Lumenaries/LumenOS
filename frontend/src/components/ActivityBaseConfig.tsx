@@ -215,7 +215,7 @@ function Team(props) {
 
   const changeTeamName = function (name) {
     if (name != teamName()) {
-      setTeamName(name.length > 0 ? name : defaultName);
+      setTeamName(name.length > 0 ? name.toUpperCase() : defaultName);
       putTeamName();
     }
   };

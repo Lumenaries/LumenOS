@@ -63,8 +63,8 @@ public:
     void pause() override;
 
 private:
-    field::Team team_one_{"Home"};
-    field::Team team_two_{"Away"};
+    field::Team team_one_{"HOME"};
+    field::Team team_two_{"AWAY"};
 
     field::Number quarter_{1};
     field::Number down_{1};
