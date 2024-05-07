@@ -265,7 +265,7 @@ menu "Lumen"
 
             config NET_WIFI_PASSWORD
                 string "SoftAP Password"
-                default "lumenaries"
+                default "LUMENARIES"
                 help
                     Wi-Fi password (WPA or WPA2) to use for the softAP.
 
