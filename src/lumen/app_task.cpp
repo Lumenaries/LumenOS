@@ -96,12 +96,36 @@ void app_task(void* /* parameters */)
                 web::EventMessage{web::EventMessage::Type::event_occurred}
             );
         }
+
+        if ((event_buffer & g_swap_to_default_activity) != 0) {
+            activity_context.set_activity(activity::Type::football);
+        }
     }
 }
 
 TaskHandle_t get_app_task_handle()
 {
     return app_task_handle;
+}
+
+void signal_update(
+    uint32_t signal /* = g_update_display_signal | g_update_event_stream */
+)
+{
+    xTaskNotify(get_app_task_handle(), signal, eSetBits);
+}
+
+bool signal_update_from_isr(
+    uint32_t signal /* = g_update_display_signal | g_update_event_stream */
+)
+{
+    auto higher_priority_task_awoken = pdFALSE;
+
+    xTaskNotifyFromISR(
+        get_app_task_handle(), signal, eSetBits, &higher_priority_task_awoken
+    );
+
+    return higher_priority_task_awoken == pdTRUE;
 }
 
 } // namespace lumen

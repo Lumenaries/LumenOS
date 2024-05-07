@@ -20,6 +20,8 @@ public:
     /// Draw the fields on the display.
     void update_display() override;
 
+    void button_pressed(ButtonEvent event) override;
+
 private:
     bool connected_{};
 

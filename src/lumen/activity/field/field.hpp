@@ -60,39 +60,6 @@ public:
     /// Convert the contents of the field to a string.
     [[nodiscard]] virtual std::string to_string() const = 0;
 
-    /** Send a signal to the app task.
-     *
-     * By default, this function will signal an update to the display and the
-     * client event stream.
-     */
-    void signal_update(
-        uint32_t signal = g_update_display_signal | g_update_event_stream
-    )
-    {
-        xTaskNotify(get_app_task_handle(), signal, eSetBits);
-    }
-
-    /** Send a signal to the app task.
-     *
-     * By default, this function will signal an update to the display and the
-     * client event stream.
-     */
-    bool signal_update_from_isr(
-        uint32_t signal = g_update_display_signal | g_update_event_stream
-    )
-    {
-        auto higher_priority_task_awoken = pdFALSE;
-
-        xTaskNotifyFromISR(
-            get_app_task_handle(),
-            signal,
-            eSetBits,
-            &higher_priority_task_awoken
-        );
-
-        return higher_priority_task_awoken == pdTRUE;
-    }
-
 private:
     T value_{};
 };

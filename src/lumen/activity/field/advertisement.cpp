@@ -151,7 +151,7 @@ bool timer_alarm_callback(
 {
     auto* field = static_cast<Advertisement*>(context);
 
-    return field->signal_update_from_isr(g_update_display_signal);
+    return signal_update_from_isr(g_update_display_signal);
 }
 
 } // namespace

@@ -1,5 +1,6 @@
 #include "lumen/activity/connect.hpp"
 
+#include "lumen/app_task.hpp"
 #include "lumen/net/wifi.hpp"
 
 #include "esp_log.h"
@@ -55,6 +56,11 @@ void Connect::update_display()
     }
 
     display->flipDMABuffer();
+}
+
+void Connect::button_pressed(ButtonEvent)
+{
+    signal_update(g_swap_to_default_activity);
 }
 
 } // namespace lumen::activity

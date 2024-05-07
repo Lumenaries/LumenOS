@@ -11,7 +11,7 @@ constexpr auto tag = "activity/football";
 
 constexpr int left_team_name_offset[] = {14, 11, 8, 5, 2, 0};
 
-constexpr int right_team_name_offset[] = {77, 74, 71, 68, 65, 63};
+constexpr int right_team_name_offset[] = {77, 74, 71, 68, 65, 61};
 
 } // namespace
 
