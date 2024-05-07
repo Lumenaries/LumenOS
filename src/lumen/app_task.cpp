@@ -40,6 +40,8 @@ void app_task(void* /* parameters */)
         BUTTON_LONG_PRESS_START, power_button_long_press, &activity_context
     );
 
+    // Eventually, the power button should display the battery level. For now,
+    // it's simply a power indicator.
     power_button.set_color(hardware::button::RGLEDButton::LEDColor::green);
 
     auto timer_button = hardware::button::LEDButton{

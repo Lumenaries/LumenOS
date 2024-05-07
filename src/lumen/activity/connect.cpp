@@ -9,15 +9,14 @@ namespace {
 
 constexpr auto tag = "activity/connect";
 
-}
+} // namespace
 
 void Connect::set_connected(bool connected)
 {
-    if (connected_ == connected) {
-        return;
+    if (connected_ != connected) {
+        connected_ = connected;
     }
 
-    connected_ = connected;
     update_display();
 }
 
