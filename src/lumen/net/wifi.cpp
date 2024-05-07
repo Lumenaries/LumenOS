@@ -170,10 +170,10 @@ void wifi_event_handler(
         );
     } else if (event_id == WIFI_EVENT_AP_STADISCONNECTED) {
         // This is required because otherwise our event stream task won't
-        // know that the user has disconnected. There's probably a better
-        // way to do this. Also, if a user is connected when the
-        // "randomize_wifi_password" function is called, the wifi config will
-        // be set twice.
+        // know that the user has disconnected and close the task. There's
+        // probably a better way to do this. Also, if a user is connected when
+        // the "randomize_wifi_password" function is called, the wifi config
+        // will be set twice.
         ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &config));
 
         auto* event = static_cast<wifi_event_ap_stadisconnected_t*>(event_data);
