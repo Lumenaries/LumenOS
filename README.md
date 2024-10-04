@@ -10,6 +10,15 @@ The source code for the ESP32-S3 microcontroller is stored in the `src`
 directory. The source code for the web frontend is stored in the `frontend/src`
 directory.
 
+* Demo
+
+https://github.com/user-attachments/assets/002fa658-3faf-4c77-9a63-f6c103c0f548
+
+* University of Idaho Senior Design EXPO Poster
+
+![expo_poster](https://github.com/user-attachments/assets/703bd685-ae03-421d-b260-40aa2fd5bc68)
+
+
 ## Dependencies
 
 This project requires `arduino core`. You have a few options here:
